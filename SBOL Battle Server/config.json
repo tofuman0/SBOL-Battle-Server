@@ -1,0 +1,9 @@
+{
+	"servername":"SBOL",
+	"serverport":47701,
+	"serverclientlimit":100,
+	"serverwelcomemessage":"Welcome to SBOL",
+	"managementserverport":7946,
+	"managementserveraddress":"localhost",
+	"logpath":".\\log"
+}

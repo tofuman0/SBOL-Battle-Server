@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{07DF8363-62BC-49F0-8C07-2B3040CE9950}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>SBOL Battle Server</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>.\include;$(IncludePath)</IncludePath>
+    <LibraryPath>.\lib\$(configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>.\include;$(IncludePath)</IncludePath>
+    <LibraryPath>.\lib\$(configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <ProgramDataBaseFileName>$(OutDir)$(TargetName).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <AdditionalDependencies>ws2_32.lib;libcrypto.lib;libssl.lib;Crypt32.lib;GDI32.LIB;ADVAPI32.LIB;USER32.LIB;BlowFishSBOL.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>ws2_32.lib;libcrypto.lib;libssl.lib;Crypt32.lib;GDI32.LIB;ADVAPI32.LIB;USER32.LIB;BlowFishSBOL.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Client Packets\ClientPacket15.cpp" />
+    <ClCompile Include="Client Packets\ClientPacketStatus.cpp" />
+    <ClCompile Include="Client Packets\ClientPacketAuthentication.cpp" />
+    <ClCompile Include="Client Packets\ClientPacketBattle.cpp" />
+    <ClCompile Include="Client Packets\ClientPacketCar.cpp" />
+    <ClCompile Include="Client Packets\ClientPacketChat.cpp" />
+    <ClCompile Include="Client Packets\ClientPacketCourseDetails.cpp" />
+    <ClCompile Include="Client Packets\ClientPacketGarage.cpp" />
+    <ClCompile Include="Client Packets\ClientPacketItem.cpp" />
+    <ClCompile Include="Client Packets\ClientPacketKeepAlive.cpp" />
+    <ClCompile Include="Client Packets\ClientPacketNotifications.cpp" />
+    <ClCompile Include="Client Packets\ClientPacketPing.cpp" />
+    <ClCompile Include="Client Packets\ClientPacketPlayerCreation.cpp" />
+    <ClCompile Include="Client Packets\ClientPacketPlayerDetails.cpp" />
+    <ClCompile Include="Client Packets\ClientPacketPositioning.cpp" />
+    <ClCompile Include="Client Packets\ClientPacketRivalDetails.cpp" />
+    <ClCompile Include="Client Packets\ClientPacketShop.cpp" />
+    <ClCompile Include="Client Packets\ClientPacketTeam.cpp" />
+    <ClCompile Include="client.cpp" />
+    <ClCompile Include="course.cpp" />
+    <ClCompile Include="debug.cpp" />
+    <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Management Packets\ManagementPacketClientAuth.cpp" />
+    <ClCompile Include="Management Packets\ManagementPacketClientRequests.cpp" />
+    <ClCompile Include="ManagementServer.cpp" />
+    <ClCompile Include="packet.cpp" />
+    <ClCompile Include="rival.cpp" />
+    <ClCompile Include="Server Packets\ClientAuthPackets.cpp" />
+    <ClCompile Include="Server Packets\ClientOperationsPackets.cpp" />
+    <ClCompile Include="Server Packets\ClientRequestsPackets.cpp" />
+    <ClCompile Include="Server Packets\ServerAuthPackets.cpp" />
+    <ClCompile Include="Server Packets\ServerOperationsPackets.cpp" />
+    <ClCompile Include="server.cpp" />
+    <ClCompile Include="serverpacket.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="client.h" />
+    <ClInclude Include="course.h" />
+    <ClInclude Include="debug.h" />
+    <ClInclude Include="globals.h" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="main.h" />
+    <ClInclude Include="managementpackets.h" />
+    <ClInclude Include="ManagementServer.h" />
+    <ClInclude Include="packet.h" />
+    <ClInclude Include="packets.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="rival.h" />
+    <ClInclude Include="RivalTables.h" />
+    <ClInclude Include="server.h" />
+    <ClInclude Include="serverpacket.h" />
+    <ClInclude Include="serverpackets.h" />
+    <ClInclude Include="strings.h" />
+    <ClInclude Include="structures.h" />
+    <ClInclude Include="RouteTables.h" />
+    <ClInclude Include="TicketTables.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SBOL Battle Server.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="shutokou.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

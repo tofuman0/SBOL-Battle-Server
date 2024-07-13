@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="ManagementServer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="globals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="serverpacket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="packet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="server.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="client.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="serverpackets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="course.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="structures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="packets.h">
+      <Filter>Header Files\Packets</Filter>
+    </ClInclude>
+    <ClInclude Include="managementpackets.h">
+      <Filter>Header Files\Packets</Filter>
+    </ClInclude>
+    <ClInclude Include="TicketTables.h">
+      <Filter>Header Files\Tables</Filter>
+    </ClInclude>
+    <ClInclude Include="RouteTables.h">
+      <Filter>Header Files\Tables</Filter>
+    </ClInclude>
+    <ClInclude Include="strings.h">
+      <Filter>Header Files\Tables</Filter>
+    </ClInclude>
+    <ClInclude Include="RivalTables.h">
+      <Filter>Header Files\Tables</Filter>
+    </ClInclude>
+    <ClInclude Include="rival.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{ee7e59bb-61d8-4c01-aa28-cfcafdac3641}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{470f9d10-8ee3-4e4c-8523-02c7ae2877aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Client Packets">
+      <UniqueIdentifier>{f871b189-443e-428d-8eb9-09bbff20d044}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Management Packets">
+      <UniqueIdentifier>{354df3e8-8b06-4c0d-909d-48294b1a5890}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Server Packets">
+      <UniqueIdentifier>{3cf15780-b10a-47c1-83fd-84f18e48c499}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Packets">
+      <UniqueIdentifier>{4fe9c0fe-fed6-437b-85e9-a0bb34c094c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Tables">
+      <UniqueIdentifier>{18f5414e-a230-49c2-b3e4-88429fc092a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{8ede6a0d-c429-49d0-a2af-d055e0b9600a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ManagementServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="serverpacket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="packet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="server.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="client.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="course.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Client Packets\ClientPacket15.cpp">
+      <Filter>Source Files\Client Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Client Packets\ClientPacketAuthentication.cpp">
+      <Filter>Source Files\Client Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Client Packets\ClientPacketBattle.cpp">
+      <Filter>Source Files\Client Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Client Packets\ClientPacketCar.cpp">
+      <Filter>Source Files\Client Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Client Packets\ClientPacketChat.cpp">
+      <Filter>Source Files\Client Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Client Packets\ClientPacketCourseDetails.cpp">
+      <Filter>Source Files\Client Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Client Packets\ClientPacketGarage.cpp">
+      <Filter>Source Files\Client Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Client Packets\ClientPacketItem.cpp">
+      <Filter>Source Files\Client Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Client Packets\ClientPacketKeepAlive.cpp">
+      <Filter>Source Files\Client Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Client Packets\ClientPacketNotifications.cpp">
+      <Filter>Source Files\Client Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Client Packets\ClientPacketPing.cpp">
+      <Filter>Source Files\Client Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Client Packets\ClientPacketPlayerCreation.cpp">
+      <Filter>Source Files\Client Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Client Packets\ClientPacketPlayerDetails.cpp">
+      <Filter>Source Files\Client Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Client Packets\ClientPacketPositioning.cpp">
+      <Filter>Source Files\Client Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Client Packets\ClientPacketRivalDetails.cpp">
+      <Filter>Source Files\Client Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Client Packets\ClientPacketShop.cpp">
+      <Filter>Source Files\Client Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Client Packets\ClientPacketTeam.cpp">
+      <Filter>Source Files\Client Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Management Packets\ManagementPacketClientAuth.cpp">
+      <Filter>Source Files\Management Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Server Packets\ClientAuthPackets.cpp">
+      <Filter>Source Files\Server Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Server Packets\ClientOperationsPackets.cpp">
+      <Filter>Source Files\Server Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Server Packets\ClientRequestsPackets.cpp">
+      <Filter>Source Files\Server Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Server Packets\ServerAuthPackets.cpp">
+      <Filter>Source Files\Server Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Server Packets\ServerOperationsPackets.cpp">
+      <Filter>Source Files\Server Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Client Packets\ClientPacketStatus.cpp">
+      <Filter>Source Files\Client Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="Management Packets\ManagementPacketClientRequests.cpp">
+      <Filter>Source Files\Management Packets</Filter>
+    </ClCompile>
+    <ClCompile Include="rival.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SBOL Battle Server.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="shutokou.ico">
+      <Filter>Resources</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,79 @@
+{
+	"id" : 100,
+	"customteam" : true,
+	"teamname" : "RedSuns",
+	"stickers" : 10,
+	"members" : [
+		{
+			"id" : 0,
+			"name" : "Keisuke",
+			"carid" : 59,
+			"leader" : true,
+			"cp" : 50,
+			"routetable" : 1,
+			"rewardtable" : 0,
+			"commontable" : 0,
+			"rewardchance" : 0.0,
+			"carmods" :	{
+				"carcolour1" : "0x00DFDF",
+				"carcolour2" : "0x00DFDF",
+				"engine" : 7,
+				"muffler" : 8,
+				"transmission" : 4,
+				"differential" : 4,
+				"tyreandbrakes" : 9,
+				"suspension" : 6,
+				"body" : 5,
+				"overfenders" : 1,
+				"frontbumper" : 5,
+				"bonnet" : 0,
+				"mirrors" : 2,
+				"sideskirts" : 0,
+				"rearbumper" : 5,
+				"rearspoiler" : 5,
+				"grill" : 2,
+				"lights" : 1,
+				"wheels" : 250,
+				"colourwheels" : 1,
+				"wheelcolour1" : "0xFFFFFF",
+				"wheelcolour2" : "0xFFFFFF",
+				"stickers" : 10
+			},
+			"carsettings" : {
+				"handle" : 0,
+				"acceleration" : 15,
+				"brake" : 15,
+				"brakebalance" : 0,
+				"springratefront" : 0,
+				"springraterear" : 0,
+				"damperratefront" : 0,
+				"damperraterear" : 0,
+				"gear1" : 0,
+				"gear2" : 0,
+				"gear3" : 0,
+				"gear4" : 0,
+				"gear5" : 0,
+				"gear6" : 0,
+				"rideheightfront" : -10,
+				"rideheightrear" : -10,
+				"finaldrive" : 0,
+				"boostpressure" : 15
+			},
+			"difficulty" :	{
+				"floats" : [ 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0 ],
+				"bytes" : [ 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255 ]
+			},
+			"requirements" : {
+				"level" : 0,
+				"wins" : 0,
+				"kms" : 0,
+				"day" : 0,
+				"time" : 0,
+				"previousrivals" : [ ],
+				"drivetrain" : 0,
+				"enginecylinders" : 0,
+				"aspiration" : 0
+			}
+		}
+	]
+}
