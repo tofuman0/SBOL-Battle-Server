@@ -149,7 +149,7 @@ public:
 	PARTSHOPDATA shopData;
 	ITEMDATA itemData;
 	uint8_t* hDAT;
-	LOGGER logger;
+	Logger logger;
 	MANAGEMENTSERVER managementserver;
 	std::vector<uint32_t> startingCars;
 	uint32_t shopBasePrices[11] = {

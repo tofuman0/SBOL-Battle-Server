@@ -34,7 +34,7 @@ void ClientPacketPositioning(CLIENT* client)
 				}
 				client->inbuf.getArray((uint8_t*)&client->position, sizeof(POSITION), 0x06);
 				if(client->logPosition)
-					client->logger->Log(LOGGER::LOGTYPE_CLIENT, L"0x%04X,0x%04X,0x%04X", client->position.location1, client->position.location2, client->position.location3);
+					client->logger->Log(Logger::LOGTYPE_CLIENT, L"0x%04X,0x%04X,0x%04X", client->position.location1, client->position.location2, client->position.location3);
 				//client->position.time += 1000;
 				//Relay current position
 				//if (client->battle.status == BATTLESTATUS::NOT_IN_BATTLE) 
@@ -47,7 +47,7 @@ void ClientPacketPositioning(CLIENT* client)
 			}
 			else
 			{
-				client->logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has tried to spoof player ID %u",
+				client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has tried to spoof player ID %u",
 					client->logger->toWide(client->handle).c_str(),
 					client->driverslicense,
 					client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -56,14 +56,14 @@ void ClientPacketPositioning(CLIENT* client)
 				return;
 			}
 
-			//client->logger->Log(LOGGER::LOGTYPE_PACKET, L"Packet: Server -> Course");
-			//client->logger->Log(LOGGER::LOGTYPE_PACKET, client->logger->packet_to_text(&client->outbuf.buffer[0x00], client->outbuf.getSize()));
+			//client->logger->Log(Logger::LOGTYPE_PACKET, L"Packet: Server -> Course");
+			//client->logger->Log(Logger::LOGTYPE_PACKET, client->logger->packet_to_text(&client->outbuf.buffer[0x00], client->outbuf.getSize()));
 
 			return;
 		}
 		else
 		{
-			client->logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has tried to spoof player ID %u",
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has tried to spoof player ID %u",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),

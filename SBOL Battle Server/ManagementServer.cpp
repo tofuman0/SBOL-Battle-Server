@@ -28,7 +28,7 @@ uint32_t MANAGEMENTSERVER::Start(SERVER* serverptr)
 	logger = &server->logger;
 	if (LoadKey())
 	{
-		logger->Log(LOGGER::LOGTYPE_MANAGEMENT, L"Management key failed to load.");
+		logger->Log(Logger::LOGTYPE_MANAGEMENT, L"Management key failed to load.");
 		return 1;
 	}
 	if (!server)
@@ -38,7 +38,7 @@ uint32_t MANAGEMENTSERVER::Start(SERVER* serverptr)
 	std::thread mThread(managementServerThread, this);
 	mThread.detach();
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
-	logger->Log(LOGGER::LOGTYPE_MANAGEMENT, L"Management Server Thread Started.");
+	logger->Log(Logger::LOGTYPE_MANAGEMENT, L"Management Server Thread Started.");
 
 	return 0;
 }
@@ -69,7 +69,7 @@ uint32_t MANAGEMENTSERVER::LoadKey()
 	keyfile.read((char*)&key[0], 32);
 	keyfile.read((char*)&iv[0], 16);
 	keyfile.close();
-	logger->Log(LOGGER::LOGTYPE_MANAGEMENT, L"Management key loaded.");
+	logger->Log(Logger::LOGTYPE_MANAGEMENT, L"Management key loaded.");
 	return 0;
 }
 void MANAGEMENTSERVER::initialize()
@@ -103,7 +103,7 @@ uint32_t MANAGEMENTSERVER::Send(SERVERPACKET* src)
 	{
 		if (isAuth == false && src->getType() > 0x0000)
 		{
-			logger->Log(LOGGER::LOGTYPE_ERROR, L"Unable to send packet to management server %s as not authenticated.", logger->toWide((char*)IP_Address).c_str());
+			logger->Log(Logger::LOGTYPE_ERROR, L"Unable to send packet to management server %s as not authenticated.", logger->toWide((char*)IP_Address).c_str());
 			return 2;
 		}
 		if (CLIENT_BUFFER_SIZE < ((int32_t)src->getSize() + 15))
@@ -117,7 +117,7 @@ uint32_t MANAGEMENTSERVER::Send(SERVERPACKET* src)
 			uint16_t newsize = 0;
 			if ((size - 4) < 0 || size > CLIENT_BUFFER_SIZE)
 			{
-				logger->Log(LOGGER::LOGTYPE_ERROR, L"Unable to send packet to client %s as packet will be %ubytes", logger->toWide((char*)IP_Address).c_str(), size);
+				logger->Log(Logger::LOGTYPE_ERROR, L"Unable to send packet to client %s as packet will be %ubytes", logger->toWide((char*)IP_Address).c_str(), size);
 				return 1;
 			}
 			src->setSize(size - 2);
@@ -131,7 +131,7 @@ uint32_t MANAGEMENTSERVER::Send(SERVERPACKET* src)
 			newsize = compressed.size();
 			if (newsize > CLIENT_BUFFER_SIZE)
 			{
-				logger->Log(LOGGER::LOGTYPE_ERROR, L"Unable to send packet to client %s as packet will be %ubytes", logger->toWide((char*)IP_Address).c_str(), newsize);
+				logger->Log(Logger::LOGTYPE_ERROR, L"Unable to send packet to client %s as packet will be %ubytes", logger->toWide((char*)IP_Address).c_str(), newsize);
 				return 1;
 			}
 			if (newsize)
@@ -148,7 +148,7 @@ uint32_t MANAGEMENTSERVER::Send(SERVERPACKET* src)
 			{
 				if (newsize + 2 + BLOCK_SIZE > CLIENT_BUFFER_SIZE)
 				{
-					logger->Log(LOGGER::LOGTYPE_ERROR, L"Unable to send packet to client %s as packet will be %ubytes", logger->toWide((char*)IP_Address).c_str(), newsize + 2 + BLOCK_SIZE);
+					logger->Log(Logger::LOGTYPE_ERROR, L"Unable to send packet to client %s as packet will be %ubytes", logger->toWide((char*)IP_Address).c_str(), newsize + 2 + BLOCK_SIZE);
 					return 1;
 				}
 				newsize = encrypt(&src->buffer[0x02], &src->buffer[0x02], static_cast<int32_t>(newsize));
@@ -201,22 +201,22 @@ void MANAGEMENTSERVER::ProcessPacket()
 		}
 		catch (std::exception ex)
 		{
-			logger->Log(LOGGER::LOGTYPE_COMM, L"Invalid Packet Message: %04X from client %s", inbuf.getType(), logger->toWide((char*)IP_Address).c_str());
+			logger->Log(Logger::LOGTYPE_COMM, L"Invalid Packet Message: %04X from client %s", inbuf.getType(), logger->toWide((char*)IP_Address).c_str());
 			Disconnect();
 			return;
 		}
 
 		if (inbuf.getType() > sizeof(PacketFunctions) / 4 || (isAuth == false && inbuf.getType() != SERVERPACKET::PACKETTYPE::PACKETTYPE_AUTH))
 		{
-			logger->Log(LOGGER::LOGTYPE_COMM, L"Invalid Packet Message: %04X from client %s", inbuf.getType(), logger->toWide((char*)IP_Address).c_str());
+			logger->Log(Logger::LOGTYPE_COMM, L"Invalid Packet Message: %04X from client %s", inbuf.getType(), logger->toWide((char*)IP_Address).c_str());
 			Disconnect();
 			return;
 		}
 #ifdef PACKET_OUTPUT
 		if (inbuf.getType() != 0x0000 && inbuf.getSubType() != 0x0001)
 		{
-			logger->Log(LOGGER::LOGTYPE_MANAGEMENT, L"Packet: Management -> Server");
-			logger->Log(LOGGER::LOGTYPE_MANAGEMENT, logger->packet_to_text(&inbuf.buffer[0], inbuf.getSize()).c_str());
+			logger->Log(Logger::LOGTYPE_MANAGEMENT, L"Packet: Management -> Server");
+			logger->Log(Logger::LOGTYPE_MANAGEMENT, logger->packet_to_text(&inbuf.buffer[0], inbuf.getSize()).c_str());
 		}
 #endif
 		PacketFunctions[inbuf.getType()](this);
@@ -241,7 +241,7 @@ void MANAGEMENTSERVER::managementServerThread(void* parg)
 	wserror = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (wserror != 0)
 	{
-		managementserver->logger->Log(LOGGER::LOGTYPE_MANAGEMENT, L"WSAStartup failed for management server with error %u", wserror);
+		managementserver->logger->Log(Logger::LOGTYPE_MANAGEMENT, L"WSAStartup failed for management server with error %u", wserror);
 		goto end;
 	}
 
@@ -252,7 +252,7 @@ void MANAGEMENTSERVER::managementServerThread(void* parg)
 	managementPort = static_cast<std::ostringstream*>(&(std::ostringstream() << gameserver->getMANAGEMENTSERVERPort()))->str();
 	wserror = getaddrinfo(gameserver->getMANAGEMENTSERVERAddress().c_str(), managementPort.c_str(), &hints, &result);
 	if (wserror != 0) {
-		managementserver->logger->Log(LOGGER::LOGTYPE_MANAGEMENT, L"getaddrinfo failed for management server with error %u", wserror);
+		managementserver->logger->Log(Logger::LOGTYPE_MANAGEMENT, L"getaddrinfo failed for management server with error %u", wserror);
 		goto end;
 	}
 
@@ -260,7 +260,7 @@ void MANAGEMENTSERVER::managementServerThread(void* parg)
 		ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype,
 			ptr->ai_protocol);
 		if (ConnectSocket == INVALID_SOCKET) {
-			managementserver->logger->Log(LOGGER::LOGTYPE_MANAGEMENT, L"socket failed for management server with error %ld", WSAGetLastError());
+			managementserver->logger->Log(Logger::LOGTYPE_MANAGEMENT, L"socket failed for management server with error %ld", WSAGetLastError());
 			goto end;
 		}
 		wserror = connect(ConnectSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
@@ -275,10 +275,10 @@ void MANAGEMENTSERVER::managementServerThread(void* parg)
 	freeaddrinfo(result);
 
 	if (ConnectSocket == INVALID_SOCKET) {
-		managementserver->logger->Log(LOGGER::LOGTYPE_MANAGEMENT, L"unable to connect to management server on port %u", gameserver->getMANAGEMENTSERVERPort());
+		managementserver->logger->Log(Logger::LOGTYPE_MANAGEMENT, L"unable to connect to management server on port %u", gameserver->getMANAGEMENTSERVERPort());
 		goto end;
 	}
-	managementserver->logger->Log(LOGGER::LOGTYPE_MANAGEMENT, L"Connected to management server on port %u", gameserver->getMANAGEMENTSERVERPort());
+	managementserver->logger->Log(Logger::LOGTYPE_MANAGEMENT, L"Connected to management server on port %u", gameserver->getMANAGEMENTSERVERPort());
 	gameserver->setConnectedToMANAGEMENTSERVER();
 	managementserver->ServerSocket = ConnectSocket;
 	managementserver->SendAuth();
@@ -303,7 +303,7 @@ void MANAGEMENTSERVER::managementServerThread(void* parg)
 			FD_CLR(managementserver->ServerSocket, &WriteFDs);
 			if (managementserver->DataSend() == false)
 			{
-				managementserver->logger->Log(LOGGER::LOGTYPE_MANAGEMENT, L"Disconnected from management server");
+				managementserver->logger->Log(Logger::LOGTYPE_MANAGEMENT, L"Disconnected from management server");
 				gameserver->clearConnectedToMANAGEMENTSERVER();
 				break;
 			}
@@ -314,7 +314,7 @@ void MANAGEMENTSERVER::managementServerThread(void* parg)
 			//FD_CLR(managementserver->ServerSocket, &ReadFDs);
 			if (managementserver->DataRecv() == false)
 			{
-				managementserver->logger->Log(LOGGER::LOGTYPE_MANAGEMENT, L"Disconnected from management server");
+				managementserver->logger->Log(Logger::LOGTYPE_MANAGEMENT, L"Disconnected from management server");
 				gameserver->clearConnectedToMANAGEMENTSERVER();
 				break;
 			}
@@ -347,7 +347,7 @@ void MANAGEMENTSERVER::CheckManagementPackets(uint32_t rcvcopy, uint8_t* tmprcv)
 		if (inbuf.getSize() > CLIENT_BUFFER_SIZE)
 		{
 			// Packet too big, disconnect the client.
-			logger->Log(LOGGER::LOGTYPE_MANAGEMENT, L"Management server %s sent an invalid packet.", toWide((char*)IP_Address).c_str());
+			logger->Log(Logger::LOGTYPE_MANAGEMENT, L"Management server %s sent an invalid packet.", toWide((char*)IP_Address).c_str());
 			Disconnect();
 		}
 		else
@@ -393,13 +393,13 @@ int32_t MANAGEMENTSERVER::encrypt(uint8_t* src, uint8_t* dst, int32_t len)
 		{
 		crypterror:
 			ERR_print_errors_fp(stderr);
-			logger->Log(LOGGER::LOGTYPE_ERROR, L"Unable to encrypt data. %u", error);
+			logger->Log(Logger::LOGTYPE_ERROR, L"Unable to encrypt data. %u", error);
 			return -1;
 		}
 	}
 	catch (exception ex) {
 		ERR_print_errors_fp(stderr);
-		logger->Log(LOGGER::LOGTYPE_ERROR, L"Unable to encrypt data: %s", ex.what());
+		logger->Log(Logger::LOGTYPE_ERROR, L"Unable to encrypt data: %s", ex.what());
 		return -1;
 	}
 #else
@@ -432,14 +432,14 @@ int32_t MANAGEMENTSERVER::decrypt(uint8_t* src, uint8_t* dst, int32_t len)
 		{
 		crypterror:
 			ERR_print_errors_fp(stderr);
-			logger->Log(LOGGER::LOGTYPE_ERROR, L"Unable to decrypt data.");
+			logger->Log(Logger::LOGTYPE_ERROR, L"Unable to decrypt data.");
 			return -1;
 		}
 
 	}
 	catch (exception ex) {
 		ERR_print_errors_fp(stderr);
-		logger->Log(LOGGER::LOGTYPE_ERROR, L"Unable to decrypt data: %s", ex.what());
+		logger->Log(Logger::LOGTYPE_ERROR, L"Unable to decrypt data: %s", ex.what());
 		return -1;
 	}
 #else
@@ -482,7 +482,7 @@ bool MANAGEMENTSERVER::DataSend()
 			wserror = WSAGetLastError();
 			if (wserror != WSAEWOULDBLOCK)
 			{
-				logger->Log(LOGGER::LOGTYPE_MANAGEMENT, L"Could not send data to management server. Socket Error %d", wserror);
+				logger->Log(Logger::LOGTYPE_MANAGEMENT, L"Could not send data to management server. Socket Error %d", wserror);
 				return false;
 			}
 		}
@@ -512,7 +512,7 @@ bool MANAGEMENTSERVER::DataRecv()
 		wserror = WSAGetLastError();
 		if (wserror != WSAEWOULDBLOCK)
 		{
-			logger->Log(LOGGER::LOGTYPE_MANAGEMENT, L"Could not read data from management server. Socket Error %d", wserror);
+			logger->Log(Logger::LOGTYPE_MANAGEMENT, L"Could not read data from management server. Socket Error %d", wserror);
 			return false;
 		}
 	}
@@ -620,7 +620,7 @@ uint32_t MANAGEMENTSERVER::messagesInSendQueue()
 	std::lock_guard<std::mutex> locker(_muPackets);
 	if (sendQueue.size() > 10)
 	{
-		logger->Log(LOGGER::LOGTYPE_COMM, L"Send Queue exceeds 10 for management server. %u in queue",
+		logger->Log(Logger::LOGTYPE_COMM, L"Send Queue exceeds 10 for management server. %u in queue",
 			sendQueue.size()
 		);
 	}

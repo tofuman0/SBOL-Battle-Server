@@ -6,12 +6,12 @@
 
 #define PACKET_BUFFER_SIZE 64000 * 16
 
-class LOGGER
+class Logger
 {
 public:
-	LOGGER();
-	LOGGER(char* path);
-	~LOGGER();
+	Logger();
+	Logger(char* path);
+	~Logger();
 	const enum LOGTYPE {
 		LOGTYPE_NONE,
 		LOGTYPE_SERVER,
@@ -31,6 +31,7 @@ public:
 	std::wstring toWide(std::string in);
 	std::string toNarrow(std::wstring in);
 private:
+	void CheckLogPath(std::string path);
 	std::string logpath;
 };
 

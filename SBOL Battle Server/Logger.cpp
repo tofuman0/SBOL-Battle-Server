@@ -16,18 +16,20 @@ const wchar_t* LOGFILES[]{
 	L"management"
 };
 
-LOGGER::LOGGER()
+Logger::Logger()
 {
 	logpath = ".\\log";
+	CheckLogPath(logpath);
 }
-LOGGER::LOGGER(char* path)
+Logger::Logger(char* path)
 {
 	logpath = path;
+	CheckLogPath(logpath);
 }
-LOGGER::~LOGGER()
+Logger::~Logger()
 {
 }
-void LOGGER::Log(LOGTYPE type, const wchar_t* in, ...)
+void Logger::Log(LOGTYPE type, const wchar_t* in, ...)
 {
 	try
 	{
@@ -37,7 +39,7 @@ void LOGGER::Log(LOGTYPE type, const wchar_t* in, ...)
 #endif
 		va_list args;
 		wchar_t text[MAX_MESG_LEN];
-		wchar_t logbuf[FILENAME_MAX];
+		wchar_t logbuf[MAX_MESG_LEN];
 		wchar_t buf[MAX_MESG_LEN];
 
 		SYSTEMTIME rawtime;
@@ -77,35 +79,37 @@ void LOGGER::Log(LOGTYPE type, const wchar_t* in, ...)
 		wprintf(L"Error writing to logfile: %s", toWide(ex.what()).c_str());
 	}
 }
-std::wstring LOGGER::toWide(std::string in)
+std::wstring Logger::toWide(std::string in)
 {
 	std::wstring temp(in.length(), L' ');
 	copy(in.begin(), in.end(), temp.begin());
 	return temp;
 }
-std::string LOGGER::toNarrow(std::wstring in)
+std::string Logger::toNarrow(std::wstring in)
 {
 	std::string temp(in.length(), ' ');
 	copy(in.begin(), in.end(), temp.begin());
 	return temp;
 }
-void LOGGER::setLogPath(char* in)
+void Logger::setLogPath(char* in)
 {
 	logpath = in;
+	CheckLogPath(logpath);
 }
-void LOGGER::setLogPath(std::string& in)
+void Logger::setLogPath(std::string& in)
 {
 	logpath = in;
+	CheckLogPath(logpath);
 }
-std::string LOGGER::getLogPath()
+std::string Logger::getLogPath()
 {
 	return logpath;
 }
-bool LOGGER::isLogPathSet()
+bool Logger::isLogPathSet()
 {
 	return (logpath.length() > 0) ? true : false;
 }
-std::wstring LOGGER::packet_to_text(uint8_t* buf, uint32_t len)
+std::wstring Logger::packet_to_text(uint8_t* buf, uint32_t len)
 {
 	try
 	{
@@ -158,4 +162,17 @@ std::wstring LOGGER::packet_to_text(uint8_t* buf, uint32_t len)
 	}
 	catch (std::exception ex) { }
 	return std::wstring();
+}
+
+void Logger::CheckLogPath(std::string path)
+{
+	struct stat sb;
+	if (stat(path.c_str(), &sb) != 0)
+	{
+		std::cout << "Log path " << path.c_str() << " doesn't exist. Creating path" << std::endl;
+		if (!CreateDirectoryA(path.c_str(), NULL))
+		{
+			std::cout << "Error creating log folder " << path.c_str() << std::endl;
+		}
+	}
 }

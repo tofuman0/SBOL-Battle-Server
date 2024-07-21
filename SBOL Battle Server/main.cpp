@@ -55,11 +55,11 @@ int main()
 	assert(mainIcon);
 	ChangeIcon(mainIcon);
 
-	server->logger.Log(LOGGER::LOGTYPE_NONE, L"SBOL Server version %s by Tofuman", VERSION_STRING);
-	server->logger.Log(LOGGER::LOGTYPE_NONE, L"-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+	server->logger.Log(Logger::LOGTYPE_NONE, L"SBOL Server version %s by Tofuman", VERSION_STRING);
+	server->logger.Log(Logger::LOGTYPE_NONE, L"-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
 	if (server->Start())
 	{
-		server->logger.Log(LOGGER::LOGTYPE_ERROR, L"Server failed to start");
+		server->logger.Log(Logger::LOGTYPE_ERROR, L"Server failed to start");
 		return 1;
 	}
 

@@ -96,7 +96,7 @@ public:
 		int32_t spCount;
 	} BATTLE;
 #pragma region Client Class Pointers
-	LOGGER* logger;
+	Logger* logger;
 	SERVER* server;
 	COURSE* course;
 	BATTLE battle;

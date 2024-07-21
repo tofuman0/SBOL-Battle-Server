@@ -398,7 +398,7 @@ void ClientPacketChat(CLIENT* client)
 		uint32_t teamID = client->inbuf.get<uint32_t>(0x62);
 		if (teamID != client->teamdata.teamID || client->inTeam() == false)
 		{
-			client->logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to team chat but is not in a team or in the specified team. Team ID %u",
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to team chat but is not in a team or in the specified team. Team ID %u",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),

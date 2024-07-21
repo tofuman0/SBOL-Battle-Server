@@ -35,8 +35,8 @@ void COURSE::sendToCourse(PACKET* src, int32_t exclude)
 #ifdef PACKET_OUTPUT_DIS
 				if (src->getType() != 0x0A00)
 				{
-					logger->Log(LOGGER::LOGTYPE_PACKET, L"Packet: Server -> Course");
-					logger->Log(LOGGER::LOGTYPE_PACKET, logger->packet_to_text(&src->buffer[0x00], src->getSize()));
+					logger->Log(Logger::LOGTYPE_PACKET, L"Packet: Server -> Course");
+					logger->Log(Logger::LOGTYPE_PACKET, logger->packet_to_text(&src->buffer[0x00], src->getSize()));
 				}
 #endif
 				client->addToSendQueue(src);
@@ -65,8 +65,8 @@ void COURSE::sendToProximity(PACKET* src, float x, float y, int32_t exclude)
 #ifdef PACKET_OUTPUT_DIS
 				if (src->getType() != 0x0A00)
 				{
-					logger->Log(LOGGER::LOGTYPE_PACKET, L"Packet: Server -> Course");
-					logger->Log(LOGGER::LOGTYPE_PACKET, logger->packet_to_text(&src->buffer[0x00], src->getSize()));
+					logger->Log(Logger::LOGTYPE_PACKET, L"Packet: Server -> Course");
+					logger->Log(Logger::LOGTYPE_PACKET, logger->packet_to_text(&src->buffer[0x00], src->getSize()));
 				}
 #endif
 				client->addToSendQueue(src);

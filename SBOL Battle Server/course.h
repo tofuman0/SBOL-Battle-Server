@@ -18,7 +18,7 @@ private:
 public:
 	COURSE();
 	~COURSE();
-	LOGGER* logger;
+	Logger* logger;
 	std::vector<CLIENT*> courseClient;
 	PACKET coursebuf;
 

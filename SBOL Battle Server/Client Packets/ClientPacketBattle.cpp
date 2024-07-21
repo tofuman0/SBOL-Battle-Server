@@ -31,7 +31,7 @@ void ClientPacketBattle(CLIENT* client)
 			client->battle.status = CLIENT::BATTLESTATUS::BS_NOT_IN_BATTLE;
 			client->SendBattleAbort(0);
 		}
-		client->logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u is challenging player ID %u",
+		client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u is challenging player ID %u",
 			client->logger->toWide(client->handle).c_str(),
 			client->driverslicense,
 			client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -88,7 +88,7 @@ void ClientPacketBattle(CLIENT* client)
 			client->battle.spCount++;
 			if (client->battle.lastSP != INITIALBATTLE_SP && (client->battle.SP >= client->battle.lastSP || (client->battle.lastSP - client->battle.SP) > 400000))
 			{
-				client->logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u may have altered the battle SP. %u SP taken since last SP",
+				client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u may have altered the battle SP. %u SP taken since last SP",
 					client->logger->toWide(client->handle).c_str(),
 					client->driverslicense,
 					client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -108,7 +108,7 @@ void ClientPacketBattle(CLIENT* client)
 		if (clientID < COURSE_NPC_LIMIT)
 		{	// Is Rival ID
 			client->SendBattleChallengeNPC(clientID, 100000);
-			client->logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u is challenging NPC ID %u",
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u is challenging NPC ID %u",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -119,7 +119,7 @@ void ClientPacketBattle(CLIENT* client)
 		{
 			client->battle.status = CLIENT::BATTLESTATUS::BS_NOT_IN_BATTLE;
 			client->SendBattleAbort(0);
-			client->logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u is challenging invalid NPC ID %u",
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u is challenging invalid NPC ID %u",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -141,7 +141,7 @@ void ClientPacketBattle(CLIENT* client)
 			uint32_t _2 = client->inbuf.get<uint32_t>(0x06);
 			uint32_t _3 = client->inbuf.get<uint32_t>(0x0A);
 			uint32_t _4 = client->inbuf.get<uint32_t>(0x0E);
-			client->logger->Log(LOGGER::LOGTYPE_NONE, L"Client %s (%u / %s) with ID %u has finshed battle. %u, %u, %u, %u.",
+			client->logger->Log(Logger::LOGTYPE_NONE, L"Client %s (%u / %s) with ID %u has finshed battle. %u, %u, %u, %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),

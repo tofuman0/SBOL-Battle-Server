@@ -27,7 +27,7 @@ void ClientPacketRivalDetails(CLIENT* client)
 		int32_t count = static_cast<int32_t>(client->inbuf.get<uint8_t>(0x04));
 		if (client->inbuf.getSize() < 5 + (count * sizeof(int32_t)) || count > sizeof(client->careerdata.rivalStatus) / sizeof(RIVAL_STATUS))
 		{
-			client->logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client %s (%u / %s) has sent invalid 0xC01 packet.",
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has sent invalid 0xC01 packet.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str()
@@ -50,7 +50,7 @@ void ClientPacketRivalDetails(CLIENT* client)
 			uint32_t currentID = client->inbuf.get<uint32_t>();
 			if (currentID >= sizeof(client->careerdata.rivalStatus) / sizeof(RIVAL_STATUS))
 			{
-				client->logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client %s (%u / %s) has sent invalid 0xC01 packet.",
+				client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has sent invalid 0xC01 packet.",
 					client->logger->toWide(client->handle).c_str(),
 					client->driverslicense,
 					client->logger->toWide((char*)&client->IP_Address).c_str()

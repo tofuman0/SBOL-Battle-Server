@@ -342,7 +342,7 @@ int32_t SERVER::LoadConfig(const wchar_t* filename)
 	std::ifstream inFile(filename);
 	if (!inFile.is_open())
 	{
-		logger.Log(LOGGER::LOGTYPE_ERROR, L"Error Loading configuration file: %s.", filename);
+		logger.Log(Logger::LOGTYPE_ERROR, L"Error Loading configuration file: %s.", filename);
 		return 1;
 	}
 
@@ -352,7 +352,7 @@ int32_t SERVER::LoadConfig(const wchar_t* filename)
 		inFile >> in;
 	}
 	catch (...) {
-		logger.Log(LOGGER::LOGTYPE_ERROR, L"JSON Parse Error\n");
+		logger.Log(Logger::LOGTYPE_ERROR, L"JSON Parse Error\n");
 		inFile.close();
 		return 1;
 	}
@@ -370,10 +370,10 @@ int32_t SERVER::LoadConfig(const wchar_t* filename)
 		{
 			try {
 				serverPort = in["serverport"].get<unsigned short>();
-				logger.Log(LOGGER::LOGTYPE_DEBUG, L"CONFIG: Server port is %u.", serverPort);
+				logger.Log(Logger::LOGTYPE_DEBUG, L"CONFIG: Server port is %u.", serverPort);
 			}
 			catch (...) {
-				logger.Log(LOGGER::LOGTYPE_ERROR, L"JSON Parse Error\n");
+				logger.Log(Logger::LOGTYPE_ERROR, L"JSON Parse Error\n");
 				return 1;
 			}
 		}
@@ -387,10 +387,10 @@ int32_t SERVER::LoadConfig(const wchar_t* filename)
 		{
 			try {
 				serverName = in["servername"].get<std::string>();
-				logger.Log(LOGGER::LOGTYPE_DEBUG, L"CONFIG: Server Name is %s.", toWide(serverName).c_str());
+				logger.Log(Logger::LOGTYPE_DEBUG, L"CONFIG: Server Name is %s.", toWide(serverName).c_str());
 			}
 			catch (...) {
-				logger.Log(LOGGER::LOGTYPE_ERROR, L"JSON Parse Error\n");
+				logger.Log(Logger::LOGTYPE_ERROR, L"JSON Parse Error\n");
 				return 1;
 			}
 		}
@@ -404,10 +404,10 @@ int32_t SERVER::LoadConfig(const wchar_t* filename)
 		{
 			try {
 				serverClientLimit = in["serverclientlimit"].get<unsigned short>();
-				logger.Log(LOGGER::LOGTYPE_DEBUG, L"CONFIG: Server Client Limit is %u.", serverClientLimit);
+				logger.Log(Logger::LOGTYPE_DEBUG, L"CONFIG: Server Client Limit is %u.", serverClientLimit);
 			}
 			catch (...) {
-				logger.Log(LOGGER::LOGTYPE_ERROR, L"JSON Parse Error\n");
+				logger.Log(Logger::LOGTYPE_ERROR, L"JSON Parse Error\n");
 				return 1;
 			}
 		}
@@ -421,10 +421,10 @@ int32_t SERVER::LoadConfig(const wchar_t* filename)
 		{
 			try {
 				serverWelcomeMessage = in["serverwelcomemessage"].get<std::string>();
-				logger.Log(LOGGER::LOGTYPE_DEBUG, L"CONFIG: Server Welcome Message is %s.", toWide(serverWelcomeMessage).c_str());
+				logger.Log(Logger::LOGTYPE_DEBUG, L"CONFIG: Server Welcome Message is %s.", toWide(serverWelcomeMessage).c_str());
 			}
 			catch (...) {
-				logger.Log(LOGGER::LOGTYPE_ERROR, L"JSON Parse Error\n");
+				logger.Log(Logger::LOGTYPE_ERROR, L"JSON Parse Error\n");
 				return 1;
 			}
 		}
@@ -438,10 +438,10 @@ int32_t SERVER::LoadConfig(const wchar_t* filename)
 		{
 			try {
 				managementServerPort = in["managementserverport"].get<unsigned short>();
-				logger.Log(LOGGER::LOGTYPE_DEBUG, L"CONFIG: Management Server port is %u.", managementServerPort);
+				logger.Log(Logger::LOGTYPE_DEBUG, L"CONFIG: Management Server port is %u.", managementServerPort);
 			}
 			catch (...) {
-				logger.Log(LOGGER::LOGTYPE_ERROR, L"JSON Parse Error\n");
+				logger.Log(Logger::LOGTYPE_ERROR, L"JSON Parse Error\n");
 				return 1;
 			}
 		}
@@ -455,10 +455,10 @@ int32_t SERVER::LoadConfig(const wchar_t* filename)
 		{
 			try {
 				managementServerAddress = in["managementserveraddress"].get<std::string>();
-				logger.Log(LOGGER::LOGTYPE_DEBUG, L"CONFIG: Management Server Address is %s.", toWide(managementServerAddress).c_str());
+				logger.Log(Logger::LOGTYPE_DEBUG, L"CONFIG: Management Server Address is %s.", toWide(managementServerAddress).c_str());
 			}
 			catch (...) {
-				logger.Log(LOGGER::LOGTYPE_ERROR, L"JSON Parse Error\n");
+				logger.Log(Logger::LOGTYPE_ERROR, L"JSON Parse Error\n");
 				return 1;
 			}
 		}
@@ -472,10 +472,10 @@ int32_t SERVER::LoadConfig(const wchar_t* filename)
 		{
 			try {
 				logger.setLogPath(in["logpath"].get<std::string>());
-				logger.Log(LOGGER::LOGTYPE_DEBUG, L"CONFIG: Log path is %s.", logger.isLogPathSet() ? toWide(logger.getLogPath()).c_str() : L"EMPTY");
+				logger.Log(Logger::LOGTYPE_DEBUG, L"CONFIG: Log path is %s.", logger.isLogPathSet() ? toWide(logger.getLogPath()).c_str() : L"EMPTY");
 			}
 			catch (...) {
-				logger.Log(LOGGER::LOGTYPE_ERROR, L"JSON Parse Error\n");
+				logger.Log(Logger::LOGTYPE_ERROR, L"JSON Parse Error\n");
 				return 1;
 			}
 		}
@@ -488,7 +488,7 @@ int32_t SERVER::LoadConfig(const wchar_t* filename)
 
 	if (malformed)
 	{
-		logger.Log(LOGGER::LOGTYPE_ERROR, L"Configuration file: %s is malformed (%s).", filename, error.c_str());
+		logger.Log(Logger::LOGTYPE_ERROR, L"Configuration file: %s is malformed (%s).", filename, error.c_str());
 		return 1;
 	}
 	else
@@ -516,7 +516,7 @@ void SERVER::CheckClientPackets(CLIENT* client, uint32_t rcvcopy, uint8_t* tmprc
 		if (client->inbuf.getSize() > CLIENT_BUFFER_SIZE)
 		{
 			// Packet too big, disconnect the client.
-			logger.Log(LOGGER::LOGTYPE_COMM, L"Client %s sent a invalid packet.", toWide((char*)client->IP_Address).c_str());
+			logger.Log(Logger::LOGTYPE_COMM, L"Client %s sent a invalid packet.", toWide((char*)client->IP_Address).c_str());
 			client->Disconnect();
 		}
 		else
@@ -531,8 +531,8 @@ void SERVER::initialize_connection(CLIENT* connect)
 	{
 		saveClientData(connect);
 		std::wstring ip = toWide((char*)connect->IP_Address);
-		logger.Log(LOGGER::LOGTYPE_COMM, L"Client %s has disconnected.", ip.c_str());
-		logger.Log(LOGGER::LOGTYPE_COMM, L"Player count: %u", playerCount() - 1);
+		logger.Log(Logger::LOGTYPE_COMM, L"Client %s has disconnected.", ip.c_str());
+		logger.Log(Logger::LOGTYPE_COMM, L"Player count: %u", playerCount() - 1);
 		if(connect->course != nullptr) connect->course->removeClient(connect);
 		closesocket(connect->ClientSocket);
 	}
@@ -757,7 +757,7 @@ int32_t SERVER::tcp_accept(int32_t sockfd, struct sockaddr *client_addr, int32_t
 	}
 	else
 	{
-		logger.Log(LOGGER::LOGTYPE_COMM, L"Could not accept connection.");
+		logger.Log(Logger::LOGTYPE_COMM, L"Could not accept connection.");
 		return -1;
 	}
 }
@@ -780,10 +780,10 @@ bool SERVER::InitServerSocket()
 		switch (ServerSocket)
 		{
 		case -1:
-			logger.Log(LOGGER::LOGTYPE_ERROR, L"Could not create socket.");
+			logger.Log(Logger::LOGTYPE_ERROR, L"Could not create socket.");
 			break;
 		case -2:
-			logger.Log(LOGGER::LOGTYPE_ERROR, L"Could not bind to port %u.", serverPort);
+			logger.Log(Logger::LOGTYPE_ERROR, L"Could not bind to port %u.", serverPort);
 			break;
 		default:
 			break;
@@ -793,13 +793,13 @@ bool SERVER::InitServerSocket()
 
 	if (tcp_listen(ServerSocket))
 	{
-		logger.Log(LOGGER::LOGTYPE_ERROR, L"Could not listen to port %u.", serverPort);
+		logger.Log(Logger::LOGTYPE_ERROR, L"Could not listen to port %u.", serverPort);
 		return false;
 	}
 	else
-		logger.Log(LOGGER::LOGTYPE_COMM, L"Listening on port %u.", serverPort);
+		logger.Log(Logger::LOGTYPE_COMM, L"Listening on port %u.", serverPort);
 
-	logger.Log(LOGGER::LOGTYPE_SERVER, L"Server Started.");
+	logger.Log(Logger::LOGTYPE_SERVER, L"Server Started.");
 	return true;
 }
 bool SERVER::AcceptConnection()
@@ -822,8 +822,8 @@ bool SERVER::AcceptConnection()
 			InetNtopA(AF_INET, &listen_in.sin_addr, (char*)&c->IP_Address[0], 16);
 			*(uint32_t*)&c->ipaddr = *(uint32_t*)&listen_in.sin_addr;
 			std::wstring ip = toWide((char*)c->IP_Address);
-			logger.Log(LOGGER::LOGTYPE_COMM, L"Accepted CLIENT connection from %s:%u", ip.c_str(), listen_in.sin_port);
-			logger.Log(LOGGER::LOGTYPE_COMM, L"Player count: %u", playerCount());
+			logger.Log(Logger::LOGTYPE_COMM, L"Accepted CLIENT connection from %s:%u", ip.c_str(), listen_in.sin_port);
+			logger.Log(Logger::LOGTYPE_COMM, L"Player count: %u", playerCount());
 			c->sendWelcome = time(NULL) + SEND_WELCOME_TIME;
 			c->packetEnable(0x00);
 			c->packetEnable(0x01);
@@ -888,7 +888,7 @@ bool SERVER::Send(CLIENT * client)
 			if (wserror != WSAEWOULDBLOCK)
 			{
 				if (wserror != 0)
-					logger.Log(LOGGER::LOGTYPE_COMM, L"Could not write data to client %s. Socket Error %X08", toWide((char*)client->IP_Address).c_str(), wserror);
+					logger.Log(Logger::LOGTYPE_COMM, L"Could not write data to client %s. Socket Error %X08", toWide((char*)client->IP_Address).c_str(), wserror);
 				client->Disconnect();
 			}
 		}
@@ -917,7 +917,7 @@ bool SERVER::Recv(CLIENT * client)
 		if (wserror != WSAEWOULDBLOCK)
 		{
 			if (wserror != 0)
-				logger.Log(LOGGER::LOGTYPE_COMM, L"Could not read data from client %s. Socket Error %d", toWide((char*)client->IP_Address).c_str(), wserror);
+				logger.Log(Logger::LOGTYPE_COMM, L"Could not read data from client %s. Socket Error %d", toWide((char*)client->IP_Address).c_str(), wserror);
 			client->Disconnect();
 		}
 	}
@@ -992,7 +992,7 @@ bool SERVER::ClientChecks(CLIENT * client)
 	//}
 	if (client->timeoutCount > 0 && client->timeoutCount < time(NULL))
 	{
-		client->logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client %s (%u / %s) has timed out so was disconnected.",
+		client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has timed out so was disconnected.",
 			client->logger->toWide(client->handle).c_str(),
 			client->driverslicense,
 			client->logger->toWide((char*)&client->IP_Address).c_str()
@@ -1133,7 +1133,7 @@ void SERVER::serverThread(void* parg)
 		if (selectcount == 0)
 			std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
-	server->logger.Log(LOGGER::LOGTYPE_SERVER, L"Server Stopped.");
+	server->logger.Log(Logger::LOGTYPE_SERVER, L"Server Stopped.");
 	server->running = false;
 }
 std::vector<std::string> SERVER::split(std::string& in, std::string& delimit)
@@ -1264,7 +1264,7 @@ void SERVER::LoadRivalFile()
 		std::ifstream inFile(rivalfile);
 		if (!inFile.is_open())
 		{
-			logger.Log(LOGGER::LOGTYPE_ERROR, L"Error Loading rival file: %s.", rivalfile.c_str());
+			logger.Log(Logger::LOGTYPE_ERROR, L"Error Loading rival file: %s.", rivalfile.c_str());
 		}
 		else
 		{
@@ -1274,10 +1274,10 @@ void SERVER::LoadRivalFile()
 				inFile >> in;
 			}
 			catch (json::exception ex) {
-				logger.Log(LOGGER::LOGTYPE_ERROR, L"JSON Parse Error %s on file %s.", logger.toWide(ex.what()).c_str(), logger.toWide(rivalfile).c_str());
+				logger.Log(Logger::LOGTYPE_ERROR, L"JSON Parse Error %s on file %s.", logger.toWide(ex.what()).c_str(), logger.toWide(rivalfile).c_str());
 			}
 			catch (...) {
-				logger.Log(LOGGER::LOGTYPE_ERROR, L"JSON Parse Error");
+				logger.Log(Logger::LOGTYPE_ERROR, L"JSON Parse Error");
 				inFile.close();
 			}
 			inFile.close();
@@ -1389,10 +1389,10 @@ void SERVER::LoadRivalFile()
 #endif
 				}
 				catch (json::exception ex) {
-					logger.Log(LOGGER::LOGTYPE_ERROR, L"JSON Parse Error %s on file %s.", logger.toWide(ex.what()).c_str(), logger.toWide(rivalfile).c_str());
+					logger.Log(Logger::LOGTYPE_ERROR, L"JSON Parse Error %s on file %s.", logger.toWide(ex.what()).c_str(), logger.toWide(rivalfile).c_str());
 				}
 				catch (...) {
-					logger.Log(LOGGER::LOGTYPE_ERROR, L"JSON Parse Error on file %s.", logger.toWide(rivalfile).c_str());
+					logger.Log(Logger::LOGTYPE_ERROR, L"JSON Parse Error on file %s.", logger.toWide(rivalfile).c_str());
 				}
 			}
 		}
@@ -1512,7 +1512,7 @@ int32_t SERVER::loadPDat()
 	std::ifstream inFile(filename, std::ios::in | std::ios::binary);
 	if (!inFile.is_open())
 	{
-		logger.Log(LOGGER::LOGTYPE_ERROR, L"Error Loading parts file: %s.", toWide(filename).c_str());
+		logger.Log(Logger::LOGTYPE_ERROR, L"Error Loading parts file: %s.", toWide(filename).c_str());
 		return 1;
 	}
 	size_t fileSize = 0;
@@ -1522,13 +1522,13 @@ int32_t SERVER::loadPDat()
 	fileSize = (size_t)(inFile.tellg() - begin);
 	if (fileSize < sizeof(P_DAT_ENTRY))
 	{
-		logger.Log(LOGGER::LOGTYPE_ERROR, L"Error Loading parts file: %s. Too small.", toWide(filename).c_str());
+		logger.Log(Logger::LOGTYPE_ERROR, L"Error Loading parts file: %s. Too small.", toWide(filename).c_str());
 		return 1;
 	}
 	uint8_t* pDatBuf = (uint8_t*)malloc(fileSize);
 	if(pDatBuf == nullptr)
 	{
-		logger.Log(LOGGER::LOGTYPE_ERROR, L"Error Allocating memory for parts file: %s.", toWide(filename).c_str());
+		logger.Log(Logger::LOGTYPE_ERROR, L"Error Allocating memory for parts file: %s.", toWide(filename).c_str());
 		return 1;
 	}
 	inFile.seekg(0, std::ios::beg);
@@ -1538,7 +1538,7 @@ int32_t SERVER::loadPDat()
 	SBOL::BlowFish* SBOL_BF = new SBOL::BlowFish();
 	if (SBOL_BF->PDATDecrypt((char*)pDatBuf, fileSize) < 0)
 	{
-		logger.Log(LOGGER::LOGTYPE_ERROR, L"Error Decrypting parts file: %s.", toWide(filename).c_str());
+		logger.Log(Logger::LOGTYPE_ERROR, L"Error Decrypting parts file: %s.", toWide(filename).c_str());
 		return 1;
 	}
 	fileSize = *(size_t*)&pDatBuf[0x00];
@@ -1546,10 +1546,10 @@ int32_t SERVER::loadPDat()
 	pDAT.pdat = (P_DAT_ENTRY*)malloc(fileSize);
 	if(pDAT.pdat == nullptr)
 	{
-		logger.Log(LOGGER::LOGTYPE_ERROR, L"Error Allocating memory for parts file: %s.", toWide(filename).c_str());
+		logger.Log(Logger::LOGTYPE_ERROR, L"Error Allocating memory for parts file: %s.", toWide(filename).c_str());
 		return 1;
 	}
-	logger.Log(LOGGER::LOGTYPE_NONE, L"Parts file %s loaded. Hash: %04X, size: %ubytes.", toWide(filename).c_str(), *(uint32_t*)&pDatBuf[0x04], fileSize);
+	logger.Log(Logger::LOGTYPE_NONE, L"Parts file %s loaded. Hash: %04X, size: %ubytes.", toWide(filename).c_str(), *(uint32_t*)&pDatBuf[0x04], fileSize);
 	CopyMemory(pDAT.pdat, &pDatBuf[0x0C], fileSize - 4);
 	free(pDatBuf);
 	delete SBOL_BF;
@@ -1561,7 +1561,7 @@ int32_t SERVER::loadSDat()
 	std::ifstream inFile(filename, std::ios::in | std::ios::binary);
 	if (!inFile.is_open())
 	{
-		logger.Log(LOGGER::LOGTYPE_ERROR, L"Error Loading spec file: %s.", toWide(filename).c_str());
+		logger.Log(Logger::LOGTYPE_ERROR, L"Error Loading spec file: %s.", toWide(filename).c_str());
 		return 1;
 	}
 	size_t fileSize = 0;
@@ -1571,13 +1571,13 @@ int32_t SERVER::loadSDat()
 	fileSize = (size_t)(inFile.tellg() - begin);
 	if (fileSize < sizeof(S_DAT_ENTRY))
 	{
-		logger.Log(LOGGER::LOGTYPE_ERROR, L"Error Loading spec file: %s. Too small.", toWide(filename).c_str());
+		logger.Log(Logger::LOGTYPE_ERROR, L"Error Loading spec file: %s. Too small.", toWide(filename).c_str());
 		return 1;
 	}
 	uint8_t* sDatBuf = (uint8_t*)malloc(fileSize);
 	if (sDatBuf == nullptr)
 	{
-		logger.Log(LOGGER::LOGTYPE_ERROR, L"Error Allocating memory for spec file: %s.", toWide(filename).c_str());
+		logger.Log(Logger::LOGTYPE_ERROR, L"Error Allocating memory for spec file: %s.", toWide(filename).c_str());
 		return 1;
 	}
 	inFile.seekg(0, std::ios::beg);
@@ -1587,7 +1587,7 @@ int32_t SERVER::loadSDat()
 	SBOL::BlowFish* SBOL_BF = new SBOL::BlowFish();
 	if (SBOL_BF->SDATDecrypt((char*)sDatBuf, fileSize) < 0)
 	{
-		logger.Log(LOGGER::LOGTYPE_ERROR, L"Error Decrypting spec file: %s.", toWide(filename).c_str());
+		logger.Log(Logger::LOGTYPE_ERROR, L"Error Decrypting spec file: %s.", toWide(filename).c_str());
 		return 1;
 	}
 	fileSize = *(size_t*)&sDatBuf[0x00];
@@ -1595,10 +1595,10 @@ int32_t SERVER::loadSDat()
 	sDAT.sdat = (S_DAT_ENTRY*)malloc(fileSize);
 	if (sDAT.sdat == nullptr)
 	{
-		logger.Log(LOGGER::LOGTYPE_ERROR, L"Error Allocating memory for spec file: %s.", toWide(filename).c_str());
+		logger.Log(Logger::LOGTYPE_ERROR, L"Error Allocating memory for spec file: %s.", toWide(filename).c_str());
 		return 1;
 	}
-	logger.Log(LOGGER::LOGTYPE_NONE, L"Spec file %s loaded. Hash: %04X, size: %ubytes.", toWide(filename).c_str(), *(uint32_t*)&sDatBuf[0x04], fileSize);
+	logger.Log(Logger::LOGTYPE_NONE, L"Spec file %s loaded. Hash: %04X, size: %ubytes.", toWide(filename).c_str(), *(uint32_t*)&sDatBuf[0x04], fileSize);
 	CopyMemory(sDAT.sdat, &sDatBuf[0x0C], fileSize - 4);
 	free(sDatBuf);
 	delete SBOL_BF;
@@ -1610,7 +1610,7 @@ int32_t SERVER::loadPartShopData()
 	std::ifstream inFile(filename, std::ios::in | std::ios::binary);
 	if (!inFile.is_open())
 	{
-		logger.Log(LOGGER::LOGTYPE_ERROR, L"Error Loading shop file: %s.", toWide(filename).c_str());
+		logger.Log(Logger::LOGTYPE_ERROR, L"Error Loading shop file: %s.", toWide(filename).c_str());
 		return 1;
 	}
 	size_t fileSize = 0;
@@ -1620,20 +1620,20 @@ int32_t SERVER::loadPartShopData()
 	fileSize = (size_t)(inFile.tellg() - begin);
 	if (fileSize < sizeof(PARTSHOPDATA_ENTRY) || fileSize % sizeof(PARTSHOPDATA_ENTRY))
 	{
-		logger.Log(LOGGER::LOGTYPE_ERROR, L"Error Loading shop file: %s. Unexpected size.", toWide(filename).c_str());
+		logger.Log(Logger::LOGTYPE_ERROR, L"Error Loading shop file: %s. Unexpected size.", toWide(filename).c_str());
 		return 1;
 	}
 	shopData.data = (PARTSHOPDATA_ENTRY*)malloc(fileSize);
 	if (shopData.data == nullptr)
 	{
-		logger.Log(LOGGER::LOGTYPE_ERROR, L"Error Allocating memory for shop file: %s.", toWide(filename).c_str());
+		logger.Log(Logger::LOGTYPE_ERROR, L"Error Allocating memory for shop file: %s.", toWide(filename).c_str());
 		return 1;
 	}
 	inFile.seekg(0, std::ios::beg);
 	inFile.read((char*)shopData.data, fileSize);
 	inFile.close();
 	shopData.count = (uint16_t)(fileSize / sizeof(PARTSHOPDATA_ENTRY));
-	logger.Log(LOGGER::LOGTYPE_NONE, L"Shop file %s loaded. Size: %ubytes.", toWide(filename).c_str(), fileSize);
+	logger.Log(Logger::LOGTYPE_NONE, L"Shop file %s loaded. Size: %ubytes.", toWide(filename).c_str(), fileSize);
 	return 0;
 }
 int32_t SERVER::loadItemData()
@@ -1642,7 +1642,7 @@ int32_t SERVER::loadItemData()
 	std::ifstream inFile(filename, std::ios::in | std::ios::binary);
 	if (!inFile.is_open())
 	{
-		logger.Log(LOGGER::LOGTYPE_ERROR, L"Error Loading item file: %s.", toWide(filename).c_str());
+		logger.Log(Logger::LOGTYPE_ERROR, L"Error Loading item file: %s.", toWide(filename).c_str());
 		return 1;
 	}
 	size_t fileSize = 0;
@@ -1652,20 +1652,20 @@ int32_t SERVER::loadItemData()
 	fileSize = (size_t)(inFile.tellg() - begin);
 	if (fileSize < sizeof(ITEMDATA_ENTRY) || (fileSize % sizeof(ITEMDATA_ENTRY)) != 0)
 	{
-		logger.Log(LOGGER::LOGTYPE_ERROR, L"Error Loading item file: %s. Unexpected size.", toWide(filename).c_str());
+		logger.Log(Logger::LOGTYPE_ERROR, L"Error Loading item file: %s. Unexpected size.", toWide(filename).c_str());
 		return 1;
 	}
 	itemData.data = (ITEMDATA_ENTRY*)malloc(fileSize);
 	if (itemData.data == nullptr)
 	{
-		logger.Log(LOGGER::LOGTYPE_ERROR, L"Error Allocating memory for item file: %s.", toWide(filename).c_str());
+		logger.Log(Logger::LOGTYPE_ERROR, L"Error Allocating memory for item file: %s.", toWide(filename).c_str());
 		return 1;
 	}
 	inFile.seekg(0, std::ios::beg);
 	inFile.read((char*)itemData.data, fileSize);
 	inFile.close();
 	itemData.count = (uint16_t)(fileSize / sizeof(ITEMDATA_ENTRY));
-	logger.Log(LOGGER::LOGTYPE_NONE, L"Item file %s loaded. Size: %ubytes.", toWide(filename).c_str(), fileSize);
+	logger.Log(Logger::LOGTYPE_NONE, L"Item file %s loaded. Size: %ubytes.", toWide(filename).c_str(), fileSize);
 	return 0;
 }
 

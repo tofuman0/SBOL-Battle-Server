@@ -9,13 +9,13 @@ void ServerAuth(MANAGEMENTSERVER* managementserver)
 	{
 		if (managementserver->inbuf.get<uint32_t>(0x0A) == managementserver->inbuf.get<uint32_t>(0x06) / 8 && managementserver->inbuf.getString(0x0E, 0x10) == "Tofuman")
 		{
-			managementserver->logger->Log(LOGGER::LOGTYPE_MANAGEMENT, L"Authenticated with management server");
+			managementserver->logger->Log(Logger::LOGTYPE_MANAGEMENT, L"Authenticated with management server");
 		}
 		else
 		{
 			managementserver->isAuth = false;
 			managementserver->Disconnect();
-			managementserver->logger->Log(LOGGER::LOGTYPE_MANAGEMENT, L"Failed to authenticate with management server");
+			managementserver->logger->Log(Logger::LOGTYPE_MANAGEMENT, L"Failed to authenticate with management server");
 		}
 	}
 	break;

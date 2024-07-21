@@ -29,7 +29,7 @@ void ClientRequests(MANAGEMENTSERVER* managementserver)
 			}
 			else if (result == 2)
 			{
-				findClient->logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to create a team but is already in a team. Team ID %u.",
+				findClient->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to create a team but is already in a team. Team ID %u.",
 					findClient->logger->toWide(findClient->handle).c_str(),
 					findClient->driverslicense,
 					findClient->logger->toWide((char*)&findClient->IP_Address).c_str(),
@@ -64,7 +64,7 @@ void ClientRequests(MANAGEMENTSERVER* managementserver)
 			}
 			else if (result == 2)
 			{
-				findClient->logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to update team comment but is not in team. Team ID %u.",
+				findClient->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to update team comment but is not in team. Team ID %u.",
 					findClient->logger->toWide(findClient->handle).c_str(),
 					findClient->driverslicense,
 					findClient->logger->toWide((char*)&findClient->IP_Address).c_str(),
@@ -75,7 +75,7 @@ void ClientRequests(MANAGEMENTSERVER* managementserver)
 			}
 			else if (result == 3)
 			{
-				findClient->logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to update team comment but is not the team leader. Team ID %u.",
+				findClient->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to update team comment but is not the team leader. Team ID %u.",
 					findClient->logger->toWide(findClient->handle).c_str(),
 					findClient->driverslicense,
 					findClient->logger->toWide((char*)&findClient->IP_Address).c_str(),
@@ -110,7 +110,7 @@ void ClientRequests(MANAGEMENTSERVER* managementserver)
 			}
 			else if (result == 2 || result == 3)
 			{
-				findClient->logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to update team comment but is not in team or is not team leader. Team ID %u.",
+				findClient->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to update team comment but is not in team or is not team leader. Team ID %u.",
 					findClient->logger->toWide(findClient->handle).c_str(),
 					findClient->driverslicense,
 					findClient->logger->toWide((char*)&findClient->IP_Address).c_str(),
@@ -144,7 +144,7 @@ void ClientRequests(MANAGEMENTSERVER* managementserver)
 			}
 			else if (result == 2 || result == 3)
 			{
-				findClient->logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to delete team comment but is not in team or team leader. Team ID %u.",
+				findClient->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to delete team comment but is not in team or team leader. Team ID %u.",
 					findClient->logger->toWide(findClient->handle).c_str(),
 					findClient->driverslicense,
 					findClient->logger->toWide((char*)&findClient->IP_Address).c_str(),

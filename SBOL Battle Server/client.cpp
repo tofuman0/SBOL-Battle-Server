@@ -113,7 +113,7 @@ int32_t CLIENT::joinCourse()
 	}
 	if (course == nullptr)
 	{
-		logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client can't join course.");
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client can't join course.");
 		Disconnect();
 		return 0;
 	}
@@ -405,7 +405,7 @@ uint16_t CLIENT::getShopPartPrice(uint32_t bay, uint8_t itemCategory, uint8_t it
 		{
 			if (itemID == 0 || itemID > 9)
 			{
-				logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to purchase invalid item from Tire/Brake shop ID %u",
+				logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to purchase invalid item from Tire/Brake shop ID %u",
 					logger->toWide(handle).c_str(),
 					driverslicense,
 					logger->toWide((char*)&IP_Address).c_str(),
@@ -494,7 +494,7 @@ uint16_t CLIENT::getShopPartPriceFromID(uint32_t carID, uint8_t itemCategory, ui
 		{
 			if (itemID == 0 || itemID > 9)
 			{
-				logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to purchase invalid item from Tire/Brake shop ID %u",
+				logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to purchase invalid item from Tire/Brake shop ID %u",
 					logger->toWide(handle).c_str(),
 					driverslicense,
 					logger->toWide((char*)&IP_Address).c_str(),
@@ -966,7 +966,7 @@ void CLIENT::processBattleWin()
 		addExp((uint32_t)exp);
 		careerdata.level = getLevel();
 
-		logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has won battle. Which lasted for %0.2f Kms. %u Exp received with %u SP remaining.",
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has won battle. Which lasted for %0.2f Kms. %u Exp received with %u SP remaining.",
 			logger->toWide(handle).c_str(),
 			driverslicense,
 			logger->toWide((char*)&IP_Address).c_str(),
@@ -1000,7 +1000,7 @@ void CLIENT::processBattleLose()
 		addExp((uint32_t)exp);
 		careerdata.level = getLevel();
 
-		logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has lost battle. Which lasted for %0.2f Kms. %u Exp received with %u SP remaining.",
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has lost battle. Which lasted for %0.2f Kms. %u Exp received with %u SP remaining.",
 			logger->toWide(handle).c_str(),
 			driverslicense,
 			logger->toWide((char*)&IP_Address).c_str(),
@@ -1046,7 +1046,7 @@ uint8_t CLIENT::getLevel()
 {
 	if (LEVEL_CAP > server->expToLevel.size())
 	{
-		logger->Log(LOGGER::LOGTYPE_ERROR, L"LEVEL_CAP (%u) is greater than values in expToLevel table size (%u)", LEVEL_CAP, server->expToLevel.size());
+		logger->Log(Logger::LOGTYPE_ERROR, L"LEVEL_CAP (%u) is greater than values in expToLevel table size (%u)", LEVEL_CAP, server->expToLevel.size());
 		return 1;
 	}
 	for (int32_t i = 0; i < LEVEL_CAP; i++)
@@ -1397,7 +1397,7 @@ void CLIENT::SendRivalPosition()
 	// If in battle don't bother sending position but we still need to tick.
 	if(battle.status == BATTLESTATUS::BS_NOT_IN_BATTLE)
 		Send();
-	//logger->Log(LOGGER::LOGTYPE_CLIENT, L"0x%04X,0x%04X,0x%04X", position.location1, position.location2, position.location3);
+	//logger->Log(Logger::LOGTYPE_CLIENT, L"0x%04X,0x%04X,0x%04X", position.location1, position.location2, position.location3);
 }
 void CLIENT::SendRemoveRivals()
 {
@@ -1756,7 +1756,7 @@ void CLIENT::SendBattleCheckStatus()
 	{
 		if (abs(battle.challenger->battle.spCount - battle.spCount) > 10)
 		{
-			battle.challenger->logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u may have altered the battle SP. %u SP. SP Count %u",
+			battle.challenger->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u may have altered the battle SP. %u SP. SP Count %u",
 				battle.challenger->logger->toWide(battle.challenger->handle).c_str(),
 				battle.challenger->driverslicense,
 				battle.challenger->logger->toWide((char*)&battle.challenger->IP_Address).c_str(),
@@ -1848,7 +1848,7 @@ void CLIENT::Send(PACKET* src)
 	{
 		if (CLIENT_BUFFER_SIZE < ((int)src->getSize() + 15))
 		{
-			logger->Log(LOGGER::LOGTYPE_CLIENT, L"Client Sent too large packet.");
+			logger->Log(Logger::LOGTYPE_CLIENT, L"Client Sent too large packet.");
 			Disconnect();
 		}
 		else
@@ -1860,8 +1860,8 @@ void CLIENT::Send(PACKET* src)
 			//if (src->getType() != 0x0A00 && src->getType() != 0x0700)
 			if (src->getType() != 0x0700)
 			{
-				logger->Log(LOGGER::LOGTYPE_PACKET, L"Packet: Server -> Client (%u)", courseID);
-				logger->Log(LOGGER::LOGTYPE_PACKET, logger->packet_to_text(&src->buffer[0x00], size).c_str());
+				logger->Log(Logger::LOGTYPE_PACKET, L"Packet: Server -> Client (%u)", courseID);
+				logger->Log(Logger::LOGTYPE_PACKET, logger->packet_to_text(&src->buffer[0x00], size).c_str());
 			}
 #endif
 			//src->setSize(size);
@@ -1990,7 +1990,7 @@ void CLIENT::ProcessPacket()
 		uint32_t packetType = (inbuf.getType() >> 8) & 0xFF;
 		if (packetType > sizeof(MainPacketFunctions) / 4)
 		{
-			logger->Log(LOGGER::LOGTYPE_COMM, L"Invalid Packet Message: %04X from client %s (%u / %s) with ID %u",
+			logger->Log(Logger::LOGTYPE_COMM, L"Invalid Packet Message: %04X from client %s (%u / %s) with ID %u",
 				inbuf.getType(),
 				logger->toWide(handle).c_str(),
 				driverslicense,
@@ -2010,8 +2010,8 @@ void CLIENT::ProcessPacket()
 		//if (packetType == 0x07 || packetType == 0x04)
 		//if(inbuf.getType() != 0x700)
 		{
-			logger->Log(LOGGER::LOGTYPE_PACKET, L"Packet: Client (%u) -> Server", courseID);
-			logger->Log(LOGGER::LOGTYPE_PACKET, logger->packet_to_text(&inbuf.buffer[0x00], inbuf.getSize()).c_str());
+			logger->Log(Logger::LOGTYPE_PACKET, L"Packet: Client (%u) -> Server", courseID);
+			logger->Log(Logger::LOGTYPE_PACKET, logger->packet_to_text(&inbuf.buffer[0x00], inbuf.getSize()).c_str());
 		}
 #endif
 		// Deny all except authentication packets from clients not authenticated
@@ -2028,8 +2028,8 @@ void CLIENT::ProcessPacket()
 		if (packetType == 0x07 || packetType == 0x00 || packetType == 0x04 || packetType == 0x05) return;
 		//if (packetType == 0x07 || packetType == 0x00 || packetType == 0x04) return;
 		//if (packetType != 0x07 || packetType != 0x04) return;
-		else if ((inbuf.getType() & 0xFF00) == (outbuf.getType() & 0xFF00)) logger->Log(LOGGER::LOGTYPE_COMM, L"Packet Message: %04X -> %04X", inbuf.getType(), outbuf.getSubType());
-		else logger->Log(LOGGER::LOGTYPE_COMM, L"Packet Message: %04X -> NO RESPONSE", inbuf.getType());
+		else if ((inbuf.getType() & 0xFF00) == (outbuf.getType() & 0xFF00)) logger->Log(Logger::LOGTYPE_COMM, L"Packet Message: %04X -> %04X", inbuf.getType(), outbuf.getSubType());
+		else logger->Log(Logger::LOGTYPE_COMM, L"Packet Message: %04X -> NO RESPONSE", inbuf.getType());
 #endif
 	}
 }
@@ -2040,13 +2040,13 @@ void CLIENT::ProcessManagementPacket()
 		uint32_t packetType = serverbuf.getType();
 		if (packetType > sizeof(ManagementPacketFunctions) / 4)
 		{
-			logger->Log(LOGGER::LOGTYPE_COMM, L"Invalid Packet Message: %04X from management server", serverbuf.getType());
+			logger->Log(Logger::LOGTYPE_COMM, L"Invalid Packet Message: %04X from management server", serverbuf.getType());
 			Disconnect();
 			return;
 		}
 #ifdef PACKET_OUTPUT
-		logger->Log(LOGGER::LOGTYPE_PACKET, L"Packet: Management -> Client");
-		logger->Log(LOGGER::LOGTYPE_PACKET, logger->packet_to_text(&serverbuf.buffer[0x00], serverbuf.getSize() + 2).c_str());
+		logger->Log(Logger::LOGTYPE_PACKET, L"Packet: Management -> Client");
+		logger->Log(Logger::LOGTYPE_PACKET, logger->packet_to_text(&serverbuf.buffer[0x00], serverbuf.getSize() + 2).c_str());
 #endif
 		ManagementPacketFunctions[packetType](this);
 	}
@@ -2091,7 +2091,7 @@ uint32_t CLIENT::messagesInSendQueue()
 	std::lock_guard<std::mutex> locker(_muClient);
 	if (sendQueue.size() > 10)
 	{
-		logger->Log(LOGGER::LOGTYPE_COMM, L"Send Queue exceeds 10 for client %s(%u / %s). %u in queue",
+		logger->Log(Logger::LOGTYPE_COMM, L"Send Queue exceeds 10 for client %s(%u / %s). %u in queue",
 			logger->toWide(handle).c_str(),
 			driverslicense,
 			logger->toWide((char*)&IP_Address).c_str(),
@@ -2100,7 +2100,7 @@ uint32_t CLIENT::messagesInSendQueue()
 	}
 	else if (sendQueue.size() > 50)
 	{
-		logger->Log(LOGGER::LOGTYPE_COMM, L"Send Queue exceeds 50 for client %s(%u / %s) so was disconnected",
+		logger->Log(Logger::LOGTYPE_COMM, L"Send Queue exceeds 50 for client %s(%u / %s) so was disconnected",
 			logger->toWide(handle).c_str(),
 			driverslicense,
 			logger->toWide((char*)&IP_Address).c_str()

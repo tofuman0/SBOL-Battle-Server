@@ -57,7 +57,7 @@ public:
 	bool isConfigured() { return configured; }
 	bool shouldRetry();
 	void setServerHandle(HANDLE* ptr) { serverHandle = ptr; }
-	LOGGER* logger;
+	Logger* logger;
 	void addToMessageQueue(MESSAGE_QUEUE& in);
 	MESSAGE_QUEUE getTopFromMessageQueue();
 	uint32_t messagesInQueue();
