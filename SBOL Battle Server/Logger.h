@@ -19,7 +19,7 @@ public:
 		LOGTYPE_ERROR,
 		LOGTYPE_DEBUG,
 		LOGTYPE_COMM,
-		LOGTYPE_CLIENT,
+		LOGTYPE_Client,
 		LOGTYPE_MANAGEMENT
 	};
 	void Log(LOGTYPE type, const wchar_t* in, ...);

@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include "..\server.h"
 
-void ClientPacketPositioning(CLIENT* client)
+void ClientPacketPositioning(Client* client)
 {
 	uint16_t pType = client->inbuf.getType();
 	uint16_t clientID;
@@ -30,11 +30,11 @@ void ClientPacketPositioning(CLIENT* client)
 								powf(abs(client->position.posY2 - _y), 2)
 							) * 10) / 10);
 					client->garagedata.activeCar->KMs += dist;
-					if (client->battle.status == CLIENT::BATTLESTATUS::BS_IN_BATTLE) client->battle.KMs += dist;
+					if (client->battle.status == Client::BATTLESTATUS::BS_IN_BATTLE) client->battle.KMs += dist;
 				}
 				client->inbuf.getArray((uint8_t*)&client->position, sizeof(POSITION), 0x06);
 				if(client->logPosition)
-					client->logger->Log(Logger::LOGTYPE_CLIENT, L"0x%04X,0x%04X,0x%04X", client->position.location1, client->position.location2, client->position.location3);
+					client->logger->Log(Logger::LOGTYPE_Client, L"0x%04X,0x%04X,0x%04X", client->position.location1, client->position.location2, client->position.location3);
 				//client->position.time += 1000;
 				//Relay current position
 				//if (client->battle.status == BATTLESTATUS::NOT_IN_BATTLE) 
@@ -47,7 +47,7 @@ void ClientPacketPositioning(CLIENT* client)
 			}
 			else
 			{
-				client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has tried to spoof player ID %u",
+				client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u has tried to spoof player ID %u",
 					client->logger->toWide(client->handle).c_str(),
 					client->driverslicense,
 					client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -63,7 +63,7 @@ void ClientPacketPositioning(CLIENT* client)
 		}
 		else
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has tried to spoof player ID %u",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u has tried to spoof player ID %u",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),

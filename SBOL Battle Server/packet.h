@@ -10,7 +10,7 @@ class PACKET
 public:
 	PACKET();
 	~PACKET();
-	uint8_t buffer[CLIENT_BUFFER_SIZE];
+	uint8_t buffer[Client_BUFFER_SIZE];
 	void setOffset(uint16_t in) { pOffset = in; }
 	uint32_t getOffset() { return pOffset; }
 	void addOffset(uint16_t in) { pOffset += in; }
@@ -61,7 +61,7 @@ private:
 template<typename T>
 void PACKET::append(T in, bool SWAP)
 {
-	if ((pOffset + sizeof(in)) < CLIENT_BUFFER_SIZE)
+	if ((pOffset + sizeof(in)) < Client_BUFFER_SIZE)
 	{
 		*(T*)&buffer[pOffset] = SWAP ? swap(in) : in;
 		pOffset += sizeof(in);
@@ -72,7 +72,7 @@ void PACKET::append(T in, bool SWAP)
 template<typename T>
 void PACKET::set(T in, uint32_t offset, bool SWAP)
 {
-	if ((pOffset + sizeof(in)) < CLIENT_BUFFER_SIZE)
+	if ((pOffset + sizeof(in)) < Client_BUFFER_SIZE)
 	{
 		*(T*)&buffer[pOffset] = SWAP ? swap(in) : in;
 	}
@@ -81,7 +81,7 @@ void PACKET::set(T in, uint32_t offset, bool SWAP)
 template<typename T>
 T PACKET::get(uint32_t offset, bool SWAP)
 {
-	if (offset + sizeof(T) > CLIENT_BUFFER_SIZE)
+	if (offset + sizeof(T) > Client_BUFFER_SIZE)
 		return T();
 	else
 		return (SWAP ? swap(*(T*)&buffer[offset]) : *(T*)&buffer[offset]);
@@ -90,7 +90,7 @@ T PACKET::get(uint32_t offset, bool SWAP)
 template<typename T>
 T PACKET::get()
 {
-	if (pOffset + sizeof(T) > CLIENT_BUFFER_SIZE)
+	if (pOffset + sizeof(T) > Client_BUFFER_SIZE)
 		return T();
 	else
 	{

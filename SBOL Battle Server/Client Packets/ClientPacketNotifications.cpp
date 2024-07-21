@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include "..\server.h"
 
-void ClientPacketNotifications(CLIENT* client)
+void ClientPacketNotifications(Client* client)
 {
 	uint16_t pType = client->inbuf.getType();
 	uint16_t clientID;
@@ -25,7 +25,7 @@ void ClientPacketNotifications(CLIENT* client)
 		}
 		else
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has tried to spoof player ID %u",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u has tried to spoof player ID %u",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -54,7 +54,7 @@ void ClientPacketNotifications(CLIENT* client)
 		}
 		else
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has tried to spoof player ID %u",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u has tried to spoof player ID %u",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),

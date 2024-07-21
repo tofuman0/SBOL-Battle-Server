@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include "..\server.h"
 
-void ClientPacket15(CLIENT* client)
+void ClientPacket15(Client* client)
 {
 	uint16_t pType = client->inbuf.getType();
 

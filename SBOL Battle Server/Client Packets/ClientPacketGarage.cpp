@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include "..\server.h"
 
-void ClientPacketGarage(CLIENT* client)
+void ClientPacketGarage(Client* client)
 {
 	uint16_t pType = client->inbuf.getType();
 
@@ -16,7 +16,7 @@ void ClientPacketGarage(CLIENT* client)
 
 		if (cost != GARAGE_COST)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has altered garage cost. Cost: %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has altered garage cost. Cost: %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),

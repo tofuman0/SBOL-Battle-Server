@@ -4,11 +4,11 @@
 #include "server.h"
 //#include <openssl/rand.h>
 
-typedef void(PacketFunction)(CLIENT* client);
+typedef void(PacketFunction)(Client* client);
 
-void ManagementPacketDoNothing(CLIENT* client) { }
-void ManagementPacketClientAuth(CLIENT* client);
-void ManagementPacketClientRequests(CLIENT* client);
+void ManagementPacketDoNothing(Client* client) { }
+void ManagementPacketClientAuth(Client* client);
+void ManagementPacketClientRequests(Client* client);
 
 PacketFunction* ManagementPacketFunctions[] =
 {

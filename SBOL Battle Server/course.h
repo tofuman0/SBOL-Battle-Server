@@ -6,7 +6,7 @@
 #include "packet.h"
 #include "Logger.h"
 
-class CLIENT;
+class Client;
 
 class COURSE
 {
@@ -19,7 +19,7 @@ public:
 	COURSE();
 	~COURSE();
 	Logger* logger;
-	std::vector<CLIENT*> courseClient;
+	std::vector<Client*> courseClient;
 	PACKET coursebuf;
 
 	int32_t temp1;
@@ -33,11 +33,11 @@ public:
 	int32_t getCourse() { return course; };
 	int32_t getIndex() { return index; };
 	uint32_t getClientCount();
-	CLIENT* getClient(uint16_t clientID);
-	int32_t addClient(CLIENT* in);
-	void removeClient(CLIENT* in);
-	int32_t findClient(CLIENT* in);
-	CLIENT* findClient(int32_t in);
+	Client* getClient(uint16_t clientID);
+	int32_t addClient(Client* in);
+	void removeClient(Client* in);
+	int32_t findClient(Client* in);
+	Client* findClient(int32_t in);
 	//void removeClientID(uint16_t id);
 	int32_t getFree();
 #pragma region Course Packets

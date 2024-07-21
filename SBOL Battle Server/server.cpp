@@ -506,14 +506,14 @@ std::string SERVER::toNarrow(std::wstring in)
 	copy(in.begin(), in.end(), temp.begin());
 	return temp;
 }
-void SERVER::CheckClientPackets(CLIENT* client, uint32_t rcvcopy, uint8_t* tmprcv)
+void SERVER::CheckClientPackets(Client* client, uint32_t rcvcopy, uint8_t* tmprcv)
 {
 	if (rcvcopy >= 4)
 	{
 		client->inbuf.setArray(tmprcv, rcvcopy, 0x00);
 		uint16_t size = client->inbuf.getSizeFromBuffer();
 		client->inbuf.setSize(SWAP_SHORT(size) + 2);
-		if (client->inbuf.getSize() > CLIENT_BUFFER_SIZE)
+		if (client->inbuf.getSize() > Client_BUFFER_SIZE)
 		{
 			// Packet too big, disconnect the client.
 			logger.Log(Logger::LOGTYPE_COMM, L"Client %s sent a invalid packet.", toWide((char*)client->IP_Address).c_str());
@@ -525,7 +525,7 @@ void SERVER::CheckClientPackets(CLIENT* client, uint32_t rcvcopy, uint8_t* tmprc
 		}
 	}
 }
-void SERVER::initialize_connection(CLIENT* connect)
+void SERVER::initialize_connection(Client* connect)
 {
 	if (connect->ClientSocket >= 0)
 	{
@@ -542,7 +542,7 @@ void SERVER::initialize_connection(CLIENT* connect)
 	snprintf(titleBuf, sizeof(titleBuf), "SBOL Battle Server v%s. Clients: %u", logger.toNarrow(VERSION_STRING).c_str(), playerCount() - 1);
 	SetConsoleTitleA(titleBuf);
 }
-void SERVER::removeClient(CLIENT* connect)
+void SERVER::removeClient(Client* connect)
 {
 	for (auto& c : connections)
 	{
@@ -599,10 +599,10 @@ bool SERVER::clientIsAuthenticated(uint32_t license)
 }
 void SERVER::disconnectLoggedInUser(uint32_t license)
 {
-	CLIENT* foundUser = findUser(license);
+	Client* foundUser = findUser(license);
 	if (foundUser != nullptr)
 	{
-		foundUser->SendChatMessage(CLIENT::CHATTYPE::CHATTYPE_NOTIFICATION, std::string("NULL"), std::string("Your account has been logged in so have been logged out."), license);
+		foundUser->SendChatMessage(Client::CHATTYPE::CHATTYPE_NOTIFICATION, std::string("NULL"), std::string("Your account has been logged in so have been logged out."), license);
 		foundUser->Disconnect();
 	}
 }
@@ -613,7 +613,7 @@ void SERVER::disconnectAllUsers(uint32_t exclude)
 		if (c->ClientSocket >= 0 && c->driverslicense != exclude) c->Disconnect();
 	}
 }
-CLIENT* SERVER::findUser(std::string& in)
+Client* SERVER::findUser(std::string& in)
 {
 	for (auto& c : connections)
 	{
@@ -621,7 +621,7 @@ CLIENT* SERVER::findUser(std::string& in)
 	}
 	return nullptr;
 }
-CLIENT* SERVER::findUser(uint32_t in)
+Client* SERVER::findUser(uint32_t in)
 {
 	for (auto& c : connections)
 	{
@@ -629,7 +629,7 @@ CLIENT* SERVER::findUser(uint32_t in)
 	}
 	return nullptr;
 }
-void SERVER::saveClientData(CLIENT* client)
+void SERVER::saveClientData(Client* client)
 {
 	if (client->canSave == true && client->driverslicense)
 	{
@@ -813,7 +813,7 @@ bool SERVER::AcceptConnection()
 	{
 		if (freeConnection())
 		{
-			CLIENT* c = new CLIENT();
+			Client* c = new Client();
 			c->initialize();
 			c->server = this;
 			c->logger = &logger;
@@ -822,7 +822,7 @@ bool SERVER::AcceptConnection()
 			InetNtopA(AF_INET, &listen_in.sin_addr, (char*)&c->IP_Address[0], 16);
 			*(uint32_t*)&c->ipaddr = *(uint32_t*)&listen_in.sin_addr;
 			std::wstring ip = toWide((char*)c->IP_Address);
-			logger.Log(Logger::LOGTYPE_COMM, L"Accepted CLIENT connection from %s:%u", ip.c_str(), listen_in.sin_port);
+			logger.Log(Logger::LOGTYPE_COMM, L"Accepted Client connection from %s:%u", ip.c_str(), listen_in.sin_port);
 			logger.Log(Logger::LOGTYPE_COMM, L"Player count: %u", playerCount());
 			c->sendWelcome = time(NULL) + SEND_WELCOME_TIME;
 			c->packetEnable(0x00);
@@ -837,10 +837,10 @@ bool SERVER::AcceptConnection()
 	}
 	return false;
 }
-bool SERVER::Send(CLIENT * client)
+bool SERVER::Send(Client * client)
 {
 	int32_t sent_len, wserror, max_send;
-	uint8_t sendbuf[CLIENT_BUFFER_SIZE];
+	uint8_t sendbuf[Client_BUFFER_SIZE];
 	SEND_QUEUE entry;
 
 	if (client->snddata > 0 || client->messagesInSendQueue())
@@ -862,7 +862,7 @@ bool SERVER::Send(CLIENT * client)
 					uint16_t packetSize;
 					entry = client->getFromSendQueue();
 					packetSize = SWAP_SHORT(*(uint16_t*)&entry.sndbuf[0]) + 2;
-					if (client->snddata + packetSize < CLIENT_BUFFER_SIZE)
+					if (client->snddata + packetSize < Client_BUFFER_SIZE)
 					{
 						CopyMemory((char*)&client->sndbuf[client->snddata], entry.sndbuf, packetSize);
 						client->snddata += packetSize;
@@ -877,8 +877,8 @@ bool SERVER::Send(CLIENT * client)
 			}
 		}
 
-		if (client->snddata > CLIENT_BUFFER_SIZE)
-			max_send = CLIENT_BUFFER_SIZE;
+		if (client->snddata > Client_BUFFER_SIZE)
+			max_send = Client_BUFFER_SIZE;
 		else
 			max_send = client->snddata;
 
@@ -906,10 +906,10 @@ bool SERVER::Send(CLIENT * client)
 	}
 	return false;
 }
-bool SERVER::Recv(CLIENT * client)
+bool SERVER::Recv(Client * client)
 {
 	int32_t  wserror, recv_len, max_read;
-	max_read = CLIENT_BUFFER_SIZE - client->rcvread;
+	max_read = Client_BUFFER_SIZE - client->rcvread;
 
 	if ((recv_len = recv(client->ClientSocket, (char *)&client->rcvbuf[client->rcvread], max_read, 0)) == SOCKET_ERROR)
 	{
@@ -940,9 +940,9 @@ bool SERVER::Recv(CLIENT * client)
 	}
 	return false;
 }
-bool SERVER::ProcessRecv(CLIENT * client, int32_t len)
+bool SERVER::ProcessRecv(Client * client, int32_t len)
 {
-	uint8_t recvbuf[CLIENT_BUFFER_SIZE];
+	uint8_t recvbuf[Client_BUFFER_SIZE];
 
 	if (!client || len < 0)
 		return false;
@@ -957,8 +957,8 @@ bool SERVER::ProcessRecv(CLIENT * client, int32_t len)
 	{
 		CopyMemory(&recvbuf[0], &client->rcvbuf[0], client->packetsize);
 		CheckClientPackets(client, client->packetsize, recvbuf);
-		CopyMemory(&recvbuf[0], &client->rcvbuf[client->packetsize], CLIENT_BUFFER_SIZE - client->packetsize);
-		CopyMemory(&client->rcvbuf[0], &recvbuf[0], CLIENT_BUFFER_SIZE - client->packetsize);
+		CopyMemory(&recvbuf[0], &client->rcvbuf[client->packetsize], Client_BUFFER_SIZE - client->packetsize);
+		CopyMemory(&client->rcvbuf[0], &recvbuf[0], Client_BUFFER_SIZE - client->packetsize);
 		client->hassize = false;
 		client->rcvread -= client->packetsize;
 		client->packetsize = 0;
@@ -966,13 +966,13 @@ bool SERVER::ProcessRecv(CLIENT * client, int32_t len)
 	}
 	return false;
 }
-bool SERVER::RecvToProcess(CLIENT * client)
+bool SERVER::RecvToProcess(Client * client)
 {
 	if (!client || client->todc == true)
 		return false;
 	return client->rcvread ? true : false;
 }
-bool SERVER::ClientChecks(CLIENT * client)
+bool SERVER::ClientChecks(Client * client)
 {
 	if (!client)
 		return false;
@@ -986,13 +986,13 @@ bool SERVER::ClientChecks(CLIENT * client)
 		goto _disconnectClient;
 	}
 	// Sending ping when the client stops sending packets doesn't resolve the issue.
-	//if (client->timeoutCount > 0 && client->timeoutCount - (CLIENT_TIMEOUT / 2) < time(NULL))
+	//if (client->timeoutCount > 0 && client->timeoutCount - (Client_TIMEOUT / 2) < time(NULL))
 	//{
 	//	client->SendPing();
 	//}
 	if (client->timeoutCount > 0 && client->timeoutCount < time(NULL))
 	{
-		client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has timed out so was disconnected.",
+		client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has timed out so was disconnected.",
 			client->logger->toWide(client->handle).c_str(),
 			client->driverslicense,
 			client->logger->toWide((char*)&client->IP_Address).c_str()
@@ -1013,7 +1013,7 @@ bool SERVER::ClientChecks(CLIENT * client)
 	if (client->battle.timeout != 0 && client->battle.timeout < time(NULL) && (client->battle.challenger != nullptr || client->battle.isNPC == true))
 	{
 		client->battle.timeout = 0;
-		client->battle.status = CLIENT::BATTLESTATUS::BS_NOT_IN_BATTLE;
+		client->battle.status = Client::BATTLESTATUS::BS_NOT_IN_BATTLE;
 		client->battle.challenger = nullptr;
 		client->battle.isNPC = false;
 		client->SendBattleAbort(0);
@@ -1398,7 +1398,7 @@ void SERVER::LoadRivalFile()
 		}
 	}
 }
-RIVALDATA * SERVER::GetRivalData(int32_t RivalID, CLIENT* client)
+RIVALDATA * SERVER::GetRivalData(int32_t RivalID, Client* client)
 {
 	if (RivalID == -1)
 	{	// Set rival based on rules and progress of client

@@ -140,7 +140,7 @@ public:
 		DC_KICKED,
 		DC_BANNED
 	};
-	std::vector<CLIENT*> connections;
+	std::vector<Client*> connections;
 	std::vector<COURSE*> courses[COURSE_DIMENSIONS];
 	std::vector<uint32_t> expToLevel;
 	std::vector<RIVALDATA> rivalData;
@@ -165,9 +165,9 @@ public:
 	int32_t LoadConfig(const wchar_t* filename);
 	bool isRunning() { return running; }
 	static void serverThread(void* parg);
-	void CheckClientPackets(CLIENT* client, uint32_t rcvcopy, uint8_t* tmprcv);
-	void initialize_connection(CLIENT* connect);
-	void removeClient(CLIENT* connect);
+	void CheckClientPackets(Client* client, uint32_t rcvcopy, uint8_t* tmprcv);
+	void initialize_connection(Client* connect);
+	void removeClient(Client* connect);
 	void organizeClients();
 	std::string getMANAGEMENTSERVERAddress() { return managementServerAddress; }
 	uint16_t getMANAGEMENTSERVERPort() { return managementServerPort; }
@@ -179,9 +179,9 @@ public:
 	bool clientIsAuthenticated(uint32_t license);
 	void disconnectLoggedInUser(uint32_t license);
 	void disconnectAllUsers(uint32_t exclude);
-	CLIENT* findUser(std::string& in);
-	CLIENT* findUser(uint32_t in);
-	void saveClientData(CLIENT* client);
+	Client* findUser(std::string& in);
+	Client* findUser(uint32_t in);
+	void saveClientData(Client* client);
 	std::vector<std::string> split(std::string& in, std::string& delimit);
 	uint32_t getNextClientID();
 	bool isValidCar(uint16_t carID);
@@ -189,7 +189,7 @@ public:
 	uint32_t playerCount();
 	SERVERSTATUS getStatus() { return status; };
 	void LoadRivalFile();
-	RIVALDATA* GetRivalData(int32_t RivalID, CLIENT* client = nullptr);
+	RIVALDATA* GetRivalData(int32_t RivalID, Client* client = nullptr);
 	void setStatus(SERVERSTATUS _status) { status = _status; };
 	void SendChatMessage(CHATTYPE type, std::string& handle, std::string& message);
 	void SendOfflineChatMessage(CHATTYPE type, std::string& fromHandle, std::string& toHandle, std::string& message);
@@ -209,11 +209,11 @@ public:
 	uint32_t getServerNumConnections() { return serverNumConnections; }
 	bool InitServerSocket();
 	bool AcceptConnection();
-	bool Send(CLIENT* client);
-	bool Recv(CLIENT* client);
-	bool ProcessRecv(CLIENT* client, int32_t len);
-	bool RecvToProcess(CLIENT* client);
-	bool ClientChecks(CLIENT* client);
+	bool Send(Client* client);
+	bool Recv(Client* client);
+	bool ProcessRecv(Client* client, int32_t len);
+	bool RecvToProcess(Client* client);
+	bool ClientChecks(Client* client);
 #pragma endregion
 private:
 	uint32_t currentClientID;

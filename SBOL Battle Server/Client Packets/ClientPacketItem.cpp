@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include "..\server.h"
 
-void ClientPacketItem(CLIENT* client)
+void ClientPacketItem(Client* client)
 {
 	uint16_t pType = client->inbuf.getType();
 
@@ -19,7 +19,7 @@ void ClientPacketItem(CLIENT* client)
 
 		if (client->isValidItem(itemID) == false)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to use invalid item. ID %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to use invalid item. ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -31,7 +31,7 @@ void ClientPacketItem(CLIENT* client)
 
 		if (client->removeItem(itemID) == false)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to use item they don't have. ID %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to use item they don't have. ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -44,9 +44,9 @@ void ClientPacketItem(CLIENT* client)
 		ITEMDATA_ENTRY item = client->getItem(itemID);
 		uint32_t cp = 0;
 
-		if (item.itemType != CLIENT::ITEMTYPES::ITEMTYPE_ITEM)
+		if (item.itemType != Client::ITEMTYPES::ITEMTYPE_ITEM)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to use item that isn't an ITEM type. ID %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to use item that isn't an ITEM type. ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -56,7 +56,7 @@ void ClientPacketItem(CLIENT* client)
 			return;
 		}
 
-		if (item.type == CLIENT::ITEMUSETYPES::USETYPE_CP)
+		if (item.type == Client::ITEMUSETYPES::USETYPE_CP)
 		{
 			cp = item.resaleValue;
 			client->giveCP(cp);
@@ -115,7 +115,7 @@ void ClientPacketItem(CLIENT* client)
 
 		if (client->isValidItem(itemID) == false)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to sell an invalid item. ID %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to sell an invalid item. ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -128,11 +128,11 @@ void ClientPacketItem(CLIENT* client)
 		ITEMDATA_ENTRY item = client->getItem(itemID);
 		int16_t finalPrice = client->getItemResalePrice(itemID);
 
-		if (finalPrice == -1 && item.itemType == CLIENT::ITEMTYPES::ITEMTYPE_PART) finalPrice = client->getShopPartPriceFromID(item.carID, item.category, item.type, item.typeValue);
+		if (finalPrice == -1 && item.itemType == Client::ITEMTYPES::ITEMTYPE_PART) finalPrice = client->getShopPartPriceFromID(item.carID, item.category, item.type, item.typeValue);
 
 		if (itemValue != finalPrice || finalPrice == -1)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried purchase an item with an modified cost. ID %u, Client Cost %u, Real Cost %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried purchase an item with an modified cost. ID %u, Client Cost %u, Real Cost %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -158,7 +158,7 @@ void ClientPacketItem(CLIENT* client)
 		}
 		else
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to sell an item they don't have. ID %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to sell an item they don't have. ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -176,7 +176,7 @@ void ClientPacketItem(CLIENT* client)
 
 		if (client->isValidItem(itemID) == false)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to purchase an invalid item. ID %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase an invalid item. ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -189,7 +189,7 @@ void ClientPacketItem(CLIENT* client)
 
 		if (itemCost != finalPrice || finalPrice == -1)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried purchase an item with an modified cost. ID %u, Client Cost %u, Real Cost %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried purchase an item with an modified cost. ID %u, Client Cost %u, Real Cost %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -217,7 +217,7 @@ void ClientPacketItem(CLIENT* client)
 		}
 		else
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried purchase an item without enough CP. ID %u, Client CP %u, Real Cost %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried purchase an item without enough CP. ID %u, Client CP %u, Real Cost %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -247,7 +247,7 @@ void ClientPacketItem(CLIENT* client)
 		uint16_t itemID = client->inbuf.get<uint16_t>(0x04);
 		if (client->removeItem(itemID) == false)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to trash an item they don't have. ID %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to trash an item they don't have. ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -285,9 +285,9 @@ void ClientPacketItem(CLIENT* client)
 
 		ITEMDATA_ENTRY item = client->getItem(itemID);
 
-		if (client->isValidItem(itemID) == false || item.itemType != CLIENT::ITEMTYPES::ITEMTYPE_CAR)
+		if (client->isValidItem(itemID) == false || item.itemType != Client::ITEMTYPES::ITEMTYPE_CAR)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to trade in an invalid item to the car ticket shop. ID %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to trade in an invalid item to the car ticket shop. ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -322,7 +322,7 @@ void ClientPacketItem(CLIENT* client)
 		}
 		else
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to trade in an item to the car ticket shop that they don't have. ID %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to trade in an item to the car ticket shop that they don't have. ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -344,7 +344,7 @@ void ClientPacketItem(CLIENT* client)
 
 		if (bay >= (uint32_t)(client->garagedata.garageCount * 4) || client->garagedata.car[bay].carID == 0xFFFFFFFF)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has specified invalid bay number in parts ticket.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u has specified invalid bay number in parts ticket.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str()
@@ -355,7 +355,7 @@ void ClientPacketItem(CLIENT* client)
 
 		if (client->isValidItem(itemID) == false)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to purchase an invalid item. ID %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase an invalid item. ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -367,7 +367,7 @@ void ClientPacketItem(CLIENT* client)
 
 		if (client->removeItem(itemID) == false)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to exchange an item they don't have. ID %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to exchange an item they don't have. ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -381,27 +381,27 @@ void ClientPacketItem(CLIENT* client)
 
 		switch (item.itemType)
 		{
-		case CLIENT::ITEMTYPES::ITEMTYPE_PART:
+		case Client::ITEMTYPES::ITEMTYPE_PART:
 		{
 			if (item.carManufacturer == 0xFF)
 			{
-				if (client->confirmClass(bay, (CLIENT::CARCLASS)item.carClass) == true) result = client->purchasePart(bay, item.category, item.type, item.typeValue, true);
+				if (client->confirmClass(bay, (Client::CARCLASS)item.carClass) == true) result = client->purchasePart(bay, item.category, item.type, item.typeValue, true);
 				else result = false;
 			}
 			else if (item.carManufacturer != 0xFF && item.carID == 0xFFFF)
 			{
-				if (client->confirmClass(bay, (CLIENT::CARCLASS)item.carClass) == true && item.carManufacturer == client->getCarManufacturer(client->garagedata.car[bay].carID)) result = client->purchasePart(bay, item.category, item.type, item.typeValue, true);
+				if (client->confirmClass(bay, (Client::CARCLASS)item.carClass) == true && item.carManufacturer == client->getCarManufacturer(client->garagedata.car[bay].carID)) result = client->purchasePart(bay, item.category, item.type, item.typeValue, true);
 				else result = false;
 			}
 			else
 			{
-				if (client->confirmClass(bay, (CLIENT::CARCLASS)item.carClass) == true && item.carID == client->getCarID(bay)) result = client->purchasePart(bay, item.category, item.type, item.typeValue, true);
+				if (client->confirmClass(bay, (Client::CARCLASS)item.carClass) == true && item.carID == client->getCarID(bay)) result = client->purchasePart(bay, item.category, item.type, item.typeValue, true);
 				else result = false;
 			}
 		}
 		break;
 		default:
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to exchange an item that isn't exchangable. ID %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to exchange an item that isn't exchangable. ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -423,7 +423,7 @@ void ClientPacketItem(CLIENT* client)
 		}
 		else
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to exchange an item but didn't meet the requirements. ID %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to exchange an item but didn't meet the requirements. ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),

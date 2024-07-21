@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include "..\server.h"
 
-void ClientPacketChat(CLIENT* client)
+void ClientPacketChat(Client* client)
 {
 	uint16_t pType = client->inbuf.getType();
 
@@ -284,7 +284,7 @@ void ClientPacketChat(CLIENT* client)
 					}
 					else
 					{
-						CLIENT* foundClient = client->server->findUser(command[1]);
+						Client* foundClient = client->server->findUser(command[1]);
 						if (foundClient != nullptr)
 						{
 							client->SendAnnounceMessage(std::string("You have been disconnected by an admin."), RGB(250, 100, 10), foundClient->driverslicense);
@@ -385,7 +385,7 @@ void ClientPacketChat(CLIENT* client)
 	case 0x602: // Private Chat Offline
 	{	
 		int32_t offset = 0x24;
-		client->SendChatMessage(CLIENT::CHATTYPE::CHATTYPE_PRIVATE, client->inbuf.getString(0x04, 0x10), client->inbuf.getString(offset, 0x4E), client->driverslicense, client->handle);
+		client->SendChatMessage(Client::CHATTYPE::CHATTYPE_PRIVATE, client->inbuf.getString(0x04, 0x10), client->inbuf.getString(offset, 0x4E), client->driverslicense, client->handle);
 		client->server->SendOfflineChatMessage(SERVER::CHATTYPE::CHATTYPE_PRIVATE, client->handle, client->inbuf.getString(0x04, 0x10), client->inbuf.getString(offset, 0x4E));
 		return;
 	}
@@ -398,7 +398,7 @@ void ClientPacketChat(CLIENT* client)
 		uint32_t teamID = client->inbuf.get<uint32_t>(0x62);
 		if (teamID != client->teamdata.teamID || client->inTeam() == false)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to team chat but is not in a team or in the specified team. Team ID %u",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to team chat but is not in a team or in the specified team. Team ID %u",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -414,17 +414,17 @@ void ClientPacketChat(CLIENT* client)
 	case 0x608: // Private Chat Online
 	{	
 		int32_t offset = 0x16;
-		CLIENT* findClient = client->server->findUser(client->inbuf.getString(0x06, 0x10));
-		if (findClient != nullptr) client->SendChatMessage(CLIENT::CHATTYPE::CHATTYPE_PRIVATE, client->inbuf.getString(0x06, 0x10), client->inbuf.getString(offset, 0x4E), findClient->driverslicense, client->handle);
-		client->SendChatMessage(CLIENT::CHATTYPE::CHATTYPE_PRIVATE, client->inbuf.getString(0x06, 0x10), client->inbuf.getString(offset, 0x4E), client->driverslicense, client->handle);
+		Client* findClient = client->server->findUser(client->inbuf.getString(0x06, 0x10));
+		if (findClient != nullptr) client->SendChatMessage(Client::CHATTYPE::CHATTYPE_PRIVATE, client->inbuf.getString(0x06, 0x10), client->inbuf.getString(offset, 0x4E), findClient->driverslicense, client->handle);
+		client->SendChatMessage(Client::CHATTYPE::CHATTYPE_PRIVATE, client->inbuf.getString(0x06, 0x10), client->inbuf.getString(offset, 0x4E), client->driverslicense, client->handle);
 		return;
 	}
 	break;
 	case 0x609:
 	{	// Chat
 		int32_t offset = (client->inbuf.get<uint16_t>(0x14) * 4) + 0x16;
-		if (client->privileges == 0xFF) client->SendChatMessage(CLIENT::CHATTYPE::CHATTYPE_ADMIN, client->handle, client->inbuf.getString(offset, 0x4E), 0);
-		else client->SendChatMessage(CLIENT::CHATTYPE::CHATTYPE_NORMAL, client->handle, client->inbuf.getString(offset, 0x4E), 0);
+		if (client->privileges == 0xFF) client->SendChatMessage(Client::CHATTYPE::CHATTYPE_ADMIN, client->handle, client->inbuf.getString(offset, 0x4E), 0);
+		else client->SendChatMessage(Client::CHATTYPE::CHATTYPE_NORMAL, client->handle, client->inbuf.getString(offset, 0x4E), 0);
 		return;
 	}
 	break;

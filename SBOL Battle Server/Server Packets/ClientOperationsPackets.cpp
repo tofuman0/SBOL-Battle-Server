@@ -18,15 +18,15 @@ void ClientOperations(MANAGEMENTSERVER* managementserver)
 		std::string message = managementserver->inbuf.getStringA(0x4E);
 		switch (type)
 		{
-		case CLIENT::CHATTYPE::CHATTYPE_ANNOUNCE:
-		case CLIENT::CHATTYPE::CHATTYPE_NOTIFICATION:
-		case CLIENT::CHATTYPE::CHATTYPE_PRIVATE:
-		case CLIENT::CHATTYPE::CHATTYPE_EVENT:
-		case CLIENT::CHATTYPE::CHATTYPE_NORMAL:
-		case CLIENT::CHATTYPE::CHATTYPE_ADMIN:
+		case Client::CHATTYPE::CHATTYPE_ANNOUNCE:
+		case Client::CHATTYPE::CHATTYPE_NOTIFICATION:
+		case Client::CHATTYPE::CHATTYPE_PRIVATE:
+		case Client::CHATTYPE::CHATTYPE_EVENT:
+		case Client::CHATTYPE::CHATTYPE_NORMAL:
+		case Client::CHATTYPE::CHATTYPE_ADMIN:
 		{
-			CLIENT* findClient = server->findUser(toHandle);
-			if (findClient != nullptr) findClient->SendChatMessage(static_cast<CLIENT::CHATTYPE>(type), fromHandle, message, findClient->driverslicense, fromHandle);
+			Client* findClient = server->findUser(toHandle);
+			if (findClient != nullptr) findClient->SendChatMessage(static_cast<Client::CHATTYPE>(type), fromHandle, message, findClient->driverslicense, fromHandle);
 		}
 		return;
 		}
@@ -37,7 +37,7 @@ void ClientOperations(MANAGEMENTSERVER* managementserver)
 		std::string toHandle = managementserver->inbuf.getStringA(0x10);
 		std::string message = managementserver->inbuf.getStringA(0x4E);
 		uint32_t colour = managementserver->inbuf.get<uint32_t>();
-		CLIENT* findClient = server->findUser(toHandle);
+		Client* findClient = server->findUser(toHandle);
 		if (findClient != nullptr) findClient->SendAnnounceMessage(message, colour, findClient->driverslicense);
 	}
 	break;

@@ -6,21 +6,21 @@
 
 #ifndef SHARED_STRUCTS
 #define SHARED_STRUCTS
-class CLIENT;
+class Client;
 
 typedef struct st_sendqueue {
-	uint8_t sndbuf[CLIENT_BUFFER_SIZE];
+	uint8_t sndbuf[Client_BUFFER_SIZE];
 } SEND_QUEUE;
 typedef struct st_coursequeue {
 	int32_t exclude;
-	uint8_t sndbuf[CLIENT_BUFFER_SIZE];
+	uint8_t sndbuf[Client_BUFFER_SIZE];
 } COURSE_QUEUE;
 typedef struct st_messagequeue {
 	int32_t socket;
-	uint8_t buffer[CLIENT_BUFFER_SIZE];
+	uint8_t buffer[Client_BUFFER_SIZE];
 } MESSAGE_QUEUE;
 typedef struct st_sendmanagementqueue {
-	uint8_t sndbuf[CLIENT_BUFFER_SIZE];
+	uint8_t sndbuf[Client_BUFFER_SIZE];
 } SEND_MANAGEMENT_QUEUE;
 typedef uint16_t ITEMBOX_ITEM;
 typedef struct st_rivalstatus {
@@ -430,7 +430,7 @@ typedef struct st_rivalrequirements {
 	int8_t driveTrain;			// Bit flag 1 = FWD, 2 = RWD, 4 = AWD
 	int8_t engineCylinders;		// Bit flag 1 = 4, 2 = 6, 4 = 8, 8 = Rotary
 	int8_t aspiration;			// Bit flag 1 = NA, 2 = Turbo
-} RIVALREQUIREMENTS;
+} RivalREQUIREMENTS;
 typedef struct st_rivaldata {
 	int32_t rivalID;
 	bool customTeam;
@@ -447,7 +447,7 @@ typedef struct st_rivaldata {
 	int32_t commonTable;
 	float rewardChance;
 	RIVALDIFFICULTY difficulty;
-	RIVALREQUIREMENTS requirements;
+	RivalREQUIREMENTS requirements;
 } RIVALDATA;
 #pragma endregion
 #pragma region Ticket Structures

@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include "..\server.h"
 
-void ClientPacketKeepAlive(CLIENT* client)
+void ClientPacketKeepAlive(Client* client)
 {
 	uint16_t pType = client->inbuf.getType();
 

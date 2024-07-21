@@ -106,7 +106,7 @@ uint32_t MANAGEMENTSERVER::Send(SERVERPACKET* src)
 			logger->Log(Logger::LOGTYPE_ERROR, L"Unable to send packet to management server %s as not authenticated.", logger->toWide((char*)IP_Address).c_str());
 			return 2;
 		}
-		if (CLIENT_BUFFER_SIZE < ((int32_t)src->getSize() + 15))
+		if (Client_BUFFER_SIZE < ((int32_t)src->getSize() + 15))
 		{
 			Disconnect();
 			return 1;
@@ -115,7 +115,7 @@ uint32_t MANAGEMENTSERVER::Send(SERVERPACKET* src)
 		{
 			uint16_t size = src->getSize();
 			uint16_t newsize = 0;
-			if ((size - 4) < 0 || size > CLIENT_BUFFER_SIZE)
+			if ((size - 4) < 0 || size > Client_BUFFER_SIZE)
 			{
 				logger->Log(Logger::LOGTYPE_ERROR, L"Unable to send packet to client %s as packet will be %ubytes", logger->toWide((char*)IP_Address).c_str(), size);
 				return 1;
@@ -129,7 +129,7 @@ uint32_t MANAGEMENTSERVER::Send(SERVERPACKET* src)
 			CopyMemory((char*)compressed.data(), &src->buffer[0x02], newsize);
 			compressed = compress(compressed);
 			newsize = compressed.size();
-			if (newsize > CLIENT_BUFFER_SIZE)
+			if (newsize > Client_BUFFER_SIZE)
 			{
 				logger->Log(Logger::LOGTYPE_ERROR, L"Unable to send packet to client %s as packet will be %ubytes", logger->toWide((char*)IP_Address).c_str(), newsize);
 				return 1;
@@ -146,7 +146,7 @@ uint32_t MANAGEMENTSERVER::Send(SERVERPACKET* src)
 			newsize = src->getSize();
 			if (isAuth == true)
 			{
-				if (newsize + 2 + BLOCK_SIZE > CLIENT_BUFFER_SIZE)
+				if (newsize + 2 + BLOCK_SIZE > Client_BUFFER_SIZE)
 				{
 					logger->Log(Logger::LOGTYPE_ERROR, L"Unable to send packet to client %s as packet will be %ubytes", logger->toWide((char*)IP_Address).c_str(), newsize + 2 + BLOCK_SIZE);
 					return 1;
@@ -344,7 +344,7 @@ void MANAGEMENTSERVER::CheckManagementPackets(uint32_t rcvcopy, uint8_t* tmprcv)
 		inbuf.clearBuffer();
 		inbuf.appendArray(tmprcv, rcvcopy);
 		inbuf.setSize(inbuf.getSizeFromBuffer());
-		if (inbuf.getSize() > CLIENT_BUFFER_SIZE)
+		if (inbuf.getSize() > Client_BUFFER_SIZE)
 		{
 			// Packet too big, disconnect the client.
 			logger->Log(Logger::LOGTYPE_MANAGEMENT, L"Management server %s sent an invalid packet.", toWide((char*)IP_Address).c_str());
@@ -460,7 +460,7 @@ int32_t MANAGEMENTSERVER::decompress(uint8_t* src, uint8_t* dst, int32_t len)
 bool MANAGEMENTSERVER::DataSend()
 {
 	int32_t wserror, send_len, max_send;
-	uint8_t sendbuf[CLIENT_BUFFER_SIZE];
+	uint8_t sendbuf[Client_BUFFER_SIZE];
 	SEND_MANAGEMENT_QUEUE entry;
 
 	if (snddata > 0 || messagesInSendQueue())
@@ -469,11 +469,11 @@ bool MANAGEMENTSERVER::DataSend()
 		{
 			entry = getFromSendQueue();
 			snddata = *(int16_t*)&entry.sndbuf[0] + 2;
-			CopyMemory(sndbuf, entry.sndbuf, CLIENT_BUFFER_SIZE);
+			CopyMemory(sndbuf, entry.sndbuf, Client_BUFFER_SIZE);
 		}
 
-		if (snddata > CLIENT_BUFFER_SIZE)
-			max_send = CLIENT_BUFFER_SIZE;
+		if (snddata > Client_BUFFER_SIZE)
+			max_send = Client_BUFFER_SIZE;
 		else
 			max_send = snddata;
 
@@ -505,7 +505,7 @@ bool MANAGEMENTSERVER::DataRecv()
 {
 	int32_t wserror, recv_len, max_send;
 	
-	max_send = CLIENT_BUFFER_SIZE - rcvread;
+	max_send = Client_BUFFER_SIZE - rcvread;
 
 	if((recv_len = recv(ServerSocket, (char*)&rcvbuf[rcvread], max_send, 0)) == SOCKET_ERROR)
 	{
@@ -539,7 +539,7 @@ bool MANAGEMENTSERVER::ProcessRecv(int32_t len)
 {
 	if (len < 0)
 		return false;
-	uint8_t recvbuf[CLIENT_BUFFER_SIZE];
+	uint8_t recvbuf[Client_BUFFER_SIZE];
 	rcvread += len;
 	if ((hassize == false || packetsize == 0) && rcvread >= 2)
 	{
@@ -550,8 +550,8 @@ bool MANAGEMENTSERVER::ProcessRecv(int32_t len)
 	{
 		CopyMemory(&recvbuf[0], &rcvbuf[0], packetsize);
 		CheckManagementPackets(packetsize, recvbuf);
-		CopyMemory(&recvbuf[0], &rcvbuf[packetsize], CLIENT_BUFFER_SIZE - packetsize);
-		CopyMemory(&rcvbuf[0], &recvbuf[0], CLIENT_BUFFER_SIZE - packetsize);
+		CopyMemory(&recvbuf[0], &rcvbuf[packetsize], Client_BUFFER_SIZE - packetsize);
+		CopyMemory(&rcvbuf[0], &recvbuf[0], Client_BUFFER_SIZE - packetsize);
 		hassize = false;
 		rcvread -= packetsize;
 		packetsize = 0;

@@ -15,7 +15,7 @@ void ClientRequests(MANAGEMENTSERVER* managementserver)
 		uint32_t teamid = managementserver->inbuf.get<uint32_t>();
 		uint8_t result = managementserver->inbuf.get<uint8_t>();
 		std::string name = managementserver->inbuf.getStringA(0x10);
-		CLIENT* findClient = server->findUser(license);
+		Client* findClient = server->findUser(license);
 		if (findClient != nullptr)
 		{
 			if (result == 0)
@@ -29,7 +29,7 @@ void ClientRequests(MANAGEMENTSERVER* managementserver)
 			}
 			else if (result == 2)
 			{
-				findClient->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to create a team but is already in a team. Team ID %u.",
+				findClient->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to create a team but is already in a team. Team ID %u.",
 					findClient->logger->toWide(findClient->handle).c_str(),
 					findClient->driverslicense,
 					findClient->logger->toWide((char*)&findClient->IP_Address).c_str(),
@@ -55,7 +55,7 @@ void ClientRequests(MANAGEMENTSERVER* managementserver)
 		uint32_t teamid = managementserver->inbuf.get<uint32_t>();
 		uint8_t result = managementserver->inbuf.get<uint8_t>();
 		uint8_t inviteStatus = managementserver->inbuf.get<uint8_t>();
-		CLIENT* findClient = server->findUser(license);
+		Client* findClient = server->findUser(license);
 		if (findClient != nullptr)
 		{
 			if (result == 0)
@@ -64,7 +64,7 @@ void ClientRequests(MANAGEMENTSERVER* managementserver)
 			}
 			else if (result == 2)
 			{
-				findClient->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to update team comment but is not in team. Team ID %u.",
+				findClient->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to update team comment but is not in team. Team ID %u.",
 					findClient->logger->toWide(findClient->handle).c_str(),
 					findClient->driverslicense,
 					findClient->logger->toWide((char*)&findClient->IP_Address).c_str(),
@@ -75,7 +75,7 @@ void ClientRequests(MANAGEMENTSERVER* managementserver)
 			}
 			else if (result == 3)
 			{
-				findClient->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to update team comment but is not the team leader. Team ID %u.",
+				findClient->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to update team comment but is not the team leader. Team ID %u.",
 					findClient->logger->toWide(findClient->handle).c_str(),
 					findClient->driverslicense,
 					findClient->logger->toWide((char*)&findClient->IP_Address).c_str(),
@@ -100,7 +100,7 @@ void ClientRequests(MANAGEMENTSERVER* managementserver)
 		uint32_t teamid = managementserver->inbuf.get<uint32_t>();
 		uint8_t result = managementserver->inbuf.get<uint8_t>();
 		std::string comment = managementserver->inbuf.getStringA(0x28);
-		CLIENT* findClient = server->findUser(license);
+		Client* findClient = server->findUser(license);
 		if (findClient != nullptr)
 		{
 			if (result == 0)
@@ -110,7 +110,7 @@ void ClientRequests(MANAGEMENTSERVER* managementserver)
 			}
 			else if (result == 2 || result == 3)
 			{
-				findClient->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to update team comment but is not in team or is not team leader. Team ID %u.",
+				findClient->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to update team comment but is not in team or is not team leader. Team ID %u.",
 					findClient->logger->toWide(findClient->handle).c_str(),
 					findClient->driverslicense,
 					findClient->logger->toWide((char*)&findClient->IP_Address).c_str(),
@@ -134,7 +134,7 @@ void ClientRequests(MANAGEMENTSERVER* managementserver)
 		uint32_t license = managementserver->inbuf.get<uint32_t>();
 		uint32_t teamid = managementserver->inbuf.get<uint32_t>();
 		uint8_t result = managementserver->inbuf.get<uint8_t>();
-		CLIENT* findClient = server->findUser(license);
+		Client* findClient = server->findUser(license);
 		if (findClient != nullptr)
 		{
 			if (result == 0)
@@ -144,7 +144,7 @@ void ClientRequests(MANAGEMENTSERVER* managementserver)
 			}
 			else if (result == 2 || result == 3)
 			{
-				findClient->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to delete team comment but is not in team or team leader. Team ID %u.",
+				findClient->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to delete team comment but is not in team or team leader. Team ID %u.",
 					findClient->logger->toWide(findClient->handle).c_str(),
 					findClient->driverslicense,
 					findClient->logger->toWide((char*)&findClient->IP_Address).c_str(),
@@ -166,7 +166,7 @@ void ClientRequests(MANAGEMENTSERVER* managementserver)
 	case 0x0004: // Get Team Data
 	{
 		uint32_t license = managementserver->inbuf.get<uint32_t>();
-		CLIENT* findClient = server->findUser(license);
+		Client* findClient = server->findUser(license);
 		if (findClient != nullptr)
 		{
 			uint32_t teamID = managementserver->inbuf.get<uint32_t>();
@@ -209,7 +209,7 @@ void ClientRequests(MANAGEMENTSERVER* managementserver)
 	{
 		uint32_t license = managementserver->inbuf.get<uint32_t>();
 		uint8_t result = managementserver->inbuf.get<uint8_t>();
-		CLIENT* findClient = server->findUser(license);
+		Client* findClient = server->findUser(license);
 		if (findClient != nullptr)
 		{
 			findClient->outbuf.clearBuffer();

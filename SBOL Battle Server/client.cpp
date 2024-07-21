@@ -11,15 +11,15 @@
 #include "packets.h"
 #include "managementpackets.h"
 
-CLIENT::CLIENT()
+Client::Client()
 {
 	initialize();
 }
-CLIENT::~CLIENT()
+Client::~Client()
 {
 	clearRivals();
 }
-void CLIENT::initialize()
+void Client::initialize()
 {
 	test1 = 0;
 	test2 = 0;
@@ -78,7 +78,7 @@ void CLIENT::initialize()
 	currentRival = nullptr;
 	ZeroMemory(&unlockableCars[0], sizeof(unlockableCars));
 }
-void CLIENT::initializeGarage()
+void Client::initializeGarage()
 {
 	garagedata.activeCar = nullptr;
 	garagedata.activeCarBay = 0;
@@ -93,12 +93,12 @@ void CLIENT::initializeGarage()
 		car.carID = 0xFFFFFFFF;
 	}
 }
-void CLIENT::initializeTeam()
+void Client::initializeTeam()
 {
 	ZeroMemory(&teamdata, sizeof(TEAMDATA));
 	teamdata.teamID = 0xFFFFFFFF;
 }
-int32_t CLIENT::joinCourse()
+int32_t Client::joinCourse()
 {
 	if (course != nullptr) course->removeClient(this);
 	if (notBeginner == false) currentCourse = 8;
@@ -113,13 +113,13 @@ int32_t CLIENT::joinCourse()
 	}
 	if (course == nullptr)
 	{
-		logger->Log(Logger::LOGTYPE_CLIENT, L"Client can't join course.");
+		logger->Log(Logger::LOGTYPE_Client, L"Client can't join course.");
 		Disconnect();
 		return 0;
 	}
 	return 1;
 }
-int8_t CLIENT::getCarCount()
+int8_t Client::getCarCount()
 {
 	int8_t count = 0;
 	for (uint32_t i = 0; i < (uint32_t)(garagedata.garageCount * 4); i++)
@@ -128,7 +128,7 @@ int8_t CLIENT::getCarCount()
 	}
 	return count;
 }
-int32_t CLIENT::getEmptyBay()
+int32_t Client::getEmptyBay()
 {
 	for (uint32_t i = 0; i < (uint32_t)(garagedata.garageCount * 4); i++)
 	{
@@ -136,7 +136,7 @@ int32_t CLIENT::getEmptyBay()
 	}
 	return -1;
 }
-bool CLIENT::addCar(int32_t carID, uint32_t bay, float r1, float g1, float b1, float r2, float g2, float b2)
+bool Client::addCar(int32_t carID, uint32_t bay, float r1, float g1, float b1, float r2, float g2, float b2)
 {
 	if ((garagedata.garageCount * 4) <= GARAGE_LIMIT)
 	{
@@ -175,7 +175,7 @@ bool CLIENT::addCar(int32_t carID, uint32_t bay, float r1, float g1, float b1, f
 	}
 	return false;
 }
-bool CLIENT::removeCar(uint32_t bay)
+bool Client::removeCar(uint32_t bay)
 {
 	if (bay >= garagedata.car.size() || garagedata.car[bay].carID == 0xFFFFFFFF || bay == garagedata.activeCarBay) return false;
 	ZeroMemory(&garagedata.car[bay], sizeof(CAR));
@@ -183,7 +183,7 @@ bool CLIENT::removeCar(uint32_t bay)
 	server->managementserver.RemoveCar(driverslicense, bay);
 	return true;
 }
-int32_t CLIENT::setActiveCar(uint32_t bay)
+int32_t Client::setActiveCar(uint32_t bay)
 {
 	if (garagedata.garageCount > 0)
 	{
@@ -214,12 +214,12 @@ int32_t CLIENT::setActiveCar(uint32_t bay)
 	}
 	return (garagedata.activeCar) ? 0 : 1;
 }
-int32_t CLIENT::getCarID(uint32_t bay)
+int32_t Client::getCarID(uint32_t bay)
 {
 	if (bay < garagedata.car.size() && garagedata.car[bay].carID != 0xFFFFFFFF) return (int32_t)garagedata.car[bay].carID;
 	else return -1;
 }
-int32_t CLIENT::getCarManufacturer(uint32_t carID)
+int32_t Client::getCarManufacturer(uint32_t carID)
 {
 	switch (carID)
 	{
@@ -300,32 +300,32 @@ int32_t CLIENT::getCarManufacturer(uint32_t carID)
 		return (int32_t)SERVER::CARMANUFACTURERS::MANUFACTURER_INVALID;
 	}
 }
-int32_t CLIENT::setHandle(std::string& in)
+int32_t Client::setHandle(std::string& in)
 {
 	handle = in.substr(0, 15);
 	return 0;
 }
-int32_t CLIENT::setUsername(std::string& in)
+int32_t Client::setUsername(std::string& in)
 {
 	username = in.substr(0, 20);
 	return 0;
 }
-bool CLIENT::enoughCP(int64_t price)
+bool Client::enoughCP(int64_t price)
 {
 	if (careerdata.CP - price < 0) return false;
 	else return true;
 }
-void CLIENT::takeCP(int64_t price)
+void Client::takeCP(int64_t price)
 {
 	if (careerdata.CP - price >= 0) careerdata.CP -= price;
 	else careerdata.CP = 0;
 }
-void CLIENT::giveCP(int64_t cp)
+void Client::giveCP(int64_t cp)
 {
 	if((careerdata.CP + cp) > careerdata.CP) careerdata.CP += cp;
 	else careerdata.CP = _I64_MAX;
 }
-uint32_t CLIENT::calculateOverhaul(uint32_t bay)
+uint32_t Client::calculateOverhaul(uint32_t bay)
 {
 	if (bay > garagedata.car.size() || garagedata.car[bay].carID == 0xFFFFFFFF) return 0;
 	S_DAT_ENTRY* sDAT = &server->sDAT.sdat[garagedata.car[bay].carID % server->sDAT.count];
@@ -347,7 +347,7 @@ uint32_t CLIENT::calculateOverhaul(uint32_t bay)
 		) *	(float)(100 - (min(garagedata.car[bay].engineCondition / 100, 100)))
 	);
 }
-uint16_t CLIENT::getShopPartPrice(uint32_t bay, uint8_t itemCategory, uint8_t itemType, uint32_t itemID)
+uint16_t Client::getShopPartPrice(uint32_t bay, uint8_t itemCategory, uint8_t itemType, uint32_t itemID)
 {
 	if (bay >= garagedata.car.size() || garagedata.car[bay].carID == 0xFFFFFFFF) return 0;
 	S_DAT_ENTRY* sDAT = &server->sDAT.sdat[garagedata.car[bay].carID % server->sDAT.count];
@@ -405,7 +405,7 @@ uint16_t CLIENT::getShopPartPrice(uint32_t bay, uint8_t itemCategory, uint8_t it
 		{
 			if (itemID == 0 || itemID > 9)
 			{
-				logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to purchase invalid item from Tire/Brake shop ID %u",
+				logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase invalid item from Tire/Brake shop ID %u",
 					logger->toWide(handle).c_str(),
 					driverslicense,
 					logger->toWide((char*)&IP_Address).c_str(),
@@ -437,7 +437,7 @@ uint16_t CLIENT::getShopPartPrice(uint32_t bay, uint8_t itemCategory, uint8_t it
 	}
 	return 0;
 }
-uint16_t CLIENT::getShopPartPriceFromID(uint32_t carID, uint8_t itemCategory, uint8_t itemType, uint32_t itemID)
+uint16_t Client::getShopPartPriceFromID(uint32_t carID, uint8_t itemCategory, uint8_t itemType, uint32_t itemID)
 {
 	S_DAT_ENTRY* sDAT = &server->sDAT.sdat[carID % server->sDAT.count];
 	uint8_t carClass = sDAT->carClass;
@@ -494,7 +494,7 @@ uint16_t CLIENT::getShopPartPriceFromID(uint32_t carID, uint8_t itemCategory, ui
 		{
 			if (itemID == 0 || itemID > 9)
 			{
-				logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to purchase invalid item from Tire/Brake shop ID %u",
+				logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase invalid item from Tire/Brake shop ID %u",
 					logger->toWide(handle).c_str(),
 					driverslicense,
 					logger->toWide((char*)&IP_Address).c_str(),
@@ -526,7 +526,7 @@ uint16_t CLIENT::getShopPartPriceFromID(uint32_t carID, uint8_t itemCategory, ui
 	}
 	return UINT16_MAX;
 }
-bool CLIENT::equipPart(uint32_t bay, uint8_t itemCategory, uint8_t itemType, uint32_t itemID)
+bool Client::equipPart(uint32_t bay, uint8_t itemCategory, uint8_t itemType, uint32_t itemID)
 {
 	if (bay >= garagedata.car.size() || garagedata.car[bay].carID == 0xFFFFFFFF) return false;
 	S_DAT_ENTRY* sDAT = &server->sDAT.sdat[garagedata.car[bay].carID % server->sDAT.count];
@@ -674,20 +674,20 @@ bool CLIENT::equipPart(uint32_t bay, uint8_t itemCategory, uint8_t itemType, uin
 	}
 	return false;
 }
-bool CLIENT::confirmClass(uint32_t bay, CARCLASS carClass)
+bool Client::confirmClass(uint32_t bay, CARCLASS carClass)
 {
 	if (bay >= garagedata.car.size() || garagedata.car[bay].carID == 0xFFFFFFFF) return false;
 	S_DAT_ENTRY* sDAT = &server->sDAT.sdat[garagedata.car[bay].carID % server->sDAT.count];
 	if (carClass == sDAT->carClass) return true;
 	return false;
 }
-uint8_t CLIENT::getCarClass(int32_t bay)
+uint8_t Client::getCarClass(int32_t bay)
 {
 	if (bay = -1) bay = getActiveCar();
 	S_DAT_ENTRY* sDAT = &server->sDAT.sdat[garagedata.car[bay].carID % server->sDAT.count];
 	return sDAT->carClass;
 }
-bool CLIENT::purchasePart(uint32_t bay, uint8_t itemCategory, uint8_t itemType, uint32_t itemID, bool override)
+bool Client::purchasePart(uint32_t bay, uint8_t itemCategory, uint8_t itemType, uint32_t itemID, bool override)
 {
 	if (bay >= garagedata.car.size() || garagedata.car[bay].carID == 0xFFFFFFFF) return false;
 	S_DAT_ENTRY* sDAT = &server->sDAT.sdat[garagedata.car[bay].carID % server->sDAT.count];
@@ -835,12 +835,12 @@ bool CLIENT::purchasePart(uint32_t bay, uint8_t itemCategory, uint8_t itemType, 
 	}
 	return false;
 }
-void CLIENT::addItem(int16_t itemID)
+void Client::addItem(int16_t itemID)
 {
 	if(itemID >= 0)
 		itembox.push_back(itemID);
 }
-bool CLIENT::removeItem(uint16_t itemID)
+bool Client::removeItem(uint16_t itemID)
 {
 	for (uint32_t i = 0; i < itembox.size(); i++)
 	{
@@ -852,7 +852,7 @@ bool CLIENT::removeItem(uint16_t itemID)
 	}
 	return false;
 }
-bool CLIENT::hasItem(uint16_t itemID)
+bool Client::hasItem(uint16_t itemID)
 {
 	for (auto& item : itembox)
 	{
@@ -860,25 +860,25 @@ bool CLIENT::hasItem(uint16_t itemID)
 	}
 	return false;
 }
-bool CLIENT::isValidItem(uint16_t itemID)
+bool Client::isValidItem(uint16_t itemID)
 {
 	return server->isValidItem(itemID);
 }
-bool CLIENT::isValidCar(uint32_t carID)
+bool Client::isValidCar(uint32_t carID)
 {
 	return server->isValidCar(carID);
 }
-int16_t CLIENT::getItemPrice(uint16_t itemID)
+int16_t Client::getItemPrice(uint16_t itemID)
 {
 	if (isValidItem(itemID)) return server->itemData.data[itemID].saleValue;
 	else return -1;
 }
-int16_t CLIENT::getItemResalePrice(uint16_t itemID)
+int16_t Client::getItemResalePrice(uint16_t itemID)
 {
 	if (isValidItem(itemID)) return server->itemData.data[itemID].resaleValue;
 	else return -1;
 }
-int16_t CLIENT::getShopCarPrice(uint32_t carID)
+int16_t Client::getShopCarPrice(uint32_t carID)
 {
 	if (isValidCar(carID) == false) return -1;
 	else
@@ -890,7 +890,7 @@ int16_t CLIENT::getShopCarPrice(uint32_t carID)
 	}
 	return -1;
 }
-int16_t CLIENT::getShopCarResalePrice(uint32_t carID)
+int16_t Client::getShopCarResalePrice(uint32_t carID)
 {
 	if (isValidCar(carID) == false) return -1;
 	else
@@ -902,7 +902,7 @@ int16_t CLIENT::getShopCarResalePrice(uint32_t carID)
 	}
 	return -1;
 }
-uint32_t CLIENT::getCarSalePrice(uint32_t bay)
+uint32_t Client::getCarSalePrice(uint32_t bay)
 {
 	if (bay >= garagedata.car.size() || garagedata.car[bay].carID == 0xFFFFFFFF) return 0;
 	uint32_t carID = garagedata.car[bay].carID;
@@ -928,18 +928,18 @@ uint32_t CLIENT::getCarSalePrice(uint32_t bay)
 
 	return price;
 }
-ITEMDATA_ENTRY CLIENT::getItem(uint16_t itemID)
+ITEMDATA_ENTRY Client::getItem(uint16_t itemID)
 {
 	ITEMDATA_ENTRY item = { 0 };
 	CopyMemory((uint8_t*)&item, (uint8_t*)&server->itemData.data[itemID], sizeof(ITEMDATA_ENTRY));
 	return item;
 }
-int32_t CLIENT::isInCarShop(uint32_t carID)
+int32_t Client::isInCarShop(uint32_t carID)
 {
 	for (uint32_t i = 0; i < shopCars.size(); i++) if (shopCars[i] == carID) return i;
 	return -1;
 }
-void CLIENT::processBattleWin()
+void Client::processBattleWin()
 {
 	if (battle.isNPC == true)
 	{
@@ -950,8 +950,8 @@ void CLIENT::processBattleWin()
 			addItem(currentRival->WinReward());
 			if (careerdata.rivalWin < 0xFFFF)
 				careerdata.rivalWin++;
-			if(currentRival->Custom() == false)
-				setRivalStatus(currentRival->TeamData().teamID, currentRival->TeamData().memberID, RIVAL::RIVALSTATUS::RS_WON);
+			if(currentRival->GetCustom() == false)
+				setRivalStatus(currentRival->GetTeamData().teamID, currentRival->GetTeamData().memberID, Rival::RIVALSTATUS::RS_WON);
 		}
 	}
 	else
@@ -966,7 +966,7 @@ void CLIENT::processBattleWin()
 		addExp((uint32_t)exp);
 		careerdata.level = getLevel();
 
-		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has won battle. Which lasted for %0.2f Kms. %u Exp received with %u SP remaining.",
+		logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u has won battle. Which lasted for %0.2f Kms. %u Exp received with %u SP remaining.",
 			logger->toWide(handle).c_str(),
 			driverslicense,
 			logger->toWide((char*)&IP_Address).c_str(),
@@ -976,7 +976,7 @@ void CLIENT::processBattleWin()
 			battle.SP);
 	}
 }
-void CLIENT::processBattleLose()
+void Client::processBattleLose()
 {
 	if (battle.isNPC == true)
 	{
@@ -987,8 +987,8 @@ void CLIENT::processBattleLose()
 			addItem(currentRival->LoseReward());
 			if (careerdata.rivalLose < 0xFFFF)
 				careerdata.rivalLose++;
-			if (currentRival->Custom() == false)
-				setRivalStatus(currentRival->TeamData().teamID, currentRival->TeamData().memberID, RIVAL::RIVALSTATUS::RS_LOST);
+			if (currentRival->GetCustom() == false)
+				setRivalStatus(currentRival->GetTeamData().teamID, currentRival->GetTeamData().memberID, Rival::RIVALSTATUS::RS_LOST);
 		}
 	}
 	else
@@ -1000,7 +1000,7 @@ void CLIENT::processBattleLose()
 		addExp((uint32_t)exp);
 		careerdata.level = getLevel();
 
-		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has lost battle. Which lasted for %0.2f Kms. %u Exp received with %u SP remaining.",
+		logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u has lost battle. Which lasted for %0.2f Kms. %u Exp received with %u SP remaining.",
 			logger->toWide(handle).c_str(),
 			driverslicense,
 			logger->toWide((char*)&IP_Address).c_str(),
@@ -1010,7 +1010,7 @@ void CLIENT::processBattleLose()
 			battle.SP);
 	}
 }
-void CLIENT::adjustEngineCondition(int32_t damage1, int32_t damage2, int32_t damage3, int32_t damage4)
+void Client::adjustEngineCondition(int32_t damage1, int32_t damage2, int32_t damage3, int32_t damage4)
 {
 	float boostAdjust = 1.0f + (float)((garagedata.activeCar->carSettings.boostPressure + 15) / 100.0f);
 	float totalwear = (float)(damage1 + damage2 + damage3 + damage4);
@@ -1024,25 +1024,25 @@ void CLIENT::adjustEngineCondition(int32_t damage1, int32_t damage2, int32_t dam
 	if (garagedata.activeCar->engineCondition < 4000) // Limit wear to 40%
 		garagedata.activeCar->engineCondition = 4000;
 }
-void CLIENT::addExp(uint32_t exp)
+void Client::addExp(uint32_t exp)
 {
 	if (careerdata.experiencePoints + exp > server->expToLevel[LEVEL_CAP]) exp = server->expToLevel[LEVEL_CAP] - (careerdata.experiencePoints);
 	careerdata.recentExperiancePoints = exp;
 	careerdata.experiencePoints += exp;
 }
-void CLIENT::takeExp(uint32_t exp)
+void Client::takeExp(uint32_t exp)
 {
 	if (careerdata.experiencePoints - exp & 0x80000000) exp = 0;
 	careerdata.recentExperiancePoints = exp;
 	careerdata.experiencePoints -= exp;
 }
-void CLIENT::setExp(uint32_t exp)
+void Client::setExp(uint32_t exp)
 {
 	if (exp > server->expToLevel[LEVEL_CAP]) exp = server->expToLevel[LEVEL_CAP] - (careerdata.experiencePoints);
 	careerdata.recentExperiancePoints = exp;
 	careerdata.experiencePoints = exp;
 }
-uint8_t CLIENT::getLevel()
+uint8_t Client::getLevel()
 {
 	if (LEVEL_CAP > server->expToLevel.size())
 	{
@@ -1065,7 +1065,7 @@ uint8_t CLIENT::getLevel()
 	careerdata.level = LEVEL_CAP;
 	return LEVEL_CAP;
 }
-void CLIENT::setLevel(uint8_t level)
+void Client::setLevel(uint8_t level)
 {
 	if (level > LEVEL_CAP) level = LEVEL_CAP;
 	else if (level == 0) level++;
@@ -1073,7 +1073,7 @@ void CLIENT::setLevel(uint8_t level)
 	careerdata.experiencePoints = server->expToLevel[level - 1];
 	careerdata.experiencePercent = (uint8_t)(((float)(careerdata.experiencePoints - server->expToLevel[level - 1]) / (float)(server->expToLevel[level] - ((level > 1) ? server->expToLevel[level - 1] : 0))) * 100.0f);
 }
-void CLIENT::clearBattle()
+void Client::clearBattle()
 {
 	if(battle.challenger != nullptr)
 	{ 
@@ -1089,18 +1089,18 @@ void CLIENT::clearBattle()
 	if (currentRival != nullptr)
 		currentRival = nullptr;
 }
-RIVAL * CLIENT::getRival(uint32_t RivalID)
+Rival * Client::getRival(uint32_t RivalID)
 {
 	for (auto& rival : rivals)
 	{
-		if (rival.ID() == RivalID)
+		if (rival.GetID() == RivalID)
 		{
 			return &rival;
 		}
 	}
 	return nullptr;
 }
-void CLIENT::getRivals()
+void Client::getRivals()
 {
 	// DISABLE FOR LIVE
 	//return;
@@ -1112,20 +1112,20 @@ void CLIENT::getRivals()
 		uint32_t currentID = i;
 		if (i == 0)
 			currentID = 800;
-		//RIVAL* newRival = new RIVAL(this, currentID);
-		RIVAL newRival(this, currentID);
-		if (!newRival.Rival(currentID))
+		//Rival* newRival = new Rival(this, currentID);
+		Rival newRival(this, currentID);
+		if (!newRival.SetRivalID(currentID))
 		{
 			//delete newRival;
 			continue;
 		}
-		newRival.ID(i);
+		newRival.SetID(i);
 		//newRival.Random();
 		newRival.SpaceTick(i, 12);
 		rivals.push_back(newRival);
 	}
 }
-void CLIENT::clearRivals()
+void Client::clearRivals()
 {
 	//for (auto& rival : rivals)
 	//{
@@ -1134,79 +1134,79 @@ void CLIENT::clearRivals()
 	rivals.clear();
 	rivals.shrink_to_fit();
 }
-void CLIENT::setRivalStatus(uint32_t TeamID, uint8_t MemberID, uint8_t Status)
+void Client::setRivalStatus(uint32_t TeamID, uint8_t MemberID, uint8_t Status)
 {
-	if (TeamID > (sizeof(careerdata.rivalStatus) / sizeof(RIVAL_STATUS)) || MemberID > 7 || (currentRival && currentRival->Custom()))
+	if (TeamID > (sizeof(careerdata.rivalStatus) / sizeof(RIVAL_STATUS)) || MemberID > 7 || (currentRival && currentRival->GetCustom()))
 		return;
 
-	if (Status == RIVAL::RIVALSTATUS::RS_WON)
+	if (Status == Rival::RIVALSTATUS::RS_WON)
 		careerdata.rivalStatus[TeamID].wins++;
 
-	if ((careerdata.rivalStatus[TeamID].rivalMember[MemberID] != RIVAL::RIVALSTATUS::RS_WON) ||
-		(careerdata.rivalStatus[TeamID].rivalMember[MemberID] == RIVAL::RIVALSTATUS::RS_HIDDEN && Status == RIVAL::RIVALSTATUS::RS_SHOW))
+	if ((careerdata.rivalStatus[TeamID].rivalMember[MemberID] != Rival::RIVALSTATUS::RS_WON) ||
+		(careerdata.rivalStatus[TeamID].rivalMember[MemberID] == Rival::RIVALSTATUS::RS_HIDDEN && Status == Rival::RIVALSTATUS::RS_SHOW))
 		careerdata.rivalStatus[TeamID].rivalMember[MemberID] = Status;
 }
-int32_t CLIENT::getSign(uint16_t id)
+int32_t Client::getSign(uint16_t id)
 {
 	if (id > sizeof(sign))
 		return -1;
 	return sign[id];
 }
-void CLIENT::enableSign(uint16_t id)
+void Client::enableSign(uint16_t id)
 {
 	if (id > sizeof(sign))
 		return;
 	sign[id] = 1;
 }
-void CLIENT::disableSign(uint16_t id)
+void Client::disableSign(uint16_t id)
 {
 	if (id > sizeof(sign))
 		return;
 	sign[id] = 0;
 }
-void CLIENT::CreateTeam(std::string& teamname)
+void Client::CreateTeam(std::string& teamname)
 {
 	if (inTeam() == false)
 		server->managementserver.TeamCreate(driverslicense, teamname);
 }
-void CLIENT::DeleteTeam()
+void Client::DeleteTeam()
 {
 	if (inTeam() && isTeamLeader())
 		server->managementserver.TeamDelete(driverslicense);
 }
-void CLIENT::RemoveTeamMember(uint32_t memberID)
+void Client::RemoveTeamMember(uint32_t memberID)
 {
 	if (inTeam() && isTeamLeader())
 		server->managementserver.TeamRemoveTeamMember(driverslicense, memberID);
 }
-void CLIENT::UpdateTeamInviteOnly(uint8_t invitestatus)
+void Client::UpdateTeamInviteOnly(uint8_t invitestatus)
 {
 	if (inTeam() && isTeamLeader())
 		server->managementserver.TeamUpdateInviteOnly(driverslicense, invitestatus);
 }
-void CLIENT::UpdateTeamComment(std::string& comment)
+void Client::UpdateTeamComment(std::string& comment)
 {
 	if (inTeam() && isTeamLeader())
 		server->managementserver.TeamUpdateComment(driverslicense, comment);
 }
-void CLIENT::UpdateTeamMemberAreaAccess(uint32_t memberID, uint8_t access)
+void Client::UpdateTeamMemberAreaAccess(uint32_t memberID, uint8_t access)
 {
 	if (inTeam() && isTeamLeader())
 		server->managementserver.TeamSetAreaAccess(driverslicense, memberID, access);
 }
-void CLIENT::GetTeamData()
+void Client::GetTeamData()
 {
 	if(inTeam())
 		server->managementserver.TeamGetData(driverslicense);
 }
-bool CLIENT::inTeam()
+bool Client::inTeam()
 {
 	if (teamdata.teamID == 0xFFFFFFFF)
 		return false;
 	else
 		return true;
 }
-bool CLIENT::isTeamLeader()
+bool Client::isTeamLeader()
 {
 	if (inTeam() == true)
 	{
@@ -1217,7 +1217,7 @@ bool CLIENT::isTeamLeader()
 	}
 	return false;
 }
-void CLIENT::SendPing()
+void Client::SendPing()
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -1227,7 +1227,7 @@ void CLIENT::SendPing()
 	outbuf.append<uint32_t>(timeGetTime());
 	Send();
 }
-void CLIENT::SendWelcome(uint8_t type, std::string& name)
+void Client::SendWelcome(uint8_t type, std::string& name)
 {
 	sendWelcome = 0;
 	isClient = true;
@@ -1240,7 +1240,7 @@ void CLIENT::SendWelcome(uint8_t type, std::string& name)
 	outbuf.appendString(name, 0x08); // Server Name ????
 	Send();
 }
-void CLIENT::SendAuthError(std::string& cmd)
+void Client::SendAuthError(std::string& cmd)
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -1251,7 +1251,7 @@ void CLIENT::SendAuthError(std::string& cmd)
 	outbuf.appendString(cmd, 0x78);
 	Send();
 }
-void CLIENT::SendAuthError(uint8_t cmd)
+void Client::SendAuthError(uint8_t cmd)
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x7B);
@@ -1261,7 +1261,7 @@ void CLIENT::SendAuthError(uint8_t cmd)
 	outbuf.append<uint8_t>(cmd);
 	Send();
 }
-void CLIENT::SendCourseJoin(uint8_t notify)
+void Client::SendCourseJoin(uint8_t notify)
 {
 	// Clear active sign as it seems this isn't saved.
 	activeSign = 0;
@@ -1313,7 +1313,7 @@ void CLIENT::SendCourseJoin(uint8_t notify)
 		SendRivalJoin();
 	}
 }
-void CLIENT::SendRivalJoin()
+void Client::SendRivalJoin()
 {
 	// DISABLE FOR LIVE
 	//return;
@@ -1326,18 +1326,18 @@ void CLIENT::SendRivalJoin()
 		outbuf.setOffset(0x06);
 		outbuf.setType(0x400);
 		outbuf.setSubType(0x480);
-		outbuf.append<uint16_t>(rival.ID()); //ID
-		outbuf.appendString(std::string(rival.Name()), 0x10); // Rival Name
+		outbuf.append<uint16_t>(rival.GetID()); //ID
+		outbuf.appendString(std::string(rival.GetName()), 0x10); // Rival Name
 		outbuf.append<uint32_t>(timeGetTime()); // Time maybe ????
-		outbuf.append<uint8_t>(rival.Level()); // Level
+		outbuf.append<uint8_t>(rival.GetLevel()); // Level
 		outbuf.append<uint32_t>(0, false); // ????
-		outbuf.append<int32_t>(rival.Car(), false); // Car ID
-		outbuf.appendArray((uint8_t*)rival.CarModsPtr(), sizeof(CARMODS) - sizeof(CARMODS::tuner)); // Rivals don't have tuner names
-		outbuf.appendArray((uint8_t*)rival.CarSettingsPtr(), sizeof(CARSETTINGS)); // Car Settings
+		outbuf.append<int32_t>(rival.GetCar(), false); // Car ID
+		outbuf.appendArray((uint8_t*)rival.GetCarModsPtr(), sizeof(CARMODS) - sizeof(CARMODS::tuner)); // Rivals don't have tuner names
+		outbuf.appendArray((uint8_t*)rival.GetCarSettingsPtr(), sizeof(CARSETTINGS)); // Car Settings
 		outbuf.append<uint16_t>(0); // ???
-		outbuf.append<uint16_t>(rival.Position().location1, false); // Junction
-		outbuf.append<uint16_t>(rival.Position().location2, false); // Distance
-		outbuf.append<uint16_t>(rival.Position().location3, false); // ???
+		outbuf.append<uint16_t>(rival.GetPosition().location1, false); // Junction
+		outbuf.append<uint16_t>(rival.GetPosition().location2, false); // Distance
+		outbuf.append<uint16_t>(rival.GetPosition().location3, false); // ???
 		outbuf.append<uint16_t>(0xFFFF, false); // Set 0xFFFF to auto place in area
 		outbuf.append<uint8_t>(2); // npc stuff must be below 0x20. 0x00 = Self, 0x01 = Player, 0x02 = NPC
 		// TODO: Has rival been beaten or lost to?
@@ -1346,14 +1346,14 @@ void CLIENT::SendRivalJoin()
 		outbuf.append<uint8_t>(0); // ???? 
 		outbuf.append<uint8_t>(0); // ????
 		// 0x6C byte array - Team Data
-		outbuf.appendArray((uint8_t*)rival.TeamDataPtr(), sizeof(TEAMDATA));
+		outbuf.appendArray((uint8_t*)rival.GetTeamDataPtr(), sizeof(TEAMDATA));
 		outbuf.append<uint8_t>(0); // If set with player notification of player entering is displayed.
 		outbuf.append<uint16_t>(0); // Count for something requires the shorts as many as these
 		outbuf.append<uint32_t>(0); // Icon next to name. if player.
 		Send();
 	}
 }
-void CLIENT::SendPositionBrief()
+void Client::SendPositionBrief()
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -1369,7 +1369,7 @@ void CLIENT::SendPositionBrief()
 	outbuf.append<uint32_t>(position.time); // Epoch Time
 	SendToProximity(position.posX1, position.posY1, &outbuf, true);
 }
-void CLIENT::SendRivalPosition()
+void Client::SendRivalPosition()
 {
 	// DISABLE FOR LIVE
 	//return;
@@ -1387,19 +1387,19 @@ void CLIENT::SendRivalPosition()
 	for (auto& rival : rivals)
 	{
 		rival.Tick();
-		outbuf.append<uint16_t>(rival.ID()); // ID
-		outbuf.append<uint16_t>(rival.Position().location2); // 700 / 0x3BC limit - Junction
-		outbuf.append<uint16_t>(rival.Position().location3); // Shifted right 5 - Position
-		outbuf.append<uint16_t>(rival.Position().location1); // 0x7FFF limit
-		outbuf.append<uint32_t>(rival.Position().time); // Epoch Time
+		outbuf.append<uint16_t>(rival.GetID()); // ID
+		outbuf.append<uint16_t>(rival.GetPosition().location2); // 700 / 0x3BC limit - Junction
+		outbuf.append<uint16_t>(rival.GetPosition().location3); // Shifted right 5 - Position
+		outbuf.append<uint16_t>(rival.GetPosition().location1); // 0x7FFF limit
+		outbuf.append<uint32_t>(rival.GetPosition().time); // Epoch Time
 	}
 
 	// If in battle don't bother sending position but we still need to tick.
 	if(battle.status == BATTLESTATUS::BS_NOT_IN_BATTLE)
 		Send();
-	//logger->Log(Logger::LOGTYPE_CLIENT, L"0x%04X,0x%04X,0x%04X", position.location1, position.location2, position.location3);
+	//logger->Log(Logger::LOGTYPE_Client, L"0x%04X,0x%04X,0x%04X", position.location1, position.location2, position.location3);
 }
-void CLIENT::SendRemoveRivals()
+void Client::SendRemoveRivals()
 {
 	for (auto& rival : rivals)
 	{
@@ -1408,12 +1408,12 @@ void CLIENT::SendRemoveRivals()
 		outbuf.setOffset(0x06);
 		outbuf.setType(0x400);
 		outbuf.setSubType(0x481);
-		outbuf.append<uint16_t>(rival.ID()); // ID to remove
+		outbuf.append<uint16_t>(rival.GetID()); // ID to remove
 		Send();
 	}
 	clearRivals();
 }
-void CLIENT::SendPosition()
+void Client::SendPosition()
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -1426,7 +1426,7 @@ void CLIENT::SendPosition()
 	outbuf.appendArray((uint8_t*)&position, sizeof(POSITION));
 	SendToProximity(position.posX1, position.posY1, &outbuf, true);
 }
-void CLIENT::SendPositionToOpponent()
+void Client::SendPositionToOpponent()
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -1438,7 +1438,7 @@ void CLIENT::SendPositionToOpponent()
 	outbuf.appendArray((uint8_t*)&position.location1, sizeof(POSITION) - sizeof(POSITION::accuracy));
 	SendToOpponent();
 }
-void CLIENT::SendChatMessage(CHATTYPE type, std::string& handle, std::string& message, uint32_t license, std::string& fromHandle)
+void Client::SendChatMessage(CHATTYPE type, std::string& handle, std::string& message, uint32_t license, std::string& fromHandle)
 {
 	PACKET* chatBuf;
 	if (handle.empty())
@@ -1490,7 +1490,7 @@ void CLIENT::SendChatMessage(CHATTYPE type, std::string& handle, std::string& me
 	else
 		SendToCourse();
 }
-void CLIENT::SendTeamChatMessage(std::string& fromHandle, std::string& message, uint32_t teamID)
+void Client::SendTeamChatMessage(std::string& fromHandle, std::string& message, uint32_t teamID)
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -1502,7 +1502,7 @@ void CLIENT::SendTeamChatMessage(std::string& fromHandle, std::string& message, 
 	outbuf.append<uint32_t>(teamID ? teamID : teamdata.teamID);
 	Send();
 }
-void CLIENT::SendAnnounceMessage(std::string& message, uint32_t colour, uint32_t license)
+void Client::SendAnnounceMessage(std::string& message, uint32_t colour, uint32_t license)
 {
 	PACKET* chatBuf;
 	if (license != 0)
@@ -1526,7 +1526,7 @@ void CLIENT::SendAnnounceMessage(std::string& message, uint32_t colour, uint32_t
 	else
 		SendToCourse();
 }
-void CLIENT::SendPlayerStats()
+void Client::SendPlayerStats()
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -1539,7 +1539,7 @@ void CLIENT::SendPlayerStats()
 	outbuf.append<uint8_t>(careerdata.experiencePercent); // Exp %
 	Send();
 }
-void CLIENT::SendItems()
+void Client::SendItems()
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -1550,7 +1550,7 @@ void CLIENT::SendItems()
 	for (uint32_t i = 0; i < min(itembox.size(), ITEMBOX_LIMIT); i++) outbuf.append<int16_t>(itembox.at(i));
 	Send();
 }
-void CLIENT::SendSigns()
+void Client::SendSigns()
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -1568,7 +1568,7 @@ void CLIENT::SendSigns()
 	for (uint16_t i = 0; i < count; i++) outbuf.append<uint32_t>(tempSign[i] + 10);
 	Send();
 }
-void CLIENT::SendCarData(uint32_t bay)
+void Client::SendCarData(uint32_t bay)
 {
 	if (bay >= garagedata.car.size() || bay >= (uint32_t)(garagedata.garageCount * 4) || garagedata.car[bay].carID == 0xFFFFFFFF) return;
 	outbuf.clearBuffer();
@@ -1586,7 +1586,7 @@ void CLIENT::SendCarData(uint32_t bay)
 	outbuf.append<uint16_t>(garagedata.car[bay].status); // Status. 1: for sale
 	Send();
 }
-void CLIENT::SendBayDetails()
+void Client::SendBayDetails()
 {
 	uint32_t limit = (uint32_t)(garagedata.garageCount * 4);
 	for (uint32_t i = 0; i < limit; i++)
@@ -1606,7 +1606,7 @@ void CLIENT::SendBayDetails()
 		}
 	}
 }
-void CLIENT::SendCarData()
+void Client::SendCarData()
 {
 	uint32_t limit = (uint32_t)(garagedata.garageCount * 4);
 	for (uint32_t i = 0; i < limit; i++)
@@ -1630,7 +1630,7 @@ void CLIENT::SendCarData()
 		}
 	}
 }
-void CLIENT::SendBattleChallengeNPC(uint16_t RivalID, uint32_t _time)
+void Client::SendBattleChallengeNPC(uint16_t RivalID, uint32_t _time)
 {
 	battle.isNPC = true;
 	battle.status = BATTLESTATUS::BS_IN_BATTLE;
@@ -1643,7 +1643,7 @@ void CLIENT::SendBattleChallengeNPC(uint16_t RivalID, uint32_t _time)
 
 	if (currentRival != nullptr)
 	{
-		setRivalStatus(currentRival->TeamData().teamID, currentRival->TeamData().memberID, RIVAL::RIVALSTATUS::RS_SHOW);
+		setRivalStatus(currentRival->GetTeamData().teamID, currentRival->GetTeamData().memberID, Rival::RIVALSTATUS::RS_SHOW);
 		outbuf.clearBuffer();
 		outbuf.setSize(0x06);
 		outbuf.setOffset(0x06);
@@ -1652,11 +1652,11 @@ void CLIENT::SendBattleChallengeNPC(uint16_t RivalID, uint32_t _time)
 		outbuf.append<uint16_t>(courseID); // Client's course ID
 		outbuf.append<uint16_t>(RivalID); // Rival's ID (the ID assigned as it joined the course)
 		outbuf.append<uint32_t>(_time); // Time
-		outbuf.appendArray((uint8_t*)currentRival->RivalDifficultyPtr(), sizeof(RIVALDIFFICULTY)); // Difficulty settings. Has values that specify how the NPC races and traffic
-		outbuf.append<uint16_t>(currentRival->Position().location2); // Distance
-		outbuf.append<uint16_t>(currentRival->Position().location3); // Unknown Position
-		outbuf.append<uint16_t>(currentRival->Position().location1); // Junction
-		outbuf.append<uint32_t>(currentRival->Position().time); // Time
+		outbuf.appendArray((uint8_t*)currentRival->GetRivalDifficultyPtr(), sizeof(RIVALDIFFICULTY)); // Difficulty settings. Has values that specify how the NPC races and traffic
+		outbuf.append<uint16_t>(currentRival->GetPosition().location2); // Distance
+		outbuf.append<uint16_t>(currentRival->GetPosition().location3); // Unknown Position
+		outbuf.append<uint16_t>(currentRival->GetPosition().location1); // Junction
+		outbuf.append<uint32_t>(currentRival->GetPosition().time); // Time
 		Send();
 		return;
 	}
@@ -1667,7 +1667,7 @@ void CLIENT::SendBattleChallengeNPC(uint16_t RivalID, uint32_t _time)
 		SendBattleNPCAbort(0);
 	}
 }
-void CLIENT::SendBattleChallenge(uint16_t challengeID, uint16_t clientID, uint32_t _time)
+void Client::SendBattleChallenge(uint16_t challengeID, uint16_t clientID, uint32_t _time)
 {
 	battle.status = BATTLESTATUS::BS_INIT_BATTLE;
 	battle.SP = battle.lastSP = INITIALBATTLE_SP;
@@ -1690,7 +1690,7 @@ void CLIENT::SendBattleChallenge(uint16_t challengeID, uint16_t clientID, uint32
 	outbuf.append<uint32_t>(position.time);
 	Send();
 }
-void CLIENT::SendBattleChallengeToOpponent(uint16_t challengeID, uint16_t clientID, uint32_t _time)
+void Client::SendBattleChallengeToOpponent(uint16_t challengeID, uint16_t clientID, uint32_t _time)
 {
 	if (battle.challenger == nullptr) return;
 	battle.challenger->battle.status = BATTLESTATUS::BS_INIT_BATTLE;
@@ -1714,7 +1714,7 @@ void CLIENT::SendBattleChallengeToOpponent(uint16_t challengeID, uint16_t client
 	outbuf.append<uint32_t>(position.time);
 	SendToOpponent();
 }
-void CLIENT::SendBattleAbort(uint8_t res)
+void Client::SendBattleAbort(uint8_t res)
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -1725,7 +1725,7 @@ void CLIENT::SendBattleAbort(uint8_t res)
 	battle.status = BATTLESTATUS::BS_NOT_IN_BATTLE;
 	Send();
 }
-void CLIENT::SendBattleNPCAbort(uint8_t res)
+void Client::SendBattleNPCAbort(uint8_t res)
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -1736,7 +1736,7 @@ void CLIENT::SendBattleNPCAbort(uint8_t res)
 	battle.status = BATTLESTATUS::BS_NOT_IN_BATTLE;
 	Send();
 }
-void CLIENT::SendBattleStart()
+void Client::SendBattleStart()
 {
 	if (battle.challenger == nullptr) return;
 	battle.status = BATTLESTATUS::BS_IN_BATTLE;
@@ -1748,7 +1748,7 @@ void CLIENT::SendBattleStart()
 	outbuf.setSubType(0x582);
 	Send();
 }
-void CLIENT::SendBattleCheckStatus()
+void Client::SendBattleCheckStatus()
 {
 	if (battle.challenger == nullptr) return;
 
@@ -1756,7 +1756,7 @@ void CLIENT::SendBattleCheckStatus()
 	{
 		if (abs(battle.challenger->battle.spCount - battle.spCount) > 10)
 		{
-			battle.challenger->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u may have altered the battle SP. %u SP. SP Count %u",
+			battle.challenger->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u may have altered the battle SP. %u SP. SP Count %u",
 				battle.challenger->logger->toWide(battle.challenger->handle).c_str(),
 				battle.challenger->driverslicense,
 				battle.challenger->logger->toWide((char*)&battle.challenger->IP_Address).c_str(),
@@ -1819,11 +1819,11 @@ void CLIENT::SendBattleCheckStatus()
 		clearBattle();
 	}
 }
-void CLIENT::SendBattleNPCFinish()
+void Client::SendBattleNPCFinish()
 {
 	if (battle.isNPC == false || currentRival == nullptr) return;
-	if (battle.status == CLIENT::BATTLESTATUS::BS_WON) processBattleWin();
-	else if (battle.status == CLIENT::BATTLESTATUS::BS_LOST) processBattleLose();
+	if (battle.status == Client::BATTLESTATUS::BS_WON) processBattleWin();
+	else if (battle.status == Client::BATTLESTATUS::BS_LOST) processBattleLose();
 
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -1831,24 +1831,24 @@ void CLIENT::SendBattleNPCFinish()
 	outbuf.setType(0x500);
 	outbuf.setSubType(0x586);
 	outbuf.append<uint8_t>(getLevel());// (battle.status == BATTLESTATUS::WON) ? 0 : 1);
-	outbuf.append<uint32_t>((battle.status == CLIENT::BATTLESTATUS::BS_WON) ? currentRival->WinXP() : currentRival->LoseXP()); // XP Gained
+	outbuf.append<uint32_t>((battle.status == Client::BATTLESTATUS::BS_WON) ? currentRival->WinXP() : currentRival->LoseXP()); // XP Gained
 	outbuf.append<uint8_t>(careerdata.experiencePercent); // XP Percentage
-	outbuf.append<uint32_t>((battle.status == CLIENT::BATTLESTATUS::BS_WON) ? currentRival->WinCP(battle.KMs) : currentRival->LoseCP(battle.KMs)); // CP
+	outbuf.append<uint32_t>((battle.status == Client::BATTLESTATUS::BS_WON) ? currentRival->WinCP(battle.KMs) : currentRival->LoseCP(battle.KMs)); // CP
 	outbuf.append<uint32_t>(0); // ???
-	outbuf.append<int16_t>((battle.status == CLIENT::BATTLESTATUS::BS_WON) ? currentRival->WinReward() : currentRival->LoseReward()); // Item
+	outbuf.append<int16_t>((battle.status == Client::BATTLESTATUS::BS_WON) ? currentRival->WinReward() : currentRival->LoseReward()); // Item
 	outbuf.append<uint8_t>(0); // For Survival?
 	Send();
 	clearBattle();
 }
-void CLIENT::Send(PACKET* src)
+void Client::Send(PACKET* src)
 {
 	if (src == nullptr)
 		src = &outbuf;
 	if (ClientSocket >= 0)
 	{
-		if (CLIENT_BUFFER_SIZE < ((int)src->getSize() + 15))
+		if (Client_BUFFER_SIZE < ((int)src->getSize() + 15))
 		{
-			logger->Log(Logger::LOGTYPE_CLIENT, L"Client Sent too large packet.");
+			logger->Log(Logger::LOGTYPE_Client, L"Client Sent too large packet.");
 			Disconnect();
 		}
 		else
@@ -1868,7 +1868,7 @@ void CLIENT::Send(PACKET* src)
 		}
 	}
 }
-void CLIENT::SendToCourse(PACKET* src, bool exclude)
+void Client::SendToCourse(PACKET* src, bool exclude)
 {
 	if (src == nullptr)
 		src = &coursebuf;
@@ -1877,7 +1877,7 @@ void CLIENT::SendToCourse(PACKET* src, bool exclude)
 		course->sendToCourse(src, exclude ? driverslicense : -1);
 	}
 }
-void CLIENT::SendToProximity(float x, float y, PACKET* src, bool exclude)
+void Client::SendToProximity(float x, float y, PACKET* src, bool exclude)
 {
 	if (src == nullptr)
 		src = &coursebuf;
@@ -1886,7 +1886,7 @@ void CLIENT::SendToProximity(float x, float y, PACKET* src, bool exclude)
 		course->sendToProximity(src, x, y, exclude ? driverslicense : -1);
 	}
 }
-void CLIENT::SendToOpponent(PACKET* src)
+void Client::SendToOpponent(PACKET* src)
 {
 	if (src == nullptr)
 		src = &outbuf;
@@ -1895,17 +1895,17 @@ void CLIENT::SendToOpponent(PACKET* src)
 		battle.challenger->Send(src);
 	}
 }
-void CLIENT::packetEnable(uint32_t packetType)
+void Client::packetEnable(uint32_t packetType)
 {
 	if (packetType > sizeof(packetAllow)) return;
 	else packetAllow[packetType] = true;
 }
-void CLIENT::packetDisable(uint32_t packetType)
+void Client::packetDisable(uint32_t packetType)
 {
 	if (packetType > sizeof(packetAllow)) return;
 	else packetAllow[packetType] = false;
 }
-void CLIENT::enableStandardPackets()
+void Client::enableStandardPackets()
 {
 	packetEnable(0x00);
 	packetDisable(0x01);
@@ -1925,7 +1925,7 @@ void CLIENT::enableStandardPackets()
 	packetEnable(0x16);
 	packetDisable(0x17);
 }
-void CLIENT::enableShopPackets()
+void Client::enableShopPackets()
 {
 	packetDisable(0x03);
 	packetDisable(0x04);
@@ -1939,7 +1939,7 @@ void CLIENT::enableShopPackets()
 	packetDisable(0x16);
 	packetEnable(0x17);
 }
-void CLIENT::enableCoursePackets()
+void Client::enableCoursePackets()
 {
 	packetEnable(0x03);
 	packetEnable(0x04);
@@ -1953,7 +1953,7 @@ void CLIENT::enableCoursePackets()
 	packetEnable(0x16);
 	packetDisable(0x17);
 }
-void CLIENT::enableAllPackets()
+void Client::enableAllPackets()
 {
 	packetEnable(0x00);
 	packetEnable(0x01);
@@ -1974,16 +1974,16 @@ void CLIENT::enableAllPackets()
 	packetEnable(0x16);
 	packetEnable(0x17);
 }
-bool CLIENT::CanSendPackets(uint32_t packetType)
+bool Client::CanSendPackets(uint32_t packetType)
 {
 	if (packetType > sizeof(packetAllow)) return false;
 	return packetAllow[packetType] ? true : false;
 }
-void CLIENT::Disconnect()
+void Client::Disconnect()
 {
 	todc = true;
 }
-void CLIENT::ProcessPacket()
+void Client::ProcessPacket()
 {
 	if (!todc)
 	{
@@ -2021,7 +2021,7 @@ void CLIENT::ProcessPacket()
 		packetResend = 0;
 
 		MainPacketFunctions[packetType](this);
-		timeoutCount = time(NULL) + CLIENT_TIMEOUT;
+		timeoutCount = time(NULL) + Client_TIMEOUT;
 #ifdef PACKET_OUTPUT
 		//if (packetType != 0x07) return;
 		//if (packetType == 0x07 || packetType == 0x00 || packetType == 0x0A || packetType == 0x04 || packetType == 0x05) return;
@@ -2033,7 +2033,7 @@ void CLIENT::ProcessPacket()
 #endif
 	}
 }
-void CLIENT::ProcessManagementPacket()
+void Client::ProcessManagementPacket()
 {
 	if (!todc)
 	{
@@ -2051,7 +2051,7 @@ void CLIENT::ProcessManagementPacket()
 		ManagementPacketFunctions[packetType](this);
 	}
 }
-void CLIENT::addToSendQueue(PACKET* src)
+void Client::addToSendQueue(PACKET* src)
 {
 	*(uint16_t*)&src->buffer[0x00] = SWAP_SHORT(src->getSize() - 2);
 	SEND_QUEUE entry = { 0 };
@@ -2061,7 +2061,7 @@ void CLIENT::addToSendQueue(PACKET* src)
 		sendQueue.push(entry);
 	}
 }
-void CLIENT::addToSendQueue(SEND_QUEUE* src)
+void Client::addToSendQueue(SEND_QUEUE* src)
 {
 	if (src != nullptr)
 	{
@@ -2069,7 +2069,7 @@ void CLIENT::addToSendQueue(SEND_QUEUE* src)
 		sendQueue.push(*src);
 	}
 }
-SEND_QUEUE CLIENT::getFromSendQueue()
+SEND_QUEUE Client::getFromSendQueue()
 {
 	SEND_QUEUE current = { 0 };
 	std::lock_guard<std::mutex> locker(_muClient);
@@ -2086,7 +2086,7 @@ SEND_QUEUE CLIENT::getFromSendQueue()
 	}
 	return current;
 }
-uint32_t CLIENT::messagesInSendQueue()
+uint32_t Client::messagesInSendQueue()
 {
 	std::lock_guard<std::mutex> locker(_muClient);
 	if (sendQueue.size() > 10)
@@ -2111,7 +2111,7 @@ uint32_t CLIENT::messagesInSendQueue()
 	return sendQueue.size();
 }
 
-void CLIENT::clearSendQueue()
+void Client::clearSendQueue()
 {
 	std::lock_guard<std::mutex> locker(_muClient);
 	std::queue<SEND_QUEUE> q;

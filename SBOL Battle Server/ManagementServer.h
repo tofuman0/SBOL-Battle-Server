@@ -35,8 +35,8 @@ public:
 	bool packetready;
 	uint8_t IP_Address[16]; // Text version
 	uint8_t ipaddr[4]; // Binary version
-	uint8_t rcvbuf[CLIENT_BUFFER_SIZE];
-	uint8_t sndbuf[CLIENT_BUFFER_SIZE];
+	uint8_t rcvbuf[Client_BUFFER_SIZE];
+	uint8_t sndbuf[Client_BUFFER_SIZE];
 	uint8_t key[32];
 	uint8_t iv[16];
 	SERVERPACKET inbuf;

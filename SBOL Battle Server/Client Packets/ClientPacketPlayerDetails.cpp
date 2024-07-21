@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include "..\server.h"
 
-void ClientPacketPlayerDetails(CLIENT* client)
+void ClientPacketPlayerDetails(Client* client)
 {
 	uint16_t pType = client->inbuf.getType();
 

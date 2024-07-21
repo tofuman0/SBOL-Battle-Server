@@ -4,31 +4,31 @@
 #include "RivalTables.h"
 #include <iostream>
 
-RIVAL::RIVAL()
+Rival::Rival()
 {
 	Initialize();
-	client = nullptr;
+	m_Client = nullptr;
 }
 
-RIVAL::RIVAL(CLIENT* Client, int32_t RivalID)
+Rival::Rival(Client* Client, int32_t RivalID)
 {
 	// TODO: To load Rival table and set data from table
 	Initialize();
-	client = Client;
-	Rival(RivalID);
+	m_Client = Client;
+	SetRivalID(RivalID);
 }
 
-RIVAL::~RIVAL()
+Rival::~Rival()
 {
 }
 
-void RIVAL::Random(int32_t Difficulty)
+void Rival::Random(int32_t Difficulty)
 {
 	// TODO: Randomly generate a random rival based of difficulty
 	memcpy(&settings, &RandomRivals[0], sizeof(RIVALDATA));
 }
 
-void RIVAL::Name(std::string& Name)
+void Rival::SetName(std::string& Name)
 {
 	// Rival name must not match a players handle so add a hidden character to start and the end
 	size_t nameLength = min(16, Name.length());
@@ -37,14 +37,14 @@ void RIVAL::Name(std::string& Name)
 	settings.name[nameLength + 1] = '\t';
 }
 
-bool RIVAL::Rival(int32_t RivalID)
+bool Rival::SetRivalID(int32_t RivalID)
 {
-	if (!client || !client->server)
+	if (!m_Client || !m_Client->server)
 		return false;
 
 	settings.rivalID = RivalID;
 
-	RIVALDATA* rd = client->server->GetRivalData(RivalID);
+	RIVALDATA* rd = m_Client->server->GetRivalData(RivalID);
 	if (rd == nullptr)
 		return false;
 
@@ -52,7 +52,7 @@ bool RIVAL::Rival(int32_t RivalID)
 	return true;
 }
 
-void RIVAL::SpaceTick(uint32_t part, uint32_t total)
+void Rival::SpaceTick(uint32_t part, uint32_t total)
 {
 	uint32_t routeTableSize = 0;
 	switch (settings.routeTable)
@@ -89,7 +89,7 @@ void RIVAL::SpaceTick(uint32_t part, uint32_t total)
 	tick = (routeTableSize / total) * part;
 }
 
-void RIVAL::Tick()
+void Rival::Tick()
 {
 	uint32_t routeTableSize = 0;
 	int16_t* routeTablePtr = nullptr;
@@ -132,7 +132,7 @@ void RIVAL::Tick()
 		break;
 	}
 	if (routeTablePtr == nullptr) return;
-	tick += RIVAL_AUTOPILOT_SPEED;
+	tick += Rival_AUTOPILOT_SPEED;
 	tick %= routeTableSize;
 	position.location1 = routeTablePtr[(tick * 3) + 0];
 	position.location2 = routeTablePtr[(tick * 3) + 1];
@@ -140,7 +140,7 @@ void RIVAL::Tick()
 	position.time = timeGetTime();
 }
 
-uint32_t RIVAL::WinCP(float distance, bool firsttime, float boost)
+uint32_t Rival::WinCP(float distance, bool firsttime, float boost)
 {
 	uint32_t CP = settings.cp * (firsttime ? 4 : 3);
 	CP += (uint32_t)(distance / 1000.0f) * 10;
@@ -148,7 +148,7 @@ uint32_t RIVAL::WinCP(float distance, bool firsttime, float boost)
 	return CP;
 }
 
-uint32_t RIVAL::LoseCP(float distance, bool firsttime, float boost)
+uint32_t Rival::LoseCP(float distance, bool firsttime, float boost)
 {
 	uint32_t CP = 0;
 	CP += (uint32_t)(distance / 1000.0f) * 10;
@@ -156,7 +156,7 @@ uint32_t RIVAL::LoseCP(float distance, bool firsttime, float boost)
 	return CP;
 }
 
-int16_t RIVAL::WinReward(float boost)
+int16_t Rival::WinReward(float boost)
 {
 	// TODO: Get reward for win
 	int16_t Reward = -1;
@@ -164,13 +164,13 @@ int16_t RIVAL::WinReward(float boost)
 	return Reward;
 }
 
-int16_t RIVAL::LoseReward(float boost)
+int16_t Rival::LoseReward(float boost)
 {
 	// No reward for losers
 	return -1;
 }
 
-void RIVAL::Initialize()
+void Rival::Initialize()
 {
 	ready = false;
 	ZeroMemory(&settings, sizeof(settings));
@@ -180,7 +180,7 @@ void RIVAL::Initialize()
 	tick = 0;
 }
 
-int16_t RIVAL::CarTicket()
+int16_t Rival::CarTicket()
 {
 	// Does rivals car have a ticket that can be obtained?
 

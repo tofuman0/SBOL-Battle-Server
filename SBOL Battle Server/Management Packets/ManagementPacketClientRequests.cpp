@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include "..\server.h"
 
-void ManagementPacketClientRequests(CLIENT* client)
+void ManagementPacketClientRequests(Client* client)
 {
 	SERVER* server = (SERVER*)client->server;
 	switch (client->serverbuf.getSubType())

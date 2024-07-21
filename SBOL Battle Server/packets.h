@@ -1,27 +1,27 @@
 #pragma once
 #include "server.h"
 
-typedef void(PacketFunction)(CLIENT* client);
+typedef void(PacketFunction)(Client* client);
 
-void ClientPacketDoNothing(CLIENT* client) { }
-void ClientPacketKeepAlive(CLIENT* client);
-void ClientPacketAuthentication(CLIENT* client);
-void ClientPacketCar(CLIENT* client);
-void ClientPacketCourseDetails(CLIENT* client);
-void ClientPacketNotifications(CLIENT* client);
-void ClientPacketBattle(CLIENT* client);
-void ClientPacketChat(CLIENT* client);
-void ClientPacketPositioning(CLIENT* client);
-void ClientPacketShop(CLIENT* client);
-void ClientPacketPing(CLIENT* client);
-void ClientPacketRivalDetails(CLIENT* client);
-void ClientPacketPlayerCreation(CLIENT* client);
-void ClientPacketPlayerDetails(CLIENT* client);
-void ClientPacketItem(CLIENT* client);
-void ClientPacketTeam(CLIENT* client);
-void ClientPacket15(CLIENT* client);
-void ClientPacketStatus(CLIENT* client);
-void ClientPacketGarage(CLIENT* client);
+void ClientPacketDoNothing(Client* client) { }
+void ClientPacketKeepAlive(Client* client);
+void ClientPacketAuthentication(Client* client);
+void ClientPacketCar(Client* client);
+void ClientPacketCourseDetails(Client* client);
+void ClientPacketNotifications(Client* client);
+void ClientPacketBattle(Client* client);
+void ClientPacketChat(Client* client);
+void ClientPacketPositioning(Client* client);
+void ClientPacketShop(Client* client);
+void ClientPacketPing(Client* client);
+void ClientPacketRivalDetails(Client* client);
+void ClientPacketPlayerCreation(Client* client);
+void ClientPacketPlayerDetails(Client* client);
+void ClientPacketItem(Client* client);
+void ClientPacketTeam(Client* client);
+void ClientPacket15(Client* client);
+void ClientPacketStatus(Client* client);
+void ClientPacketGarage(Client* client);
 
 PacketFunction* MainPacketFunctions[] =
 {

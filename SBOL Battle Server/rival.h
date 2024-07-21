@@ -5,53 +5,53 @@
 #include "Logger.h"
 #include <vector>
 
-class RIVAL
+class Rival
 {
 public:
-	RIVAL();
-	RIVAL(CLIENT* Client, int32_t RivalID = -1);
-	~RIVAL();
+	Rival();
+	Rival(Client* client, int32_t RivalID = -1);
+	~Rival();
 	const enum RIVALSTATUS {
 		RS_HIDDEN,
 		RS_SHOW,
 		RS_LOST,
 		RS_WON
 	};
-	void Client(CLIENT* Client) { client = Client; }
+	void SetClient(Client* client) { m_Client = client; }
 	void Random(int32_t Difficulty = 0);
-	void ID(int16_t ID) { id = ID; }
-	uint16_t ID() { return id; }
-	void Ready(bool Ready) { ready = Ready; }
-	bool Ready() { return ready; }
-	void Custom(bool Custom) { settings.customTeam = Custom; }
-	bool Custom() { return settings.customTeam; }
-	void Name(std::string& Name);
-	char* Name() { return settings.name; }
-	uint8_t Level() { return settings.level; }
-	void Reward(uint32_t Reward) { reward = Reward; }
-	uint32_t Reward() { return reward; }
-	void CP(uint32_t CP) { settings.cp = CP; }
-	uint32_t CP() { return settings.cp; }
-	void Position(POSITION Position) { position = Position; }
-	POSITION Position() { return position; }
-	void Leader(bool Leader) { settings.leader = Leader; }
-	bool Leader() { return settings.leader; }
-	void Car(int16_t CarID) { settings.carID = CarID; }
-	int16_t Car() { return settings.carID; }
-	void CarMods(CARMODS CarMods) { settings.carMods = CarMods; }
-	CARMODS CarMods() { return settings.carMods; }
-	CARMODS* CarModsPtr() { return &settings.carMods; }
-	CARSETTINGS CarSettings() { return settings.carSettings; }
-	CARSETTINGS* CarSettingsPtr() { return &settings.carSettings; }
-	void TeamData(TEAMDATA TeamData) { settings.teamData = TeamData; }
-	TEAMDATA TeamData() { return settings.teamData; }
-	TEAMDATA* TeamDataPtr() { return &settings.teamData; }
-	RIVALDIFFICULTY RivalDifficulty() { return settings.difficulty; }
-	RIVALDIFFICULTY* RivalDifficultyPtr() { return &settings.difficulty; }
-	bool Rival(int32_t RivalID);
-	int32_t Rival() { return settings.rivalID; }
-	int32_t RouteTable() { return settings.routeTable; }
-	void RouteTable(int32_t RouteTable) { settings.routeTable = RouteTable; }
+	void SetID(int16_t ID) { id = ID; }
+	uint16_t GetID() { return id; }
+	void SetReady(bool Ready) { ready = Ready; }
+	bool GetReady() { return ready; }
+	void SetCustom(bool Custom) { settings.customTeam = Custom; }
+	bool GetCustom() { return settings.customTeam; }
+	void SetName(std::string& Name);
+	char* GetName() { return settings.name; }
+	uint8_t GetLevel() { return settings.level; }
+	void SetReward(uint32_t Reward) { reward = Reward; }
+	uint32_t GetReward() { return reward; }
+	void SetCP(uint32_t CP) { settings.cp = CP; }
+	uint32_t GetCP() { return settings.cp; }
+	void SetPosition(POSITION Position) { position = Position; }
+	POSITION GetPosition() { return position; }
+	void SetLeader(bool Leader) { settings.leader = Leader; }
+	bool GetLeader() { return settings.leader; }
+	void SetCar(int16_t CarID) { settings.carID = CarID; }
+	int16_t GetCar() { return settings.carID; }
+	void SetCarMods(CARMODS CarMods) { settings.carMods = CarMods; }
+	CARMODS GetCarMods() { return settings.carMods; }
+	CARMODS* GetCarModsPtr() { return &settings.carMods; }
+	CARSETTINGS GetCarSettings() { return settings.carSettings; }
+	CARSETTINGS* GetCarSettingsPtr() { return &settings.carSettings; }
+	void SetTeamData(TEAMDATA TeamData) { settings.teamData = TeamData; }
+	TEAMDATA GetTeamData() { return settings.teamData; }
+	TEAMDATA* GetTeamDataPtr() { return &settings.teamData; }
+	RIVALDIFFICULTY GetRivalDifficulty() { return settings.difficulty; }
+	RIVALDIFFICULTY* GetRivalDifficultyPtr() { return &settings.difficulty; }
+	bool SetRivalID(int32_t RivalID);
+	int32_t GetRivalID() { return settings.rivalID; }
+	void SetRouteTable(int32_t RouteTable) { settings.routeTable = RouteTable; }
+	int32_t GetRouteTable() { return settings.routeTable; }
 	uint32_t WinCP(float distance = 0.0f, bool firsttime = false, float boost = 0.0f);
 	uint32_t LoseCP(float distance = 0.0f, bool firsttime = false, float boost = 0.0f);
 	uint32_t WinXP() { return 0; }
@@ -69,7 +69,7 @@ private:
 	POSITION position;
 	int32_t reward;
 	uint32_t tick;
-	CLIENT* client;
+	Client* m_Client;
 	
 	void Initialize();
 	int16_t CarTicket();

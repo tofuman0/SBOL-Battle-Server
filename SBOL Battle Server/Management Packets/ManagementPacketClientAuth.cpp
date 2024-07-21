@@ -35,7 +35,7 @@ uint16_t startPositions[][2]{
 	//#endif
 };
 
-void ManagementPacketClientAuth(CLIENT* client)
+void ManagementPacketClientAuth(Client* client)
 {
 	SERVER* server = (SERVER*)client->server;
 	switch (client->serverbuf.getSubType())

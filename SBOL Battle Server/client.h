@@ -11,17 +11,17 @@
 
 class COURSE;
 class SERVER;
-class RIVAL;
+class Rival;
 
-class CLIENT
+class Client
 {
 private:
 	std::queue<SEND_QUEUE> sendQueue;
 	std::mutex _muClient;
 	uint8_t packetAllow[0x18];
 public:
-	CLIENT();
-	~CLIENT();
+	Client();
+	~Client();
 	const enum PLAYERSTATUS {
 		PS_READY = 0,
 		PS_SAFEMODE = 1,
@@ -89,7 +89,7 @@ public:
 		BATTLESTATUS status;
 		uint32_t SP;
 		uint32_t lastSP;
-		CLIENT* challenger;
+		Client* challenger;
 		bool initiator;
 		bool isNPC;
 		float KMs;
@@ -102,13 +102,13 @@ public:
 	BATTLE battle;
 #pragma endregion
 #pragma region Client rival data
-	std::vector<RIVAL> rivals;
-	RIVAL* currentRival;
+	std::vector<Rival> rivals;
+	Rival* currentRival;
 #pragma endregion
 #pragma region Client Connection Variables
 	int32_t ClientSocket;
-	uint8_t rcvbuf[CLIENT_BUFFER_SIZE];
-	uint8_t sndbuf[CLIENT_BUFFER_SIZE];
+	uint8_t rcvbuf[Client_BUFFER_SIZE];
+	uint8_t sndbuf[Client_BUFFER_SIZE];
 	uint16_t rcvread;
 	uint32_t snddata;
 	uint16_t packetsize;
@@ -208,7 +208,7 @@ public:
 	uint8_t getLevel();
 	void setLevel(uint8_t level);
 	void clearBattle();
-	RIVAL* getRival(uint32_t RivalID);
+	Rival* getRival(uint32_t RivalID);
 	void getRivals();
 	void clearRivals();
 	void setRivalStatus(uint32_t TeamID, uint8_t MemberID, uint8_t Status);

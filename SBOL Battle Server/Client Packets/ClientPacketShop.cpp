@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include "..\server.h"
 
-void ClientPacketShop(CLIENT* client)
+void ClientPacketShop(Client* client)
 {
 	uint16_t pType = client->inbuf.getType();
 	// Prevent shop packets to be processed when not in shops
@@ -15,7 +15,7 @@ void ClientPacketShop(CLIENT* client)
 
 		if (bay >= (uint32_t)(client->garagedata.garageCount * 4) || client->garagedata.car[bay].carID == 0xFFFFFFFF)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has specified invalid bay number in part shop.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u has specified invalid bay number in part shop.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str()
@@ -44,7 +44,7 @@ void ClientPacketShop(CLIENT* client)
 
 		if (bay >= (uint32_t)(client->garagedata.garageCount * 4) || client->garagedata.car[bay].carID == 0xFFFFFFFF)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has specified invalid bay number in part shop.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u has specified invalid bay number in part shop.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str()
@@ -55,7 +55,7 @@ void ClientPacketShop(CLIENT* client)
 
 		if (finalPrice == 0 || cost != finalPrice)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has provided different price for part than expected. Category %u, ID %u, Type %u, Cost %u, Real Cost %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has provided different price for part than expected. Category %u, ID %u, Type %u, Cost %u, Real Cost %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -73,7 +73,7 @@ void ClientPacketShop(CLIENT* client)
 		{
 			if (client->purchasePart(bay, itemCategory, itemType, itemID) == false)
 			{
-				client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to purchase part from the part shop invalid data. Category %u, ID %u, Type %u, Client CP %u, Real Cost %u.",
+				client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase part from the part shop invalid data. Category %u, ID %u, Type %u, Client CP %u, Real Cost %u.",
 					client->logger->toWide(client->handle).c_str(),
 					client->driverslicense,
 					client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -90,7 +90,7 @@ void ClientPacketShop(CLIENT* client)
 		}
 		else
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to purchase part from the part shop without enough CP. Category %u, ID %u, Type %u, Client CP %u, Real Cost %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase part from the part shop without enough CP. Category %u, ID %u, Type %u, Client CP %u, Real Cost %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -122,7 +122,7 @@ void ClientPacketShop(CLIENT* client)
 
 		if (bay >= (uint32_t)(client->garagedata.garageCount * 4) || client->garagedata.car[bay].carID == 0xFFFFFFFF)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has specified invalid bay number in part shop.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u has specified invalid bay number in part shop.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str()
@@ -133,7 +133,7 @@ void ClientPacketShop(CLIENT* client)
 
 		if (client->equipPart(bay, itemCategory, itemType, itemID) == false)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u failed to equip part. Category %u, Type %u, ID %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u failed to equip part. Category %u, Type %u, ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -163,7 +163,7 @@ void ClientPacketShop(CLIENT* client)
 
 		if (bay >= (uint32_t)(client->garagedata.garageCount * 4) || client->garagedata.car[bay].carID == 0xFFFFFFFF)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has specified invalid bay number in paint shop.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has specified invalid bay number in paint shop.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str()
@@ -181,7 +181,7 @@ void ClientPacketShop(CLIENT* client)
 		if (wheelID == client->garagedata.car[bay].carID) finalPrice = 0;
 		else if (wheelID < 200 || wheelID >= 300)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to to purchase invalid wheel from shop. ID %u, Type %u, Client Cost %u, Real Cost %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to to purchase invalid wheel from shop. ID %u, Type %u, Client Cost %u, Real Cost %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -196,7 +196,7 @@ void ClientPacketShop(CLIENT* client)
 
 		if (cost != finalPrice)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has altered shop price from wheel shop. ID %u, Type %u, Client Cost %u, Real Cost %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has altered shop price from wheel shop. ID %u, Type %u, Client Cost %u, Real Cost %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -212,7 +212,7 @@ void ClientPacketShop(CLIENT* client)
 		if (client->enoughCP(finalPrice) && client->garagedata.car[bay].carID != 0xFFFFFFFF)
 		{
 #ifdef _DEBUG
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client bought from wheel shop. ID %u, Type %u, Cost %u. Guess: %u", wheelID, wheelType, cost, finalPrice);
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client bought from wheel shop. ID %u, Type %u, Cost %u. Guess: %u", wheelID, wheelType, cost, finalPrice);
 #endif
 			client->takeCP(finalPrice);
 			client->garagedata.car[bay].carMods.wheels = wheelID;
@@ -233,7 +233,7 @@ void ClientPacketShop(CLIENT* client)
 		}
 		else
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to purchase wheels from the wheel shop without enough CP. ID %u, Type %u, Client CP %u, Real Cost %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase wheels from the wheel shop without enough CP. ID %u, Type %u, Client CP %u, Real Cost %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -257,7 +257,7 @@ void ClientPacketShop(CLIENT* client)
 
 		if (bay >= (uint32_t)(client->garagedata.garageCount * 4) || client->garagedata.car[bay].carID == 0xFFFFFFFF)
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has specified invalid bay number in part shop.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u has specified invalid bay number in part shop.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str()

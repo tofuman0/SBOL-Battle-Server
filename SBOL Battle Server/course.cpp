@@ -107,7 +107,7 @@ uint32_t COURSE::getClientCount()
 	}
 	return count;
 }
-CLIENT* COURSE::getClient(uint16_t clientID)
+Client* COURSE::getClient(uint16_t clientID)
 {
 	for (auto& client : courseClient)
 	{
@@ -115,7 +115,7 @@ CLIENT* COURSE::getClient(uint16_t clientID)
 	}
 	return nullptr;
 }
-int32_t COURSE::addClient(CLIENT* in)
+int32_t COURSE::addClient(Client* in)
 {
 	int32_t freeClient = -1;
 	if (findClient(in) == -1)
@@ -130,18 +130,18 @@ int32_t COURSE::addClient(CLIENT* in)
 	}
 	return freeClient;
 }
-void COURSE::removeClient(CLIENT* in)
+void COURSE::removeClient(Client* in)
 {
 	int32_t clientIndex = findClient(in);
 	if (clientIndex != -1)
 	{
-		if (in->battle.status == CLIENT::BATTLESTATUS::BS_IN_BATTLE && in->battle.challenger != nullptr)
+		if (in->battle.status == Client::BATTLESTATUS::BS_IN_BATTLE && in->battle.challenger != nullptr)
 		{
-			in->battle.status = CLIENT::BATTLESTATUS::BS_LOST;
-			in->battle.challenger->battle.status = CLIENT::BATTLESTATUS::BS_WON;
+			in->battle.status = Client::BATTLESTATUS::BS_LOST;
+			in->battle.challenger->battle.status = Client::BATTLESTATUS::BS_WON;
 			in->battle.challenger->SendBattleCheckStatus();
 		}
-		else if (in->battle.status != CLIENT::BATTLESTATUS::BS_IN_BATTLE && in->battle.challenger != nullptr)
+		else if (in->battle.status != Client::BATTLESTATUS::BS_IN_BATTLE && in->battle.challenger != nullptr)
 		{
 			in->battle.challenger->SendBattleAbort(0);
 		}
@@ -158,7 +158,7 @@ void COURSE::removeClient(CLIENT* in)
 		courseClient[clientIndex] = nullptr;
 	}
 }
-int32_t COURSE::findClient(CLIENT* in)
+int32_t COURSE::findClient(Client* in)
 {
 	for (uint32_t i = 0; i < courseClient.size(); i++)
 	{
@@ -169,7 +169,7 @@ int32_t COURSE::findClient(CLIENT* in)
 	}
 	return -1;
 }
-CLIENT* COURSE::findClient(int32_t in)
+Client* COURSE::findClient(int32_t in)
 {
 	for (auto& client : courseClient)
 	{
@@ -192,7 +192,7 @@ void COURSE::sendCourseRacers(int32_t driverslicense)
 {
 	if (courseClient.size() > 0)
 	{
-		CLIENT* workClient = findClient(driverslicense);
+		Client* workClient = findClient(driverslicense);
 		if (workClient == nullptr) return;
 		for (auto& client : courseClient)
 		{

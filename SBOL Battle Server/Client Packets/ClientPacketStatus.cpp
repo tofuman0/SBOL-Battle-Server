@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include "..\server.h"
 
-void ClientPacketStatus(CLIENT* client)
+void ClientPacketStatus(Client* client)
 {
 	uint16_t pType = client->inbuf.getType();
 
@@ -30,7 +30,7 @@ void ClientPacketStatus(CLIENT* client)
 		}
 		else
 		{
-			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to activate sign that they haven't unlocked or that is invalid. Sign %u.",
+			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to activate sign that they haven't unlocked or that is invalid. Sign %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),

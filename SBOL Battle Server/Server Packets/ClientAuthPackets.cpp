@@ -5,7 +5,7 @@
 
 void ClientAuth(MANAGEMENTSERVER* managementserver)
 {
-	CLIENT* client = nullptr;
+	Client* client = nullptr;
 	MESSAGE_QUEUE entry = { 0 };
 	switch (managementserver->inbuf.getSubType())
 	{
