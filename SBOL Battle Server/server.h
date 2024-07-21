@@ -19,11 +19,11 @@ extern int tempValue2;
 extern int tempValue3;
 extern int tempValue4;
 
-class SERVER
+class Server
 {
 public:
-	SERVER();
-	~SERVER();
+	Server();
+	~Server();
 	const enum SERVERSTATUS {
 		SS_RUNNING,
 		SS_MAINTENANCE,

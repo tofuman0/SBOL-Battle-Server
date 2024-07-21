@@ -14,12 +14,12 @@ void ClientPacketAuthentication(Client* client)
 		if (clientVer == 0x53427B00 /* new client */)
 			//if (clientVer == 0x544D0100 /* Tofuman client */)
 		{
-			if (client->server->getStatus() == SERVER::SS_RUNNING && client->server->getConnectedToMANAGEMENTSERVER())
+			if (client->server->getStatus() == Server::SS_RUNNING && client->server->getConnectedToMANAGEMENTSERVER())
 			{
 				client->sendWelcome = 0;
 				if (client->setUsername(std::string((char*)&client->inbuf.buffer[0x08])))
 				{
-					client->SendAuthError(SERVER::AUTHLIST::AUTH_INVALID_PW);
+					client->SendAuthError(Server::AUTHLIST::AUTH_INVALID_PW);
 					return;
 				}
 				else
@@ -30,13 +30,13 @@ void ClientPacketAuthentication(Client* client)
 			}
 			else
 			{
-				client->SendAuthError(SERVER::AUTHLIST::AUTH_BUSY);
+				client->SendAuthError(Server::AUTHLIST::AUTH_BUSY);
 				return;
 			}
 		}
 		else
 		{
-			client->SendAuthError(SERVER::AUTHLIST::AUTH_OUTDATED);
+			client->SendAuthError(Server::AUTHLIST::AUTH_OUTDATED);
 			return;
 		}
 	}
@@ -44,7 +44,7 @@ void ClientPacketAuthentication(Client* client)
 	case 0x102:
 	{
 		// Check username and password here
-		SERVER* server = client->server;
+		Server* server = client->server;
 
 		server->managementserver.outbuf.clearBuffer();
 		server->managementserver.outbuf.setSize(0x06);
@@ -56,7 +56,7 @@ void ClientPacketAuthentication(Client* client)
 		server->managementserver.outbuf.appendArray((uint8_t*)&client->inbuf.buffer[0x04], client->inbuf.getSize() - 2);
 		if (server->managementserver.Send())
 		{
-			client->SendAuthError(SERVER::AUTHLIST::AUTH_BUSY);
+			client->SendAuthError(Server::AUTHLIST::AUTH_BUSY);
 		}
 		return;
 	}

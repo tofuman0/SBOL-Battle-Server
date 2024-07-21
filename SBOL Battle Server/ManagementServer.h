@@ -5,7 +5,7 @@
 #include <mutex>
 #include <queue>
 
-class SERVER;
+class Server;
 
 class MANAGEMENTSERVER
 {
@@ -14,8 +14,8 @@ class MANAGEMENTSERVER
 public:
 	MANAGEMENTSERVER();
 	~MANAGEMENTSERVER();
-	SERVER* server;
-	uint32_t Start(SERVER* serverptr);
+	Server* server;
+	uint32_t Start(Server* serverptr);
 	void Restart();
 	uint32_t Stop();
 	static void managementServerThread(void* parg);

@@ -37,7 +37,7 @@ uint16_t startPositions[][2]{
 
 void ManagementPacketClientAuth(Client* client)
 {
-	SERVER* server = (SERVER*)client->server;
+	Server* server = (Server*)client->server;
 	switch (client->serverbuf.getSubType())
 	{
 	case 0x0000: // Authentication
@@ -46,7 +46,7 @@ void ManagementPacketClientAuth(Client* client)
 		int32_t license = client->serverbuf.get<int32_t>();
 		if (license == -1)
 		{
-			client->SendAuthError(SERVER::AUTHLIST::AUTH_INVALID_PW);
+			client->SendAuthError(Server::AUTHLIST::AUTH_INVALID_PW);
 			return;
 		}
 		else
@@ -54,7 +54,7 @@ void ManagementPacketClientAuth(Client* client)
 			uint8_t loggedIn = client->serverbuf.get<uint8_t>();
 			if (loggedIn)
 			{
-				client->SendAuthError(SERVER::AUTHLIST::AUTH_LOGGED_IN);
+				client->SendAuthError(Server::AUTHLIST::AUTH_LOGGED_IN);
 				client->Disconnect();
 				return;
 			}
@@ -82,13 +82,13 @@ void ManagementPacketClientAuth(Client* client)
 				client->careerdata.ranking = client->serverbuf.get<uint32_t>();
 				if (flags & 1)
 				{
-					client->SendAuthError(SERVER::AUTHLIST::AUTH_DISABLED);
+					client->SendAuthError(Server::AUTHLIST::AUTH_DISABLED);
 					client->Disconnect();
 					return;
 				}
 				else if (flags & 128)
 				{
-					client->SendAuthError(SERVER::AUTHLIST::AUTH_DISABLED);
+					client->SendAuthError(Server::AUTHLIST::AUTH_DISABLED);
 					client->Disconnect();
 					return;
 				}
@@ -150,7 +150,7 @@ void ManagementPacketClientAuth(Client* client)
 						{
 							uint8_t bay = client->serverbuf.get<uint8_t>();
 							uint32_t carID = client->serverbuf.get<uint32_t>();
-							if (client->isValidCar(carID) == false) carID = SERVER::CARLIST::AE86_L_3_1985; // Replace invalid car with AE86 as they may only have 1 car and don't want to be left without a car.
+							if (client->isValidCar(carID) == false) carID = Server::CARLIST::AE86_L_3_1985; // Replace invalid car with AE86 as they may only have 1 car and don't want to be left without a car.
 							client->garagedata.car[bay].carID = carID;
 							client->garagedata.car[bay].KMs = client->serverbuf.get<float>();
 							client->serverbuf.getArray((uint8_t*)&client->garagedata.car[bay].carMods, sizeof(CARMODS));

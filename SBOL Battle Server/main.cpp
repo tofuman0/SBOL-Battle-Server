@@ -44,7 +44,7 @@ int main()
 
 	_set_printf_count_output(1); // Enable %n as random crashing occurred while packet logging
 	srand(timeGetTime()); // Seed RNG
-	SERVER* server = new SERVER();
+	Server* server = new Server();
 	char titleBuf[0x100];
 	snprintf(titleBuf, sizeof(titleBuf), "SBOL Battle Server v%s. Clients: 0", server->logger.toNarrow(VERSION_STRING).c_str());
 	SetConsoleTitleA(titleBuf);

@@ -4,7 +4,7 @@
 void ClientPacketPlayerCreation(Client* client)
 {
 	uint16_t pType = client->inbuf.getType();
-	SERVER* server = (SERVER*)client->server;
+	Server* server = (Server*)client->server;
 
 	if (!server)
 	{
@@ -30,7 +30,7 @@ void ClientPacketPlayerCreation(Client* client)
 		}
 		client->setHandle(tempHandle);
 
-		SERVER* server = (SERVER*)client->server;
+		Server* server = (Server*)client->server;
 
 		server->managementserver.outbuf.clearBuffer();
 		server->managementserver.outbuf.setSize(0x06);
@@ -43,7 +43,7 @@ void ClientPacketPlayerCreation(Client* client)
 		server->managementserver.outbuf.setOffset(server->managementserver.outbuf.getOffset() + 16);
 		if (server->managementserver.Send())
 		{
-			client->SendAuthError(SERVER::AUTHLIST::AUTH_BUSY);
+			client->SendAuthError(Server::AUTHLIST::AUTH_BUSY);
 			//client->Disconnect();
 		}
 		return;

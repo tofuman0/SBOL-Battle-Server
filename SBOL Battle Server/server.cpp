@@ -30,7 +30,7 @@ const char *coursenames[] = {
 	"Spare 12",
 };
 
-SERVER::SERVER()
+Server::Server()
 {
 	managementServerAddress = "localhost";
 	managementServerPort = 7946;
@@ -221,7 +221,7 @@ SERVER::SERVER()
 		23397350
 	};
 }
-SERVER::~SERVER()
+Server::~Server()
 {
 	for (auto& c : connections)
 		delete c;
@@ -239,7 +239,7 @@ SERVER::~SERVER()
 		courses[i].clear();
 	}
 }
-void SERVER::initialize() {
+void Server::initialize() {
 	for (auto& c : connections)
 		delete c;
 	connections.clear();
@@ -262,7 +262,7 @@ void SERVER::initialize() {
 	serverConnections.resize(serverClientLimit);
 	LoadRivalFile();
 }
-char* SERVER::HEXString(uint8_t* in, char* out, uint32_t length = 0)
+char* Server::HEXString(uint8_t* in, char* out, uint32_t length = 0)
 {
 	uint32_t offset = 0;
 	if (!in) return out;
@@ -277,7 +277,7 @@ char* SERVER::HEXString(uint8_t* in, char* out, uint32_t length = 0)
 	out[offset] = 0;
 	return out;
 }
-char* SERVER::HEXString(uint8_t* in, uint32_t length = 0)
+char* Server::HEXString(uint8_t* in, uint32_t length = 0)
 {
 	char* out = &hexStr[0];
 	uint32_t offset = 0;
@@ -293,7 +293,7 @@ char* SERVER::HEXString(uint8_t* in, uint32_t length = 0)
 	out[offset] = 0;
 	return out;
 }
-int32_t SERVER::Start()
+int32_t Server::Start()
 {
 	if (VerifyConfig())
 		return 1;
@@ -318,7 +318,7 @@ int32_t SERVER::Start()
 	managementserver.Start(this);
 	return 0;
 }
-int32_t SERVER::Stop()
+int32_t Server::Stop()
 {
 	if (running == false)
 		return 1;
@@ -335,7 +335,7 @@ int32_t SERVER::Stop()
 	running = false;
 	return 0;
 }
-int32_t SERVER::LoadConfig(const wchar_t* filename)
+int32_t Server::LoadConfig(const wchar_t* filename)
 {
 	bool malformed = false;
 	std::wstring error = L"";
@@ -494,19 +494,19 @@ int32_t SERVER::LoadConfig(const wchar_t* filename)
 	else
 		return 0;
 }
-std::wstring SERVER::toWide(std::string in)
+std::wstring Server::toWide(std::string in)
 {
 	std::wstring temp(in.length(), L' ');
 	copy(in.begin(), in.end(), temp.begin());
 	return temp;
 }
-std::string SERVER::toNarrow(std::wstring in)
+std::string Server::toNarrow(std::wstring in)
 {
 	std::string temp(in.length(), ' ');
 	copy(in.begin(), in.end(), temp.begin());
 	return temp;
 }
-void SERVER::CheckClientPackets(Client* client, uint32_t rcvcopy, uint8_t* tmprcv)
+void Server::CheckClientPackets(Client* client, uint32_t rcvcopy, uint8_t* tmprcv)
 {
 	if (rcvcopy >= 4)
 	{
@@ -525,7 +525,7 @@ void SERVER::CheckClientPackets(Client* client, uint32_t rcvcopy, uint8_t* tmprc
 		}
 	}
 }
-void SERVER::initialize_connection(Client* connect)
+void Server::initialize_connection(Client* connect)
 {
 	if (connect->ClientSocket >= 0)
 	{
@@ -542,7 +542,7 @@ void SERVER::initialize_connection(Client* connect)
 	snprintf(titleBuf, sizeof(titleBuf), "SBOL Battle Server v%s. Clients: %u", logger.toNarrow(VERSION_STRING).c_str(), playerCount() - 1);
 	SetConsoleTitleA(titleBuf);
 }
-void SERVER::removeClient(Client* connect)
+void Server::removeClient(Client* connect)
 {
 	for (auto& c : connections)
 	{
@@ -554,7 +554,7 @@ void SERVER::removeClient(Client* connect)
 		}
 	}
 }
-void SERVER::organizeClients()
+void Server::organizeClients()
 {
 	// Removes initialised clients
 	uint32_t connectioncount = connections.size();
@@ -569,20 +569,20 @@ void SERVER::organizeClients()
 			i++;
 	}
 }
-void SERVER::setConnectedToMANAGEMENTSERVER()
+void Server::setConnectedToMANAGEMENTSERVER()
 {
 	connectedToManagement = true;
 }
-void SERVER::clearConnectedToMANAGEMENTSERVER()
+void Server::clearConnectedToMANAGEMENTSERVER()
 {
 	connectedToManagement = false;
 }
-void SERVER::addAuthenticatedClient(uint32_t license)
+void Server::addAuthenticatedClient(uint32_t license)
 {
 	std::vector<uint32_t>::iterator it = find(authenticatedClients.begin(), authenticatedClients.end(), license);
 	if (it == authenticatedClients.end()) authenticatedClients.push_back(license);
 }
-void SERVER::removeAuthenticatedClient(uint32_t license)
+void Server::removeAuthenticatedClient(uint32_t license)
 {
 	std::vector<uint32_t>::iterator it = find(authenticatedClients.begin(), authenticatedClients.end(), license);
 	if (it != authenticatedClients.end())
@@ -591,13 +591,13 @@ void SERVER::removeAuthenticatedClient(uint32_t license)
 		authenticatedClients.erase(authenticatedClients.begin() + index);
 	}
 }
-bool SERVER::clientIsAuthenticated(uint32_t license)
+bool Server::clientIsAuthenticated(uint32_t license)
 {
 	std::vector<uint32_t>::iterator it = find(authenticatedClients.begin(), authenticatedClients.end(), license);
 	if (it != authenticatedClients.end()) return true;
 	else return false;
 }
-void SERVER::disconnectLoggedInUser(uint32_t license)
+void Server::disconnectLoggedInUser(uint32_t license)
 {
 	Client* foundUser = findUser(license);
 	if (foundUser != nullptr)
@@ -606,14 +606,14 @@ void SERVER::disconnectLoggedInUser(uint32_t license)
 		foundUser->Disconnect();
 	}
 }
-void SERVER::disconnectAllUsers(uint32_t exclude)
+void Server::disconnectAllUsers(uint32_t exclude)
 {
 	for (auto& c : connections)
 	{
 		if (c->ClientSocket >= 0 && c->driverslicense != exclude) c->Disconnect();
 	}
 }
-Client* SERVER::findUser(std::string& in)
+Client* Server::findUser(std::string& in)
 {
 	for (auto& c : connections)
 	{
@@ -621,7 +621,7 @@ Client* SERVER::findUser(std::string& in)
 	}
 	return nullptr;
 }
-Client* SERVER::findUser(uint32_t in)
+Client* Server::findUser(uint32_t in)
 {
 	for (auto& c : connections)
 	{
@@ -629,7 +629,7 @@ Client* SERVER::findUser(uint32_t in)
 	}
 	return nullptr;
 }
-void SERVER::saveClientData(Client* client)
+void Server::saveClientData(Client* client)
 {
 	if (client->canSave == true && client->driverslicense)
 	{
@@ -682,7 +682,7 @@ void SERVER::saveClientData(Client* client)
 		managementserver.Send();
 	}
 }
-int32_t SERVER::tcp_sock_open(struct in_addr ip, uint16_t port)
+int32_t Server::tcp_sock_open(struct in_addr ip, uint16_t port)
 {
 	int32_t fd, bufsize, turn_on_option_flag = 1, rcSockopt, keepAlive = 0;
 	struct sockaddr_in sa;
@@ -727,14 +727,14 @@ int32_t SERVER::tcp_sock_open(struct in_addr ip, uint16_t port)
 	}
 	return fd;
 }
-int32_t SERVER::tcp_set_nonblocking(int32_t fd)
+int32_t Server::tcp_set_nonblocking(int32_t fd)
 {
 	u_long flags = 1;
 	if (ioctlsocket(fd, FIONBIO, &flags))
 		return 1;
 	return setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (const char*)&flags, sizeof(flags));
 }
-int32_t SERVER::tcp_listen(int32_t sockfd)
+int32_t Server::tcp_listen(int32_t sockfd)
 {
 	if (listen(sockfd, 10) < 0)
 	{
@@ -743,7 +743,7 @@ int32_t SERVER::tcp_listen(int32_t sockfd)
 	tcp_set_nonblocking(sockfd);
 	return 0;
 }
-int32_t SERVER::tcp_accept(int32_t sockfd, struct sockaddr *client_addr, int32_t *addr_len)
+int32_t Server::tcp_accept(int32_t sockfd, struct sockaddr *client_addr, int32_t *addr_len)
 {
 	int32_t fd, bufsize;
 
@@ -761,12 +761,12 @@ int32_t SERVER::tcp_accept(int32_t sockfd, struct sockaddr *client_addr, int32_t
 		return -1;
 	}
 }
-bool SERVER::freeConnection()
+bool Server::freeConnection()
 {
 	if (connections.size() < serverClientLimit) return true;
 	return false;
 }
-bool SERVER::InitServerSocket()
+bool Server::InitServerSocket()
 {
 	struct in_addr server_in;
 	WSADATA winsock_data;
@@ -802,7 +802,7 @@ bool SERVER::InitServerSocket()
 	logger.Log(Logger::LOGTYPE_SERVER, L"Server Started.");
 	return true;
 }
-bool SERVER::AcceptConnection()
+bool Server::AcceptConnection()
 {
 	struct sockaddr_in listen_in;
 	int32_t listen_length;
@@ -837,7 +837,7 @@ bool SERVER::AcceptConnection()
 	}
 	return false;
 }
-bool SERVER::Send(Client * client)
+bool Server::Send(Client * client)
 {
 	int32_t sent_len, wserror, max_send;
 	uint8_t sendbuf[Client_BUFFER_SIZE];
@@ -906,7 +906,7 @@ bool SERVER::Send(Client * client)
 	}
 	return false;
 }
-bool SERVER::Recv(Client * client)
+bool Server::Recv(Client * client)
 {
 	int32_t  wserror, recv_len, max_read;
 	max_read = Client_BUFFER_SIZE - client->rcvread;
@@ -940,7 +940,7 @@ bool SERVER::Recv(Client * client)
 	}
 	return false;
 }
-bool SERVER::ProcessRecv(Client * client, int32_t len)
+bool Server::ProcessRecv(Client * client, int32_t len)
 {
 	uint8_t recvbuf[Client_BUFFER_SIZE];
 
@@ -966,13 +966,13 @@ bool SERVER::ProcessRecv(Client * client, int32_t len)
 	}
 	return false;
 }
-bool SERVER::RecvToProcess(Client * client)
+bool Server::RecvToProcess(Client * client)
 {
 	if (!client || client->todc == true)
 		return false;
 	return client->rcvread ? true : false;
 }
-bool SERVER::ClientChecks(Client * client)
+bool Server::ClientChecks(Client * client)
 {
 	if (!client)
 		return false;
@@ -1026,7 +1026,7 @@ _disconnectClient:
 	}
 	return true;
 }
-int32_t SERVER::VerifyConfig()
+int32_t Server::VerifyConfig()
 {
 	if (LoadConfig(CONFIG_FILENAME))
 		return 1;
@@ -1036,9 +1036,9 @@ int32_t SERVER::VerifyConfig()
 
 	return 0;
 }
-void SERVER::serverThread(void* parg)
+void Server::serverThread(void* parg)
 {
-	SERVER* server = (SERVER*)parg;
+	Server* server = (Server*)parg;
 	int32_t selectcount;
 	fd_set ReadFDs, WriteFDs;
 	struct timeval select_timeout = {
@@ -1136,7 +1136,7 @@ void SERVER::serverThread(void* parg)
 	server->logger.Log(Logger::LOGTYPE_SERVER, L"Server Stopped.");
 	server->running = false;
 }
-std::vector<std::string> SERVER::split(std::string& in, std::string& delimit)
+std::vector<std::string> Server::split(std::string& in, std::string& delimit)
 {
 	std::vector<std::string> out;
 	uint32_t offset = 0;
@@ -1156,11 +1156,11 @@ std::vector<std::string> SERVER::split(std::string& in, std::string& delimit)
 	if (offset == 0 && found == 0 && in.length() > 0) out.push_back(in);
 	return out;
 }
-uint32_t SERVER::getNextClientID()
+uint32_t Server::getNextClientID()
 {
 	return currentClientID++;
 }
-bool SERVER::isValidCar(uint16_t carID)
+bool Server::isValidCar(uint16_t carID)
 {
 	switch (carID)
 	{
@@ -1238,7 +1238,7 @@ bool SERVER::isValidCar(uint16_t carID)
 	}
 	return false;
 }
-bool SERVER::isValidItem(uint16_t itemID)
+bool Server::isValidItem(uint16_t itemID)
 {
 	for (int32_t i = 0; i < itemData.count; i++)
 	{
@@ -1246,7 +1246,7 @@ bool SERVER::isValidItem(uint16_t itemID)
 	}
 	return false;
 }
-uint32_t SERVER::playerCount()
+uint32_t Server::playerCount()
 {
 	//int32_t count = 0;
 	//for (uint32_t i = 0; i < connections.size(); i++)
@@ -1256,7 +1256,7 @@ uint32_t SERVER::playerCount()
 	//return count;
 	return connections.size();
 }
-void SERVER::LoadRivalFile()
+void Server::LoadRivalFile()
 {
 	std::vector<std::string> rivalfiles = GetRivalFiles();
 
@@ -1398,7 +1398,7 @@ void SERVER::LoadRivalFile()
 		}
 	}
 }
-RIVALDATA * SERVER::GetRivalData(int32_t RivalID, Client* client)
+RIVALDATA * Server::GetRivalData(int32_t RivalID, Client* client)
 {
 	if (RivalID == -1)
 	{	// Set rival based on rules and progress of client
@@ -1414,7 +1414,7 @@ RIVALDATA * SERVER::GetRivalData(int32_t RivalID, Client* client)
 	}
 	return nullptr;
 }
-void SERVER::SendChatMessage(CHATTYPE type, std::string& handle, std::string& message)
+void Server::SendChatMessage(CHATTYPE type, std::string& handle, std::string& message)
 {
 	PACKET chatBuf;
 	if (handle.empty())
@@ -1448,7 +1448,7 @@ void SERVER::SendChatMessage(CHATTYPE type, std::string& handle, std::string& me
 	chatBuf.appendString(message, 0x4E);
 	SendToAll(&chatBuf);
 }
-void SERVER::SendOfflineChatMessage(CHATTYPE type, std::string& fromHandle, std::string& toHandle, std::string& message)
+void Server::SendOfflineChatMessage(CHATTYPE type, std::string& fromHandle, std::string& toHandle, std::string& message)
 {
 	managementserver.outbuf.clearBuffer();
 	managementserver.outbuf.setSize(0x06);
@@ -1461,7 +1461,7 @@ void SERVER::SendOfflineChatMessage(CHATTYPE type, std::string& fromHandle, std:
 	managementserver.outbuf.appendString(message, 0x4E);
 	managementserver.Send();
 }
-void SERVER::SendTeamChatMessage(std::string& fromHandle, uint32_t teamID, std::string& message)
+void Server::SendTeamChatMessage(std::string& fromHandle, uint32_t teamID, std::string& message)
 {
 	managementserver.outbuf.clearBuffer();
 	managementserver.outbuf.setSize(0x06);
@@ -1473,7 +1473,7 @@ void SERVER::SendTeamChatMessage(std::string& fromHandle, uint32_t teamID, std::
 	managementserver.outbuf.append<uint32_t>(teamID);
 	managementserver.Send();
 }
-void SERVER::SendInformMessage(std::string& toHandle, std::string& message, uint32_t colour)
+void Server::SendInformMessage(std::string& toHandle, std::string& message, uint32_t colour)
 {
 	managementserver.outbuf.clearBuffer();
 	managementserver.outbuf.setSize(0x06);
@@ -1485,7 +1485,7 @@ void SERVER::SendInformMessage(std::string& toHandle, std::string& message, uint
 	managementserver.outbuf.append<uint32_t>(colour);
 	managementserver.Send();
 }
-void SERVER::SendAnnounceMessage(std::string& message, uint32_t colour)
+void Server::SendAnnounceMessage(std::string& message, uint32_t colour)
 {
 	PACKET chatBuf;
 	chatBuf.clearBuffer();
@@ -1499,14 +1499,14 @@ void SERVER::SendAnnounceMessage(std::string& message, uint32_t colour)
 	chatBuf.append<uint8_t>(static_cast<uint8_t>(GetBValue(colour)));
 	SendToAll(&chatBuf);
 }
-void SERVER::SendToAll(PACKET* src)
+void Server::SendToAll(PACKET* src)
 {
 	for (uint32_t i = 0; i < connections.size(); i++)
 	{
 		if (connections[i]->ClientSocket >= 0) connections[i]->Send(src);
 	}
 }
-int32_t SERVER::loadPDat()
+int32_t Server::loadPDat()
 {
 	std::string filename = "data\\P.DAT";
 	std::ifstream inFile(filename, std::ios::in | std::ios::binary);
@@ -1555,7 +1555,7 @@ int32_t SERVER::loadPDat()
 	delete SBOL_BF;
 	return 0;
 }
-int32_t SERVER::loadSDat()
+int32_t Server::loadSDat()
 {
 	std::string filename = "data\\S.DAT";
 	std::ifstream inFile(filename, std::ios::in | std::ios::binary);
@@ -1604,7 +1604,7 @@ int32_t SERVER::loadSDat()
 	delete SBOL_BF;
 	return 0;
 }
-int32_t SERVER::loadPartShopData()
+int32_t Server::loadPartShopData()
 {
 	std::string filename = "data\\PARTSHOP.DAT";
 	std::ifstream inFile(filename, std::ios::in | std::ios::binary);
@@ -1636,7 +1636,7 @@ int32_t SERVER::loadPartShopData()
 	logger.Log(Logger::LOGTYPE_NONE, L"Shop file %s loaded. Size: %ubytes.", toWide(filename).c_str(), fileSize);
 	return 0;
 }
-int32_t SERVER::loadItemData()
+int32_t Server::loadItemData()
 {
 	std::string filename = "data\\ITEM.DAT";
 	std::ifstream inFile(filename, std::ios::in | std::ios::binary);
@@ -1669,7 +1669,7 @@ int32_t SERVER::loadItemData()
 	return 0;
 }
 
-std::vector<std::string> SERVER::GetRivalFiles(std::string& path)
+std::vector<std::string> Server::GetRivalFiles(std::string& path)
 {
 	std::vector<std::string> rivalfiles;
 	HANDLE hFind = INVALID_HANDLE_VALUE;

@@ -3,7 +3,7 @@
 
 void ManagementPacketClientRequests(Client* client)
 {
-	SERVER* server = (SERVER*)client->server;
+	Server* server = (Server*)client->server;
 	switch (client->serverbuf.getSubType())
 	{
 	case 0x0000:

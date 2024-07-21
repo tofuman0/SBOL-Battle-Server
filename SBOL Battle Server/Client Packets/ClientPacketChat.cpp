@@ -5,7 +5,7 @@ void ClientPacketChat(Client* client)
 {
 	uint16_t pType = client->inbuf.getType();
 
-	SERVER* server = (SERVER*)client->server;
+	Server* server = (Server*)client->server;
 	switch (pType)
 	{
 	case 0x601: // Command Chat
@@ -246,14 +246,14 @@ void ClientPacketChat(Client* client)
 						{
 							if (command[2].compare("on") == 0)
 							{
-								client->server->setStatus(SERVER::SERVERSTATUS::SS_MAINTENANCE);
+								client->server->setStatus(Server::SERVERSTATUS::SS_MAINTENANCE);
 								client->SendAnnounceMessage(std::string("SERVER SET IN MAINTENANCE"), RGB(250, 100, 10), client->driverslicense);
 								client->server->SendAnnounceMessage(std::string("Server is now in maintenance. Please log out."), RGB(250, 100, 10));
 								return;
 							}
 							else if (command[2].compare("off") == 0)
 							{
-								client->server->setStatus(SERVER::SERVERSTATUS::SS_MAINTENANCE);
+								client->server->setStatus(Server::SERVERSTATUS::SS_MAINTENANCE);
 								client->SendAnnounceMessage(std::string("SERVER MAINTENANCE CLEARED"), RGB(250, 100, 10), client->driverslicense);
 								return;
 							}
@@ -386,7 +386,7 @@ void ClientPacketChat(Client* client)
 	{	
 		int32_t offset = 0x24;
 		client->SendChatMessage(Client::CHATTYPE::CHATTYPE_PRIVATE, client->inbuf.getString(0x04, 0x10), client->inbuf.getString(offset, 0x4E), client->driverslicense, client->handle);
-		client->server->SendOfflineChatMessage(SERVER::CHATTYPE::CHATTYPE_PRIVATE, client->handle, client->inbuf.getString(0x04, 0x10), client->inbuf.getString(offset, 0x4E));
+		client->server->SendOfflineChatMessage(Server::CHATTYPE::CHATTYPE_PRIVATE, client->handle, client->inbuf.getString(0x04, 0x10), client->inbuf.getString(offset, 0x4E));
 		return;
 	}
 	break;

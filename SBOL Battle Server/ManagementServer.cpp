@@ -21,7 +21,7 @@ MANAGEMENTSERVER::MANAGEMENTSERVER()
 MANAGEMENTSERVER::~MANAGEMENTSERVER()
 {
 }
-uint32_t MANAGEMENTSERVER::Start(SERVER* serverptr)
+uint32_t MANAGEMENTSERVER::Start(Server* serverptr)
 {
 	initialize();
 	server = serverptr;
@@ -225,7 +225,7 @@ void MANAGEMENTSERVER::ProcessPacket()
 void MANAGEMENTSERVER::managementServerThread(void* parg)
 {
 	MANAGEMENTSERVER* managementserver = (MANAGEMENTSERVER*)parg;
-	SERVER* gameserver = (SERVER*)managementserver->server;
+	Server* gameserver = (Server*)managementserver->server;
 	WSADATA wsaData;
 	SOCKET ConnectSocket = INVALID_SOCKET;
 	struct addrinfo *result = NULL, *ptr = NULL, hints;

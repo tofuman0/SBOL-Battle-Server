@@ -5,7 +5,7 @@
 
 void ClientRequests(MANAGEMENTSERVER* managementserver)
 {
-	SERVER* server = managementserver->server;
+	Server* server = managementserver->server;
 	managementserver->inbuf.setOffset(0x06);
 	switch (managementserver->inbuf.getSubType())
 	{
