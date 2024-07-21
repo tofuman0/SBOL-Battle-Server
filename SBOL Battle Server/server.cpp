@@ -513,7 +513,7 @@ void Server::CheckClientPackets(Client* client, uint32_t rcvcopy, uint8_t* tmprc
 		client->inbuf.setArray(tmprcv, rcvcopy, 0x00);
 		uint16_t size = client->inbuf.getSizeFromBuffer();
 		client->inbuf.setSize(SWAP_SHORT(size) + 2);
-		if (client->inbuf.getSize() > Client_BUFFER_SIZE)
+		if (client->inbuf.getSize() > CLIENT_BUFFER_SIZE)
 		{
 			// Packet too big, disconnect the client.
 			logger.Log(Logger::LOGTYPE_COMM, L"Client %s sent a invalid packet.", toWide((char*)client->IP_Address).c_str());
@@ -569,11 +569,11 @@ void Server::organizeClients()
 			i++;
 	}
 }
-void Server::setConnectedToMANAGEMENTSERVER()
+void Server::setConnectedToManagementServer()
 {
 	connectedToManagement = true;
 }
-void Server::clearConnectedToMANAGEMENTSERVER()
+void Server::clearConnectedToManagementServer()
 {
 	connectedToManagement = false;
 }
@@ -840,7 +840,7 @@ bool Server::AcceptConnection()
 bool Server::Send(Client * client)
 {
 	int32_t sent_len, wserror, max_send;
-	uint8_t sendbuf[Client_BUFFER_SIZE];
+	uint8_t sendbuf[CLIENT_BUFFER_SIZE];
 	SEND_QUEUE entry;
 
 	if (client->snddata > 0 || client->messagesInSendQueue())
@@ -862,7 +862,7 @@ bool Server::Send(Client * client)
 					uint16_t packetSize;
 					entry = client->getFromSendQueue();
 					packetSize = SWAP_SHORT(*(uint16_t*)&entry.sndbuf[0]) + 2;
-					if (client->snddata + packetSize < Client_BUFFER_SIZE)
+					if (client->snddata + packetSize < CLIENT_BUFFER_SIZE)
 					{
 						CopyMemory((char*)&client->sndbuf[client->snddata], entry.sndbuf, packetSize);
 						client->snddata += packetSize;
@@ -877,8 +877,8 @@ bool Server::Send(Client * client)
 			}
 		}
 
-		if (client->snddata > Client_BUFFER_SIZE)
-			max_send = Client_BUFFER_SIZE;
+		if (client->snddata > CLIENT_BUFFER_SIZE)
+			max_send = CLIENT_BUFFER_SIZE;
 		else
 			max_send = client->snddata;
 
@@ -909,7 +909,7 @@ bool Server::Send(Client * client)
 bool Server::Recv(Client * client)
 {
 	int32_t  wserror, recv_len, max_read;
-	max_read = Client_BUFFER_SIZE - client->rcvread;
+	max_read = CLIENT_BUFFER_SIZE - client->rcvread;
 
 	if ((recv_len = recv(client->ClientSocket, (char *)&client->rcvbuf[client->rcvread], max_read, 0)) == SOCKET_ERROR)
 	{
@@ -942,7 +942,7 @@ bool Server::Recv(Client * client)
 }
 bool Server::ProcessRecv(Client * client, int32_t len)
 {
-	uint8_t recvbuf[Client_BUFFER_SIZE];
+	uint8_t recvbuf[CLIENT_BUFFER_SIZE];
 
 	if (!client || len < 0)
 		return false;
@@ -957,8 +957,8 @@ bool Server::ProcessRecv(Client * client, int32_t len)
 	{
 		CopyMemory(&recvbuf[0], &client->rcvbuf[0], client->packetsize);
 		CheckClientPackets(client, client->packetsize, recvbuf);
-		CopyMemory(&recvbuf[0], &client->rcvbuf[client->packetsize], Client_BUFFER_SIZE - client->packetsize);
-		CopyMemory(&client->rcvbuf[0], &recvbuf[0], Client_BUFFER_SIZE - client->packetsize);
+		CopyMemory(&recvbuf[0], &client->rcvbuf[client->packetsize], CLIENT_BUFFER_SIZE - client->packetsize);
+		CopyMemory(&client->rcvbuf[0], &recvbuf[0], CLIENT_BUFFER_SIZE - client->packetsize);
 		client->hassize = false;
 		client->rcvread -= client->packetsize;
 		client->packetsize = 0;
@@ -986,7 +986,7 @@ bool Server::ClientChecks(Client * client)
 		goto _disconnectClient;
 	}
 	// Sending ping when the client stops sending packets doesn't resolve the issue.
-	//if (client->timeoutCount > 0 && client->timeoutCount - (Client_TIMEOUT / 2) < time(NULL))
+	//if (client->timeoutCount > 0 && client->timeoutCount - (CLIENT_TIMEOUT / 2) < time(NULL))
 	//{
 	//	client->SendPing();
 	//}

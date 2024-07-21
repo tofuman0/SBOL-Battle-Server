@@ -1846,7 +1846,7 @@ void Client::Send(PACKET* src)
 		src = &outbuf;
 	if (ClientSocket >= 0)
 	{
-		if (Client_BUFFER_SIZE < ((int)src->getSize() + 15))
+		if (CLIENT_BUFFER_SIZE < ((int)src->getSize() + 15))
 		{
 			logger->Log(Logger::LOGTYPE_Client, L"Client Sent too large packet.");
 			Disconnect();
@@ -2021,7 +2021,7 @@ void Client::ProcessPacket()
 		packetResend = 0;
 
 		MainPacketFunctions[packetType](this);
-		timeoutCount = time(NULL) + Client_TIMEOUT;
+		timeoutCount = time(NULL) + CLIENT_TIMEOUT;
 #ifdef PACKET_OUTPUT
 		//if (packetType != 0x07) return;
 		//if (packetType == 0x07 || packetType == 0x00 || packetType == 0x0A || packetType == 0x04 || packetType == 0x05) return;

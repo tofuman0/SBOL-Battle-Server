@@ -150,7 +150,7 @@ public:
 	ITEMDATA itemData;
 	uint8_t* hDAT;
 	Logger logger;
-	MANAGEMENTSERVER managementserver;
+	ManagementServer managementserver;
 	std::vector<uint32_t> startingCars;
 	uint32_t shopBasePrices[11] = {
 		//100, 102, 104, 106, 108, 110, 112, 115, 117, 120, 120
@@ -169,11 +169,11 @@ public:
 	void initialize_connection(Client* connect);
 	void removeClient(Client* connect);
 	void organizeClients();
-	std::string getMANAGEMENTSERVERAddress() { return managementServerAddress; }
-	uint16_t getMANAGEMENTSERVERPort() { return managementServerPort; }
-	void setConnectedToMANAGEMENTSERVER();
-	void clearConnectedToMANAGEMENTSERVER();
-	bool getConnectedToMANAGEMENTSERVER() { return connectedToManagement; }
+	std::string getManagementServerAddress() { return managementServerAddress; }
+	uint16_t getManagementServerPort() { return managementServerPort; }
+	void setConnectedToManagementServer();
+	void clearConnectedToManagementServer();
+	bool getConnectedToManagementServer() { return connectedToManagement; }
 	void addAuthenticatedClient(uint32_t license);
 	void removeAuthenticatedClient(uint32_t license);
 	bool clientIsAuthenticated(uint32_t license);

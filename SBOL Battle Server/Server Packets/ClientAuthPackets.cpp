@@ -3,7 +3,7 @@
 #include "..\server.h"
 #include "..\structures.h"
 
-void ClientAuth(MANAGEMENTSERVER* managementserver)
+void ClientAuth(ManagementServer* managementserver)
 {
 	Client* client = nullptr;
 	MESSAGE_QUEUE entry = { 0 };

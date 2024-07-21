@@ -18,7 +18,7 @@ public:
 		PACKETTYPE_ClientOPS,
 		PACKETTYPE_SERVEROPS
 	};
-	uint8_t buffer[Client_BUFFER_SIZE];
+	uint8_t buffer[CLIENT_BUFFER_SIZE];
 	void setOffset(uint16_t in) { pOffset = in; }
 	uint32_t getOffset() { return pOffset; }
 	void addOffset(uint16_t in) { pOffset += in; }
@@ -58,7 +58,7 @@ private:
 template<typename T>
 void SERVERPACKET::append(T in)
 {
-	if ((pOffset + sizeof(in)) < Client_BUFFER_SIZE)
+	if ((pOffset + sizeof(in)) < CLIENT_BUFFER_SIZE)
 	{
 		*(T*)&buffer[pOffset] = in;
 		pOffset += sizeof(in);
@@ -69,7 +69,7 @@ void SERVERPACKET::append(T in)
 template<typename T>
 void SERVERPACKET::set(T in, uint32_t offset)
 {
-	if ((pOffset + sizeof(in)) < Client_BUFFER_SIZE)
+	if ((pOffset + sizeof(in)) < CLIENT_BUFFER_SIZE)
 	{
 		*(T*)&buffer[pOffset] = in;
 	}
@@ -78,7 +78,7 @@ void SERVERPACKET::set(T in, uint32_t offset)
 template<typename T>
 T SERVERPACKET::get(uint32_t offset)
 {
-	if (offset + sizeof(T) > Client_BUFFER_SIZE)
+	if (offset + sizeof(T) > CLIENT_BUFFER_SIZE)
 		return T();
 	else
 		return *(T*)&buffer[offset];
@@ -87,7 +87,7 @@ T SERVERPACKET::get(uint32_t offset)
 template<typename T>
 T SERVERPACKET::get()
 {
-	if (pOffset + sizeof(T) > Client_BUFFER_SIZE)
+	if (pOffset + sizeof(T) > CLIENT_BUFFER_SIZE)
 		return T();
 	else
 	{

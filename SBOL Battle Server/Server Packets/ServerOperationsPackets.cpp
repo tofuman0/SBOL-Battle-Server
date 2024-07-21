@@ -1,6 +1,6 @@
 #include <Windows.h>
 #include "..\managementserver.h"
 
-void ServerOperations(MANAGEMENTSERVER* managementserver)
+void ServerOperations(ManagementServer* managementserver)
 {
 }

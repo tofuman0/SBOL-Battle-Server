@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include "..\managementserver.h"
 
-void ServerAuth(MANAGEMENTSERVER* managementserver)
+void ServerAuth(ManagementServer* managementserver)
 {
 	switch (managementserver->inbuf.getSubType())
 	{

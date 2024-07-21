@@ -14,14 +14,14 @@
 #include "managementserver.h"
 #include <fstream>
 
-MANAGEMENTSERVER::MANAGEMENTSERVER()
+ManagementServer::ManagementServer()
 {
 	initialize();
 }
-MANAGEMENTSERVER::~MANAGEMENTSERVER()
+ManagementServer::~ManagementServer()
 {
 }
-uint32_t MANAGEMENTSERVER::Start(Server* serverptr)
+uint32_t ManagementServer::Start(Server* serverptr)
 {
 	initialize();
 	server = serverptr;
@@ -42,7 +42,7 @@ uint32_t MANAGEMENTSERVER::Start(Server* serverptr)
 
 	return 0;
 }
-void MANAGEMENTSERVER::Restart()
+void ManagementServer::Restart()
 {
 	if (serverHandle) return;
 	lastConnectAttempt = time(0);
@@ -51,12 +51,12 @@ void MANAGEMENTSERVER::Restart()
 	mThread.detach();
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
 }
-uint32_t MANAGEMENTSERVER::Stop()
+uint32_t ManagementServer::Stop()
 {
 	running = false;
 	return 0;
 }
-uint32_t MANAGEMENTSERVER::LoadKey()
+uint32_t ManagementServer::LoadKey()
 {
 	std::ifstream keyfile(".\\serverkey.bin", std::ios::binary);
 	if (!keyfile.is_open()) return 1;
@@ -72,7 +72,7 @@ uint32_t MANAGEMENTSERVER::LoadKey()
 	logger->Log(Logger::LOGTYPE_MANAGEMENT, L"Management key loaded.");
 	return 0;
 }
-void MANAGEMENTSERVER::initialize()
+void ManagementServer::initialize()
 {
 	ServerSocket = -1;
 	todc = false;
@@ -95,7 +95,7 @@ void MANAGEMENTSERVER::initialize()
 	ZeroMemory(&iv[0], sizeof(iv));
 	clearSendQueue();
 }
-uint32_t MANAGEMENTSERVER::Send(SERVERPACKET* src)
+uint32_t ManagementServer::Send(SERVERPACKET* src)
 {
 	if (src == nullptr)
 		src = &outbuf;
@@ -106,7 +106,7 @@ uint32_t MANAGEMENTSERVER::Send(SERVERPACKET* src)
 			logger->Log(Logger::LOGTYPE_ERROR, L"Unable to send packet to management server %s as not authenticated.", logger->toWide((char*)IP_Address).c_str());
 			return 2;
 		}
-		if (Client_BUFFER_SIZE < ((int32_t)src->getSize() + 15))
+		if (CLIENT_BUFFER_SIZE < ((int32_t)src->getSize() + 15))
 		{
 			Disconnect();
 			return 1;
@@ -115,7 +115,7 @@ uint32_t MANAGEMENTSERVER::Send(SERVERPACKET* src)
 		{
 			uint16_t size = src->getSize();
 			uint16_t newsize = 0;
-			if ((size - 4) < 0 || size > Client_BUFFER_SIZE)
+			if ((size - 4) < 0 || size > CLIENT_BUFFER_SIZE)
 			{
 				logger->Log(Logger::LOGTYPE_ERROR, L"Unable to send packet to client %s as packet will be %ubytes", logger->toWide((char*)IP_Address).c_str(), size);
 				return 1;
@@ -129,7 +129,7 @@ uint32_t MANAGEMENTSERVER::Send(SERVERPACKET* src)
 			CopyMemory((char*)compressed.data(), &src->buffer[0x02], newsize);
 			compressed = compress(compressed);
 			newsize = compressed.size();
-			if (newsize > Client_BUFFER_SIZE)
+			if (newsize > CLIENT_BUFFER_SIZE)
 			{
 				logger->Log(Logger::LOGTYPE_ERROR, L"Unable to send packet to client %s as packet will be %ubytes", logger->toWide((char*)IP_Address).c_str(), newsize);
 				return 1;
@@ -146,7 +146,7 @@ uint32_t MANAGEMENTSERVER::Send(SERVERPACKET* src)
 			newsize = src->getSize();
 			if (isAuth == true)
 			{
-				if (newsize + 2 + BLOCK_SIZE > Client_BUFFER_SIZE)
+				if (newsize + 2 + BLOCK_SIZE > CLIENT_BUFFER_SIZE)
 				{
 					logger->Log(Logger::LOGTYPE_ERROR, L"Unable to send packet to client %s as packet will be %ubytes", logger->toWide((char*)IP_Address).c_str(), newsize + 2 + BLOCK_SIZE);
 					return 1;
@@ -159,17 +159,17 @@ uint32_t MANAGEMENTSERVER::Send(SERVERPACKET* src)
 	}
 	return 0;
 }
-void MANAGEMENTSERVER::Disconnect()
+void ManagementServer::Disconnect()
 {
 	todc = true;
 }
-bool MANAGEMENTSERVER::shouldRetry()
+bool ManagementServer::shouldRetry()
 {
 	time_t now = time(0);
 	time_t result = now - lastConnectAttempt;
 	return (result > 10);
 }
-void MANAGEMENTSERVER::ProcessPacket()
+void ManagementServer::ProcessPacket()
 {
 	if (!todc)
 	{
@@ -222,9 +222,9 @@ void MANAGEMENTSERVER::ProcessPacket()
 		PacketFunctions[inbuf.getType()](this);
 	}
 }
-void MANAGEMENTSERVER::managementServerThread(void* parg)
+void ManagementServer::managementServerThread(void* parg)
 {
-	MANAGEMENTSERVER* managementserver = (MANAGEMENTSERVER*)parg;
+	ManagementServer* managementserver = (ManagementServer*)parg;
 	Server* gameserver = (Server*)managementserver->server;
 	WSADATA wsaData;
 	SOCKET ConnectSocket = INVALID_SOCKET;
@@ -249,8 +249,8 @@ void MANAGEMENTSERVER::managementServerThread(void* parg)
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = IPPROTO_TCP;
-	managementPort = static_cast<std::ostringstream*>(&(std::ostringstream() << gameserver->getMANAGEMENTSERVERPort()))->str();
-	wserror = getaddrinfo(gameserver->getMANAGEMENTSERVERAddress().c_str(), managementPort.c_str(), &hints, &result);
+	managementPort = static_cast<std::ostringstream*>(&(std::ostringstream() << gameserver->getManagementServerPort()))->str();
+	wserror = getaddrinfo(gameserver->getManagementServerAddress().c_str(), managementPort.c_str(), &hints, &result);
 	if (wserror != 0) {
 		managementserver->logger->Log(Logger::LOGTYPE_MANAGEMENT, L"getaddrinfo failed for management server with error %u", wserror);
 		goto end;
@@ -275,11 +275,11 @@ void MANAGEMENTSERVER::managementServerThread(void* parg)
 	freeaddrinfo(result);
 
 	if (ConnectSocket == INVALID_SOCKET) {
-		managementserver->logger->Log(Logger::LOGTYPE_MANAGEMENT, L"unable to connect to management server on port %u", gameserver->getMANAGEMENTSERVERPort());
+		managementserver->logger->Log(Logger::LOGTYPE_MANAGEMENT, L"unable to connect to management server on port %u", gameserver->getManagementServerPort());
 		goto end;
 	}
-	managementserver->logger->Log(Logger::LOGTYPE_MANAGEMENT, L"Connected to management server on port %u", gameserver->getMANAGEMENTSERVERPort());
-	gameserver->setConnectedToMANAGEMENTSERVER();
+	managementserver->logger->Log(Logger::LOGTYPE_MANAGEMENT, L"Connected to management server on port %u", gameserver->getManagementServerPort());
+	gameserver->setConnectedToManagementServer();
 	managementserver->ServerSocket = ConnectSocket;
 	managementserver->SendAuth();
 	managementserver->tcp_set_nonblocking(ConnectSocket);
@@ -304,7 +304,7 @@ void MANAGEMENTSERVER::managementServerThread(void* parg)
 			if (managementserver->DataSend() == false)
 			{
 				managementserver->logger->Log(Logger::LOGTYPE_MANAGEMENT, L"Disconnected from management server");
-				gameserver->clearConnectedToMANAGEMENTSERVER();
+				gameserver->clearConnectedToManagementServer();
 				break;
 			}
 		}
@@ -315,7 +315,7 @@ void MANAGEMENTSERVER::managementServerThread(void* parg)
 			if (managementserver->DataRecv() == false)
 			{
 				managementserver->logger->Log(Logger::LOGTYPE_MANAGEMENT, L"Disconnected from management server");
-				gameserver->clearConnectedToMANAGEMENTSERVER();
+				gameserver->clearConnectedToManagementServer();
 				break;
 			}
 		}
@@ -337,14 +337,14 @@ end:
 	WSACleanup();
 	managementserver->setServerHandle(nullptr);
 }
-void MANAGEMENTSERVER::CheckManagementPackets(uint32_t rcvcopy, uint8_t* tmprcv)
+void ManagementServer::CheckManagementPackets(uint32_t rcvcopy, uint8_t* tmprcv)
 {
 	if (rcvcopy >= 6)
 	{
 		inbuf.clearBuffer();
 		inbuf.appendArray(tmprcv, rcvcopy);
 		inbuf.setSize(inbuf.getSizeFromBuffer());
-		if (inbuf.getSize() > Client_BUFFER_SIZE)
+		if (inbuf.getSize() > CLIENT_BUFFER_SIZE)
 		{
 			// Packet too big, disconnect the client.
 			logger->Log(Logger::LOGTYPE_MANAGEMENT, L"Management server %s sent an invalid packet.", toWide((char*)IP_Address).c_str());
@@ -356,19 +356,19 @@ void MANAGEMENTSERVER::CheckManagementPackets(uint32_t rcvcopy, uint8_t* tmprcv)
 		}
 	}
 }
-std::wstring MANAGEMENTSERVER::toWide(std::string in)
+std::wstring ManagementServer::toWide(std::string in)
 {
 	std::wstring temp(in.length(), L' ');
 	copy(in.begin(), in.end(), temp.begin());
 	return temp;
 }
-std::string MANAGEMENTSERVER::toNarrow(std::wstring in)
+std::string ManagementServer::toNarrow(std::wstring in)
 {
 	std::string temp(in.length(), ' ');
 	copy(in.begin(), in.end(), temp.begin());
 	return temp;
 }
-int32_t MANAGEMENTSERVER::encrypt(uint8_t* src, uint8_t* dst, int32_t len)
+int32_t ManagementServer::encrypt(uint8_t* src, uint8_t* dst, int32_t len)
 {
 #ifndef DISABLE_ENCRYPTION
 	try {
@@ -407,7 +407,7 @@ int32_t MANAGEMENTSERVER::encrypt(uint8_t* src, uint8_t* dst, int32_t len)
 	return len;
 #endif
 }
-int32_t MANAGEMENTSERVER::decrypt(uint8_t* src, uint8_t* dst, int32_t len)
+int32_t ManagementServer::decrypt(uint8_t* src, uint8_t* dst, int32_t len)
 {
 #ifndef DISABLE_ENCRYPTION
 	try {
@@ -447,20 +447,20 @@ int32_t MANAGEMENTSERVER::decrypt(uint8_t* src, uint8_t* dst, int32_t len)
 	return len;
 #endif
 }
-int32_t MANAGEMENTSERVER::compress(uint8_t* src, uint8_t* dst, int32_t len)
+int32_t ManagementServer::compress(uint8_t* src, uint8_t* dst, int32_t len)
 {	// TODO: Implement compression
 	int32_t result = 0;
 	return result;
 }
-int32_t MANAGEMENTSERVER::decompress(uint8_t* src, uint8_t* dst, int32_t len)
+int32_t ManagementServer::decompress(uint8_t* src, uint8_t* dst, int32_t len)
 {	// TODO: Implement decompression
 	int32_t result = 0;
 	return result;
 }
-bool MANAGEMENTSERVER::DataSend()
+bool ManagementServer::DataSend()
 {
 	int32_t wserror, send_len, max_send;
-	uint8_t sendbuf[Client_BUFFER_SIZE];
+	uint8_t sendbuf[CLIENT_BUFFER_SIZE];
 	SEND_MANAGEMENT_QUEUE entry;
 
 	if (snddata > 0 || messagesInSendQueue())
@@ -469,11 +469,11 @@ bool MANAGEMENTSERVER::DataSend()
 		{
 			entry = getFromSendQueue();
 			snddata = *(int16_t*)&entry.sndbuf[0] + 2;
-			CopyMemory(sndbuf, entry.sndbuf, Client_BUFFER_SIZE);
+			CopyMemory(sndbuf, entry.sndbuf, CLIENT_BUFFER_SIZE);
 		}
 
-		if (snddata > Client_BUFFER_SIZE)
-			max_send = Client_BUFFER_SIZE;
+		if (snddata > CLIENT_BUFFER_SIZE)
+			max_send = CLIENT_BUFFER_SIZE;
 		else
 			max_send = snddata;
 
@@ -501,11 +501,11 @@ bool MANAGEMENTSERVER::DataSend()
 
 	return true;
 }
-bool MANAGEMENTSERVER::DataRecv()
+bool ManagementServer::DataRecv()
 {
 	int32_t wserror, recv_len, max_send;
 	
-	max_send = Client_BUFFER_SIZE - rcvread;
+	max_send = CLIENT_BUFFER_SIZE - rcvread;
 
 	if((recv_len = recv(ServerSocket, (char*)&rcvbuf[rcvread], max_send, 0)) == SOCKET_ERROR)
 	{
@@ -535,11 +535,11 @@ bool MANAGEMENTSERVER::DataRecv()
 	}
 	return true;
 }
-bool MANAGEMENTSERVER::ProcessRecv(int32_t len)
+bool ManagementServer::ProcessRecv(int32_t len)
 {
 	if (len < 0)
 		return false;
-	uint8_t recvbuf[Client_BUFFER_SIZE];
+	uint8_t recvbuf[CLIENT_BUFFER_SIZE];
 	rcvread += len;
 	if ((hassize == false || packetsize == 0) && rcvread >= 2)
 	{
@@ -550,8 +550,8 @@ bool MANAGEMENTSERVER::ProcessRecv(int32_t len)
 	{
 		CopyMemory(&recvbuf[0], &rcvbuf[0], packetsize);
 		CheckManagementPackets(packetsize, recvbuf);
-		CopyMemory(&recvbuf[0], &rcvbuf[packetsize], Client_BUFFER_SIZE - packetsize);
-		CopyMemory(&rcvbuf[0], &recvbuf[0], Client_BUFFER_SIZE - packetsize);
+		CopyMemory(&recvbuf[0], &rcvbuf[packetsize], CLIENT_BUFFER_SIZE - packetsize);
+		CopyMemory(&rcvbuf[0], &recvbuf[0], CLIENT_BUFFER_SIZE - packetsize);
 		hassize = false;
 		rcvread -= packetsize;
 		packetsize = 0;
@@ -559,23 +559,23 @@ bool MANAGEMENTSERVER::ProcessRecv(int32_t len)
 	}
 	return false;
 }
-bool MANAGEMENTSERVER::DataRecvToProcess()
+bool ManagementServer::DataRecvToProcess()
 {
 	return rcvread ? true : false;
 }
-int32_t MANAGEMENTSERVER::tcp_set_nonblocking(int32_t  fd)
+int32_t ManagementServer::tcp_set_nonblocking(int32_t  fd)
 {
 	u_long flags = 1;
 	if (ioctlsocket(fd, FIONBIO, &flags))
 		return 1;
 	return setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (const char*)&flags, sizeof(flags));
 }
-void MANAGEMENTSERVER::addToMessageQueue(MESSAGE_QUEUE& in)
+void ManagementServer::addToMessageQueue(MESSAGE_QUEUE& in)
 {
 	std::lock_guard<std::mutex> locker(_muManagement);
 	messagequeue.push(in);
 }
-MESSAGE_QUEUE MANAGEMENTSERVER::getTopFromMessageQueue()
+MESSAGE_QUEUE ManagementServer::getTopFromMessageQueue()
 {
 	MESSAGE_QUEUE current = { 0 };
 	std::lock_guard<std::mutex> locker(_muManagement);
@@ -590,12 +590,12 @@ MESSAGE_QUEUE MANAGEMENTSERVER::getTopFromMessageQueue()
 		return current;
 	}
 }
-uint32_t MANAGEMENTSERVER::messagesInQueue()
+uint32_t ManagementServer::messagesInQueue()
 {
 	std::lock_guard<std::mutex> locker(_muManagement);
 	return messagequeue.size();
 }
-void MANAGEMENTSERVER::addToSendQueue(SERVERPACKET* src)
+void ManagementServer::addToSendQueue(SERVERPACKET* src)
 {
 	*(uint16_t*)&src->buffer[0x00] = src->getSize();
 	SEND_MANAGEMENT_QUEUE entry = { 0 };
@@ -603,7 +603,7 @@ void MANAGEMENTSERVER::addToSendQueue(SERVERPACKET* src)
 	std::lock_guard<std::mutex> locker(_muPackets);
 	sendQueue.push(entry);
 }
-SEND_MANAGEMENT_QUEUE MANAGEMENTSERVER::getFromSendQueue()
+SEND_MANAGEMENT_QUEUE ManagementServer::getFromSendQueue()
 {
 	SEND_MANAGEMENT_QUEUE current = { 0 };
 	std::lock_guard<std::mutex> locker(_muPackets);
@@ -615,7 +615,7 @@ SEND_MANAGEMENT_QUEUE MANAGEMENTSERVER::getFromSendQueue()
 	}
 	return current;
 }
-uint32_t MANAGEMENTSERVER::messagesInSendQueue()
+uint32_t ManagementServer::messagesInSendQueue()
 {
 	std::lock_guard<std::mutex> locker(_muPackets);
 	if (sendQueue.size() > 10)
@@ -627,7 +627,7 @@ uint32_t MANAGEMENTSERVER::messagesInSendQueue()
 	return sendQueue.size();
 }
 
-void MANAGEMENTSERVER::clearSendQueue()
+void ManagementServer::clearSendQueue()
 {
 	std::lock_guard<std::mutex> locker(_muPackets);
 	std::queue<SEND_MANAGEMENT_QUEUE> q;
@@ -635,7 +635,7 @@ void MANAGEMENTSERVER::clearSendQueue()
 }
 
 #pragma region Packets
-void MANAGEMENTSERVER::TeamCreate(uint32_t license, std::string& teamname)
+void ManagementServer::TeamCreate(uint32_t license, std::string& teamname)
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -646,7 +646,7 @@ void MANAGEMENTSERVER::TeamCreate(uint32_t license, std::string& teamname)
 	outbuf.appendString(teamname, 0x10);
 	Send();
 }
-void MANAGEMENTSERVER::TeamDelete(uint32_t license)
+void ManagementServer::TeamDelete(uint32_t license)
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -656,7 +656,7 @@ void MANAGEMENTSERVER::TeamDelete(uint32_t license)
 	outbuf.append<uint32_t>(license);
 	Send();
 }
-void MANAGEMENTSERVER::TeamRemoveTeamMember(uint32_t license, uint32_t memberID)
+void ManagementServer::TeamRemoveTeamMember(uint32_t license, uint32_t memberID)
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -667,7 +667,7 @@ void MANAGEMENTSERVER::TeamRemoveTeamMember(uint32_t license, uint32_t memberID)
 	outbuf.append<uint32_t>(memberID);
 	Send();
 }
-void MANAGEMENTSERVER::TeamUpdateInviteOnly(uint32_t license, uint8_t invitestatus)
+void ManagementServer::TeamUpdateInviteOnly(uint32_t license, uint8_t invitestatus)
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -678,7 +678,7 @@ void MANAGEMENTSERVER::TeamUpdateInviteOnly(uint32_t license, uint8_t invitestat
 	outbuf.append<uint8_t>(invitestatus);
 	Send();
 }
-void MANAGEMENTSERVER::TeamUpdateComment(uint32_t license, std::string& comment)
+void ManagementServer::TeamUpdateComment(uint32_t license, std::string& comment)
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -689,7 +689,7 @@ void MANAGEMENTSERVER::TeamUpdateComment(uint32_t license, std::string& comment)
 	outbuf.appendString(comment, 0x28);
 	Send();
 }
-void MANAGEMENTSERVER::TeamSetAreaAccess(uint32_t license, uint32_t memberID, uint8_t access)
+void ManagementServer::TeamSetAreaAccess(uint32_t license, uint32_t memberID, uint8_t access)
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -701,7 +701,7 @@ void MANAGEMENTSERVER::TeamSetAreaAccess(uint32_t license, uint32_t memberID, ui
 	outbuf.append<uint8_t>(access);
 	Send();
 }
-void MANAGEMENTSERVER::TeamGetData(uint32_t license)
+void ManagementServer::TeamGetData(uint32_t license)
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -711,7 +711,7 @@ void MANAGEMENTSERVER::TeamGetData(uint32_t license)
 	outbuf.append<uint32_t>(license);
 	Send();
 }
-void MANAGEMENTSERVER::SendAuth()
+void ManagementServer::SendAuth()
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -722,7 +722,7 @@ void MANAGEMENTSERVER::SendAuth()
 	Send();
 	isAuth = true;
 }
-void MANAGEMENTSERVER::SendHeartBeat()
+void ManagementServer::SendHeartBeat()
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -733,7 +733,7 @@ void MANAGEMENTSERVER::SendHeartBeat()
 	outbuf.append<uint32_t>(currTime);
 	Send();
 }
-void MANAGEMENTSERVER::SwapCar(uint32_t license, uint8_t isSwapping, uint32_t fromBay, uint32_t toBay)
+void ManagementServer::SwapCar(uint32_t license, uint8_t isSwapping, uint32_t fromBay, uint32_t toBay)
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);
@@ -746,7 +746,7 @@ void MANAGEMENTSERVER::SwapCar(uint32_t license, uint8_t isSwapping, uint32_t fr
 	outbuf.append<uint32_t>(toBay);
 	Send();
 }
-void MANAGEMENTSERVER::RemoveCar(uint32_t license, uint32_t bay)
+void ManagementServer::RemoveCar(uint32_t license, uint32_t bay)
 {
 	outbuf.clearBuffer();
 	outbuf.setSize(0x06);

@@ -21,7 +21,7 @@ void PACKET::init()
 
 void PACKET::appendArray(uint8_t* in, uint32_t size)
 {
-	if ((pOffset + size) < Client_BUFFER_SIZE)
+	if ((pOffset + size) < CLIENT_BUFFER_SIZE)
 	{
 		CopyMemory(&buffer[pOffset], in, size);
 		pOffset += size;
@@ -31,7 +31,7 @@ void PACKET::appendArray(uint8_t* in, uint32_t size)
 
 void PACKET::setArray(uint8_t* in, uint32_t size, uint32_t offset)
 {
-	if ((offset + size) < Client_BUFFER_SIZE)
+	if ((offset + size) < CLIENT_BUFFER_SIZE)
 	{
 		CopyMemory(&buffer[offset], in, size);
 	}
@@ -39,7 +39,7 @@ void PACKET::setArray(uint8_t* in, uint32_t size, uint32_t offset)
 
 void PACKET::getArray(uint8_t * in, uint32_t size, uint32_t offset)
 {
-	if ((offset + size) < Client_BUFFER_SIZE)
+	if ((offset + size) < CLIENT_BUFFER_SIZE)
 	{
 		CopyMemory(&in[0], &buffer[offset], size);
 	}
@@ -47,7 +47,7 @@ void PACKET::getArray(uint8_t * in, uint32_t size, uint32_t offset)
 
 void PACKET::getArray(uint8_t * in, uint32_t size)
 {
-	if ((pOffset + size) < Client_BUFFER_SIZE)
+	if ((pOffset + size) < CLIENT_BUFFER_SIZE)
 	{
 		CopyMemory(&in[0], &buffer[pOffset], size);
 		pOffset += size;
@@ -57,7 +57,7 @@ void PACKET::getArray(uint8_t * in, uint32_t size)
 int32_t PACKET::appendString(std::string& cmd)
 {
 	int32_t size = cmd.length();
-	if (pOffset + size < Client_BUFFER_SIZE)
+	if (pOffset + size < CLIENT_BUFFER_SIZE)
 	{
 		strcpy_s((char *)&buffer[pOffset], size + 1, &cmd[0]);
 		pOffset += size;
@@ -70,7 +70,7 @@ int32_t PACKET::appendString(std::string& cmd)
 int32_t PACKET::appendString(std::string& cmd, uint32_t addToSize)
 {
 	int32_t size = cmd.length();
-	if (pOffset + size < Client_BUFFER_SIZE)
+	if (pOffset + size < CLIENT_BUFFER_SIZE)
 	{
 		strcpy_s((char *)&buffer[pOffset], size + 1, &cmd[0]);
 		pOffset += addToSize;
@@ -83,7 +83,7 @@ int32_t PACKET::appendString(std::string& cmd, uint32_t addToSize)
 int32_t PACKET::setString(std::string& cmd, uint32_t offset)
 {
 	int32_t size = cmd.length();
-	if (offset + size < Client_BUFFER_SIZE)
+	if (offset + size < CLIENT_BUFFER_SIZE)
 	{
 		strcpy_s((char *)&buffer[offset], size + 1, &cmd[0]);
 		return size + 1;
@@ -101,7 +101,7 @@ std::string PACKET::getString(uint32_t offset)
 std::string PACKET::getString(uint32_t offset, uint32_t size)
 {
 	std::string tempString;
-	if (offset + size > Client_BUFFER_SIZE)
+	if (offset + size > CLIENT_BUFFER_SIZE)
 		return "";
 	tempString.assign((char*)&buffer[offset], size);
 	if (tempString.find("\0") != std::string::npos)
@@ -112,7 +112,7 @@ std::string PACKET::getString(uint32_t offset, uint32_t size)
 std::string PACKET::getStringA(uint32_t size)
 {
 	std::string tempString;
-	if (pOffset + size > Client_BUFFER_SIZE)
+	if (pOffset + size > CLIENT_BUFFER_SIZE)
 		return "";
 	tempString.assign((char*)&buffer[pOffset], size);
 	if (tempString.find("\0") != std::string::npos)

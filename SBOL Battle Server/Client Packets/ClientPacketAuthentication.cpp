@@ -14,7 +14,7 @@ void ClientPacketAuthentication(Client* client)
 		if (clientVer == 0x53427B00 /* new client */)
 			//if (clientVer == 0x544D0100 /* Tofuman client */)
 		{
-			if (client->server->getStatus() == Server::SS_RUNNING && client->server->getConnectedToMANAGEMENTSERVER())
+			if (client->server->getStatus() == Server::SS_RUNNING && client->server->getConnectedToManagementServer())
 			{
 				client->sendWelcome = 0;
 				if (client->setUsername(std::string((char*)&client->inbuf.buffer[0x08])))

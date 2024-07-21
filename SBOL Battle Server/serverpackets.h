@@ -1,15 +1,15 @@
 #pragma once
 #include "managementserver.h"
 
-typedef void(PacketFunction)(MANAGEMENTSERVER* managementserver);
+typedef void(PacketFunction)(ManagementServer* managementserver);
 
-void ServerAuth(MANAGEMENTSERVER* managementserver);
-void ClientAuth(MANAGEMENTSERVER* managementserver);
-void ClientRequests(MANAGEMENTSERVER* managementserver);
-void ClientOperations(MANAGEMENTSERVER* managementserver);
-void ServerOperations(MANAGEMENTSERVER* managementserver);
+void ServerAuth(ManagementServer* managementserver);
+void ClientAuth(ManagementServer* managementserver);
+void ClientRequests(ManagementServer* managementserver);
+void ClientOperations(ManagementServer* managementserver);
+void ServerOperations(ManagementServer* managementserver);
 
-void ClientPacketDoNothing(MANAGEMENTSERVER* managementserver) { }
+void ClientPacketDoNothing(ManagementServer* managementserver) { }
 
 PacketFunction* PacketFunctions[] =
 {

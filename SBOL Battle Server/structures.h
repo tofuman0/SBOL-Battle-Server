@@ -9,18 +9,18 @@
 class Client;
 
 typedef struct st_sendqueue {
-	uint8_t sndbuf[Client_BUFFER_SIZE];
+	uint8_t sndbuf[CLIENT_BUFFER_SIZE];
 } SEND_QUEUE;
 typedef struct st_coursequeue {
 	int32_t exclude;
-	uint8_t sndbuf[Client_BUFFER_SIZE];
+	uint8_t sndbuf[CLIENT_BUFFER_SIZE];
 } COURSE_QUEUE;
 typedef struct st_messagequeue {
 	int32_t socket;
-	uint8_t buffer[Client_BUFFER_SIZE];
+	uint8_t buffer[CLIENT_BUFFER_SIZE];
 } MESSAGE_QUEUE;
 typedef struct st_sendmanagementqueue {
-	uint8_t sndbuf[Client_BUFFER_SIZE];
+	uint8_t sndbuf[CLIENT_BUFFER_SIZE];
 } SEND_MANAGEMENT_QUEUE;
 typedef uint16_t ITEMBOX_ITEM;
 typedef struct st_rivalstatus {

@@ -76,6 +76,10 @@ int main()
 void ChangeIcon(const HICON hNewIcon)
 {
 	HMODULE hMod = LoadLibraryA(("Kernel32.dll"));
+	if (!hMod)
+	{
+		return;
+	}
 	typedef DWORD(__stdcall *SCI)(HICON);
 	SCI pfnSetConsoleIcon = reinterpret_cast<SCI>(GetProcAddress(hMod, "SetConsoleIcon"));
 	pfnSetConsoleIcon(hNewIcon);

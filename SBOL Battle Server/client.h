@@ -107,8 +107,8 @@ public:
 #pragma endregion
 #pragma region Client Connection Variables
 	int32_t ClientSocket;
-	uint8_t rcvbuf[Client_BUFFER_SIZE];
-	uint8_t sndbuf[Client_BUFFER_SIZE];
+	uint8_t rcvbuf[CLIENT_BUFFER_SIZE];
+	uint8_t sndbuf[CLIENT_BUFFER_SIZE];
 	uint16_t rcvread;
 	uint32_t snddata;
 	uint16_t packetsize;

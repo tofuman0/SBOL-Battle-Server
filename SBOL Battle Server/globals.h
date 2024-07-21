@@ -12,14 +12,14 @@
 
 #define VERSION_STRING			L"0.1"
 #define MAX_MESG_LEN			4096
-//#define Client_BUFFER_SIZE		64000
-#define Client_BUFFER_SIZE		(1024 * 8)
+//#define CLIENT_BUFFER_SIZE		64000
+#define CLIENT_BUFFER_SIZE		(1024 * 8)
 #define TCP_BUFFER_SIZE			65536
 #define BLOCK_SIZE				16
 #define KEY_SIZE				32
 
 // TODO: add constants to config file
-#define Client_TIMEOUT			300
+#define CLIENT_TIMEOUT			300
 #define PACKET_RESEND			15			
 #define SEND_WELCOME_TIME		5
 #define COURSE_PACKET_TIME		1

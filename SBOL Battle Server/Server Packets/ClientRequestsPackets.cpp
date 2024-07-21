@@ -3,7 +3,7 @@
 #include "..\server.h"
 #include "..\structures.h"
 
-void ClientRequests(MANAGEMENTSERVER* managementserver)
+void ClientRequests(ManagementServer* managementserver)
 {
 	Server* server = managementserver->server;
 	managementserver->inbuf.setOffset(0x06);
