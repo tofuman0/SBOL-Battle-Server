@@ -8,7 +8,7 @@
 
 class Client;
 
-class COURSE
+class Course
 {
 private:
 	int32_t course;
@@ -16,8 +16,8 @@ private:
 	time_t nextSend;
 	int32_t tempValue1 = 0;
 public:
-	COURSE();
-	~COURSE();
+	Course();
+	~Course();
 	Logger* logger;
 	std::vector<Client*> courseClient;
 	PACKET coursebuf;

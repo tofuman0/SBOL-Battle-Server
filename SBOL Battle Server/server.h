@@ -141,7 +141,7 @@ public:
 		DC_BANNED
 	};
 	std::vector<Client*> connections;
-	std::vector<COURSE*> courses[COURSE_DIMENSIONS];
+	std::vector<Course*> courses[COURSE_DIMENSIONS];
 	std::vector<uint32_t> expToLevel;
 	std::vector<RIVALDATA> rivalData;
 	P_DAT pDAT;

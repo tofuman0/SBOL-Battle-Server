@@ -1,7 +1,7 @@
 #include "course.h"
 #include "client.h"
 
-COURSE::COURSE()
+Course::Course()
 {
 	courseClient.clear();
 	courseClient.resize(COURSE_PLAYER_LIMIT);
@@ -15,10 +15,10 @@ COURSE::COURSE()
 	logger = nullptr;
 	nextSend = 0;
 }
-COURSE::~COURSE()
+Course::~Course()
 {
 }
-void COURSE::sendToCourse(PACKET* src, int32_t exclude)
+void Course::sendToCourse(PACKET* src, int32_t exclude)
 {
 	for (auto& client : courseClient)
 	{
@@ -44,7 +44,7 @@ void COURSE::sendToCourse(PACKET* src, int32_t exclude)
 		}
 	}
 }
-void COURSE::sendToProximity(PACKET* src, float x, float y, int32_t exclude)
+void Course::sendToProximity(PACKET* src, float x, float y, int32_t exclude)
 {
 	for (auto& client : courseClient)
 	{
@@ -74,7 +74,7 @@ void COURSE::sendToProximity(PACKET* src, float x, float y, int32_t exclude)
 		}
 	}
 }
-void COURSE::sendToClient(PACKET* src, int32_t driverslicense)
+void Course::sendToClient(PACKET* src, int32_t driverslicense)
 {
 	for (auto& client : courseClient)
 	{
@@ -90,7 +90,7 @@ void COURSE::sendToClient(PACKET* src, int32_t driverslicense)
 		}
 	}
 }
-void COURSE::sendToID(PACKET* src, int16_t clientID)
+void Course::sendToID(PACKET* src, int16_t clientID)
 {
 	if (courseClient[clientID] == nullptr) return;
 	uint16_t size = src->getSize();
@@ -98,7 +98,7 @@ void COURSE::sendToID(PACKET* src, int16_t clientID)
 	courseClient[clientID]->addToSendQueue(src);
 	return;
 }
-uint32_t COURSE::getClientCount()
+uint32_t Course::getClientCount()
 {
 	uint32_t count = 0;
 	for (auto& client : courseClient)
@@ -107,7 +107,7 @@ uint32_t COURSE::getClientCount()
 	}
 	return count;
 }
-Client* COURSE::getClient(uint16_t clientID)
+Client* Course::getClient(uint16_t clientID)
 {
 	for (auto& client : courseClient)
 	{
@@ -115,7 +115,7 @@ Client* COURSE::getClient(uint16_t clientID)
 	}
 	return nullptr;
 }
-int32_t COURSE::addClient(Client* in)
+int32_t Course::addClient(Client* in)
 {
 	int32_t freeClient = -1;
 	if (findClient(in) == -1)
@@ -130,7 +130,7 @@ int32_t COURSE::addClient(Client* in)
 	}
 	return freeClient;
 }
-void COURSE::removeClient(Client* in)
+void Course::removeClient(Client* in)
 {
 	int32_t clientIndex = findClient(in);
 	if (clientIndex != -1)
@@ -158,7 +158,7 @@ void COURSE::removeClient(Client* in)
 		courseClient[clientIndex] = nullptr;
 	}
 }
-int32_t COURSE::findClient(Client* in)
+int32_t Course::findClient(Client* in)
 {
 	for (uint32_t i = 0; i < courseClient.size(); i++)
 	{
@@ -169,7 +169,7 @@ int32_t COURSE::findClient(Client* in)
 	}
 	return -1;
 }
-Client* COURSE::findClient(int32_t in)
+Client* Course::findClient(int32_t in)
 {
 	for (auto& client : courseClient)
 	{
@@ -180,7 +180,7 @@ Client* COURSE::findClient(int32_t in)
 	}
 	return nullptr;
 }
-int32_t COURSE::getFree()
+int32_t Course::getFree()
 {
 	for (uint32_t i = 0; i < courseClient.size(); i++)
 	{
@@ -188,7 +188,7 @@ int32_t COURSE::getFree()
 	}
 	return -1;
 }
-void COURSE::sendCourseRacers(int32_t driverslicense)
+void Course::sendCourseRacers(int32_t driverslicense)
 {
 	if (courseClient.size() > 0)
 	{
@@ -237,7 +237,7 @@ void COURSE::sendCourseRacers(int32_t driverslicense)
 		}
 	}
 }
-void COURSE::sendRacerPositions()
+void Course::sendRacerPositions()
 {
 	if (courseClient.size() > 0 && nextSend < time(NULL))
 	{

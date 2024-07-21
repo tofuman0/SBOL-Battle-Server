@@ -253,7 +253,7 @@ void Server::initialize() {
 		courses[i].resize(COURSE_COUNT);
 		for (auto& course : courses[i])
 		{
-			course = new COURSE();
+			course = new Course();
 			course->setIndex(i);
 			course->logger = &logger;
 			course->setCourse(courseNum++);

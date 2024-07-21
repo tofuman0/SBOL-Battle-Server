@@ -9,7 +9,7 @@
 #include "Logger.h"
 #include "rival.h"
 
-class COURSE;
+class Course;
 class Server;
 class Rival;
 
@@ -98,7 +98,7 @@ public:
 #pragma region Client Class Pointers
 	Logger* logger;
 	Server* server;
-	COURSE* course;
+	Course* course;
 	BATTLE battle;
 #pragma endregion
 #pragma region Client rival data
