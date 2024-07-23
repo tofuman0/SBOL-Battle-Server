@@ -25,7 +25,7 @@ uint32_t ManagementServer::Start(Server* serverptr)
 {
 	initialize();
 	server = serverptr;
-	logger = &server->logger;
+	logger = server->logger;
 	if (LoadKey())
 	{
 		logger->Log(Logger::LOGTYPE_MANAGEMENT, L"Management key failed to load.");

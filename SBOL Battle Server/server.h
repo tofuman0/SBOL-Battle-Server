@@ -149,7 +149,7 @@ public:
 	PARTSHOPDATA shopData;
 	ITEMDATA itemData;
 	uint8_t* hDAT;
-	Logger logger;
+	Logger* logger;
 	ManagementServer managementserver;
 	std::vector<uint32_t> startingCars;
 	uint32_t shopBasePrices[11] = {
@@ -227,6 +227,7 @@ private:
 	std::string toNarrow(std::wstring in);
 	char hexStr[(MAX_MESG_LEN + 1) * 2];
 	const wchar_t* CONFIG_FILENAME = L"config.json";
+	const char* DEFAULT_JSON_CONFIG = "{\n\t\"servername\":\"SBOL\",\n\t\"serverport\":47701,\n\t\"serverclientlimit\":100,\n\t\"serverwelcomemessage\":\"Welcome to SBOL\",\n\t\"managementserverport\":7946,\n\t\"managementserveraddress\":\"localhost\",\n\t\"logpath\":\".\\\\log\"\n}";
 	uint16_t serverPort;
 	std::string serverName;
 	uint32_t serverClientLimit;

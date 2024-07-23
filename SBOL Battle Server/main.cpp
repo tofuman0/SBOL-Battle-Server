@@ -46,7 +46,7 @@ int main()
 	srand(timeGetTime()); // Seed RNG
 	Server* server = new Server();
 	char titleBuf[0x100];
-	snprintf(titleBuf, sizeof(titleBuf), "SBOL Battle Server v%s. Clients: 0", server->logger.toNarrow(VERSION_STRING).c_str());
+	snprintf(titleBuf, sizeof(titleBuf), "SBOL Battle Server v%s. Clients: 0", server->logger->toNarrow(VERSION_STRING).c_str());
 	SetConsoleTitleA(titleBuf);
 
 	HMODULE mainMod = GetModuleHandle(0);
@@ -55,11 +55,10 @@ int main()
 	assert(mainIcon);
 	ChangeIcon(mainIcon);
 
-	server->logger.Log(Logger::LOGTYPE_NONE, L"SBOL Server version %s by Tofuman", VERSION_STRING);
-	server->logger.Log(Logger::LOGTYPE_NONE, L"-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+	server->logger->Log(Logger::LOGTYPE_NONE, L"Starting . . .");
 	if (server->Start())
 	{
-		server->logger.Log(Logger::LOGTYPE_ERROR, L"Server failed to start");
+		server->logger->Log(Logger::LOGTYPE_ERROR, L"Server failed to start");
 		return 1;
 	}
 
