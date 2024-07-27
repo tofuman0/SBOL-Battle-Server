@@ -757,4 +757,19 @@ void ManagementServer::RemoveCar(uint32_t license, uint32_t bay)
 	outbuf.append<uint32_t>(bay);
 	Send();
 }
+void ManagementServer::SendCheckCredentials(Client* client)
+{
+	outbuf.clearBuffer();
+	outbuf.setSize(0x06);
+	outbuf.setOffset(0x06);
+	outbuf.setType(0x0001);
+	outbuf.setSubType(0x0000);
+	outbuf.append<int32_t>(client->ClientSocket);
+	outbuf.appendString(client->username, 0x14);
+	outbuf.appendArray((uint8_t*)&client->inbuf.buffer[0x04], client->inbuf.getSize() - 2);
+	if (Send())
+	{
+		client->SendAuthError(Server::AUTHLIST::AUTH_BUSY);
+	}
+}
 #pragma endregion

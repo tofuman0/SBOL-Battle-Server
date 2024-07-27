@@ -18,50 +18,15 @@ void ClientPacketCar(Client* client)
 	case 0x201:
 	{	// Car Settings
 		uint32_t bay = client->inbuf.get<uint32_t>(0x04) - 1;
-
-		if (bay >= (uint32_t)(client->garagedata.garageCount * 4) || client->garagedata.car[bay].carID == 0xFFFFFFFF)
-		{
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u has specified invalid bay number when requesting car data.",
-				client->logger->toWide(client->handle).c_str(),
-				client->driverslicense,
-				client->logger->toWide((char*)&client->IP_Address).c_str()
-			);
-			client->Disconnect();
-			return;
-		}
-
-		if (!client->garagedata.activeCar)
-		{
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client has no active car.");
-			client->Disconnect();
-			return;
-		}
-		client->SendCarData(bay);
-		return;
+		client->GetCarSettings(bay);
 	}
-	break;
+	return;
 	case 0x202:
 	{	// Client Switched cars
-		uint32_t selectedCar = client->inbuf.get<uint32_t>(0x04);
-		if (selectedCar > client->garagedata.car.size() || selectedCar < 1)
-		{
-			client->Disconnect();
-			return;
-		}
-		if (client->garagedata.car[selectedCar - 1].carID == 0xFFFFFFFF)
-		{
-			client->Disconnect();
-			return;
-		}
-		client->setActiveCar(selectedCar - 1);
-		client->outbuf.clearBuffer();
-		client->outbuf.setSize(0x06);
-		client->outbuf.setOffset(0x06);
-		client->outbuf.setType(0x200);
-		client->outbuf.setSubType(0x282);
-		client->outbuf.append<uint32_t>(selectedCar);
+		uint32_t bay = client->inbuf.get<uint32_t>(0x04);
+		client->SwitchCar(bay);
 	}
-	break;
+	return;
 	case 0x203:
 	{	// Purchase Car
 		// 0x04: Car ID
@@ -73,94 +38,18 @@ void ClientPacketCar(Client* client)
 		// 0x1C: Colour1 B
 		// 0x20: Cost
 		uint32_t carID = client->inbuf.get<uint32_t>(0x04);
-		float r1 = client->inbuf.get<float>(0x08);
-		float g1 = client->inbuf.get<float>(0x0C);
-		float b1 = client->inbuf.get<float>(0x10);
-		float r2 = client->inbuf.get<float>(0x14);
-		float g2 = client->inbuf.get<float>(0x18);
-		float b2 = client->inbuf.get<float>(0x1C);
+		COLOUR2 colour = {
+			client->inbuf.get<float>(0x08),
+			client->inbuf.get<float>(0x0C),
+			client->inbuf.get<float>(0x10),
+			client->inbuf.get<float>(0x14),
+			client->inbuf.get<float>(0x18),
+			client->inbuf.get<float>(0x1C)
+		};
 		uint32_t cost = client->inbuf.get<uint32_t>(0x20);
-
-		if (client->isInCarShop(carID) == -1)
-		{
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase car not in shop. Car ID %u.",
-				client->logger->toWide(client->handle).c_str(),
-				client->driverslicense,
-				client->logger->toWide((char*)&client->IP_Address).c_str(),
-				carID
-			);
-			client->Disconnect();
-			return;
-		}
-
-		uint16_t finalPrice = client->getShopCarPrice(carID);
-		if (finalPrice == -1 || cost != finalPrice)
-		{
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has provided different price for car than expected. Car ID %u, Cost %u, Real Cost %u.",
-				client->logger->toWide(client->handle).c_str(),
-				client->driverslicense,
-				client->logger->toWide((char*)&client->IP_Address).c_str(),
-				carID,
-				cost,
-				finalPrice
-			);
-			client->Disconnect();
-			return;
-		}
-
-		int32_t emptyBay = client->getEmptyBay();
-		if (emptyBay == -1 || emptyBay > 3)
-		{
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase car with no room in garage. Car ID %u.",
-				client->logger->toWide(client->handle).c_str(),
-				client->driverslicense,
-				client->logger->toWide((char*)&client->IP_Address).c_str(),
-				carID
-			);
-			client->Disconnect();
-			return;
-		}
-
-		if (client->enoughCP(finalPrice))
-		{
-			if (client->addCar(carID, emptyBay, r1, g1, b1, r2, g2, b2) == true) client->takeCP(finalPrice);
-			else
-			{
-				client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase car from the car but there was an error adding car to garage. Car ID %u, Car count: %u.",
-					client->logger->toWide(client->handle).c_str(),
-					client->driverslicense,
-					client->logger->toWide((char*)&client->IP_Address).c_str(),
-					carID,
-					client->getCarCount()
-				);
-				client->Disconnect();
-				return;
-			}
-		}
-		else
-		{
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase car from the car shop without enough CP. Car ID %u, Client CP %u, Real Cost %u.",
-				client->logger->toWide(client->handle).c_str(),
-				client->driverslicense,
-				client->logger->toWide((char*)&client->IP_Address).c_str(),
-				carID,
-				client->getCP(),
-				finalPrice
-			);
-			client->Disconnect();
-			return;
-		}
-
-
-		client->outbuf.clearBuffer();
-		client->outbuf.setSize(0x06);
-		client->outbuf.setOffset(0x06);
-		client->outbuf.setType(0x200);
-		client->outbuf.setSubType(0x283);
-		client->outbuf.append<int32_t>(emptyBay + 1); // Available Slot
-		client->outbuf.append<int64_t>(client->getCP());
+		client->PurchaseCar(carID, colour, cost);
 	}
-	break;
+	return;
 	case 0x204:
 	{	// Sell car
 		// Bay @ 0x04

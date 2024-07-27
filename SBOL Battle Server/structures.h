@@ -67,6 +67,14 @@ typedef struct st_teamjoinrequests {
 	char name[16];
 	uint32_t rank;
 } TEAMJOINREQUESTS;
+typedef struct st_colour2 {
+	float R1;
+	float G1;
+	float B1;
+	float R2;
+	float G2;
+	float B2;
+} COLOUR2;
 typedef struct st_carmods {
 	float colour1_R;
 	float colour1_G;

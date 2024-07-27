@@ -136,6 +136,10 @@ int32_t Client::getEmptyBay()
 	}
 	return -1;
 }
+bool Client::addCar(int32_t carID, uint32_t bay, COLOUR2 colour)
+{
+	return addCar(carID, bay, colour.R1, colour.G1, colour.B1, colour.R2, colour.G2, colour.B2);
+}
 bool Client::addCar(int32_t carID, uint32_t bay, float r1, float g1, float b1, float r2, float g2, float b2)
 {
 	if ((garagedata.garageCount * 4) <= GARAGE_LIMIT)
@@ -683,7 +687,7 @@ bool Client::confirmClass(uint32_t bay, CARCLASS carClass)
 }
 uint8_t Client::getCarClass(int32_t bay)
 {
-	if (bay = -1) bay = getActiveCar();
+	if (bay == -1) bay = getActiveCar();
 	S_DAT_ENTRY* sDAT = &server->sDAT.sdat[garagedata.car[bay].carID % server->sDAT.count];
 	return sDAT->carClass;
 }
@@ -1240,6 +1244,39 @@ void Client::SendWelcome(uint8_t type, std::string& name)
 	outbuf.appendString(name, 0x08); // Server Name ????
 	Send();
 }
+void Client::SendAcceptConnection()
+{
+	// Byte at 0x07 is either beginner flag or server number. Initial connections are 0 but connections to beginner is 1
+	uint32_t clientVer = inbuf.getVer() & 0xFFFFFF00;
+	if (clientVer == 0x53427B00 /* new client */)
+		//if (clientVer == 0x544D0100 /* Tofuman client */)
+	{
+		if (server->getStatus() == Server::SS_RUNNING && server->getConnectedToManagementServer())
+		{
+			sendWelcome = 0;
+			if (setUsername(std::string((char*)&inbuf.buffer[0x08])))
+			{
+				SendAuthError(Server::AUTHLIST::AUTH_INVALID_PW);
+				return;
+			}
+			else
+			{
+				SendWelcome(0, std::string("\0\1\2\4\5\6\7"));
+				return;
+			}
+		}
+		else
+		{
+			SendAuthError(Server::AUTHLIST::AUTH_BUSY);
+			return;
+		}
+	}
+	else
+	{
+		SendAuthError(Server::AUTHLIST::AUTH_OUTDATED);
+		return;
+	}
+}
 void Client::SendAuthError(std::string& cmd)
 {
 	outbuf.clearBuffer();
@@ -1259,6 +1296,21 @@ void Client::SendAuthError(uint8_t cmd)
 	outbuf.setType(0x100);
 	outbuf.setSubType(0x181);
 	outbuf.append<uint8_t>(cmd);
+	Send();
+}
+void Client::SendCareerRecord()
+{
+	outbuf.clearBuffer();
+	outbuf.setSize(0x06);
+	outbuf.setOffset(0x06);
+	outbuf.setType(0xC00);
+	outbuf.setSubType(0xC80);
+	outbuf.append<uint16_t>(careerdata.playerWin + careerdata.playerLose); // Player total
+	outbuf.append<uint16_t>(careerdata.playerWin); // VS Player Win
+	outbuf.append<uint16_t>(careerdata.playerLose); // VS Player Lose
+	outbuf.append<uint16_t>(careerdata.rivalWin + careerdata.rivalLose); // Rival total
+	outbuf.append<uint16_t>(careerdata.rivalWin); // VS Rival Win
+	outbuf.append<uint16_t>(careerdata.rivalLose); // VS Rival Lose
 	Send();
 }
 void Client::SendCourseJoin(uint8_t notify)
@@ -1312,6 +1364,66 @@ void Client::SendCourseJoin(uint8_t notify)
 		getRivals();
 		SendRivalJoin();
 	}
+}
+void Client::SendRivalRecords()
+{
+	int32_t count = static_cast<int32_t>(inbuf.get<uint8_t>(0x04));
+	if (inbuf.getSize() < 5 + (count * sizeof(int32_t)) || count > sizeof(careerdata.rivalStatus) / sizeof(RIVAL_STATUS))
+	{
+		logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has sent invalid 0xC01 packet.",
+			logger->toWide(handle).c_str(),
+			driverslicense,
+			logger->toWide((char*)&IP_Address).c_str()
+		);
+		Disconnect();
+		return;
+	}
+	outbuf.clearBuffer();
+	outbuf.setSize(0x06);
+	outbuf.setOffset(0x06);
+	outbuf.setType(0xC00);
+	outbuf.setSubType(0xC81);
+
+	outbuf.append<uint8_t>(count); // Rival count should be 0x64 as even removed rival ID's are processed
+
+	uint8_t status_remaps[] = { 3, 0, 1, 2 };
+	inbuf.addOffset(0x05);
+	for (int32_t i = 0; i < count; i++)
+	{
+		uint32_t currentID = inbuf.get<uint32_t>();
+		if (currentID >= sizeof(careerdata.rivalStatus) / sizeof(RIVAL_STATUS))
+		{
+			logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has sent invalid 0xC01 packet.",
+				logger->toWide(handle).c_str(),
+				driverslicense,
+				logger->toWide((char*)&IP_Address).c_str()
+			);
+			Disconnect();
+			return;
+		}
+		outbuf.append<uint32_t>(currentID); // Rival id. Must be loop index. Game is missing some teams.
+		int32_t check = 0;
+		for (int32_t j = 0; j < 8; j++) check += careerdata.rivalStatus[currentID].rivalMember[j] ? 1 : 0;
+		outbuf.append<uint8_t>(check ? 0x08 : 0x00); // Team count
+		// 0 - Seen / Show
+		// 1 - Lost
+		// 2 - Won
+		// 3 - Not Seen / Hide
+		if (check)
+		{
+			outbuf.append<uint8_t>(status_remaps[careerdata.rivalStatus[currentID].rivalMember[0x00] % sizeof(status_remaps)]); // Rival 1 // Boss
+			outbuf.append<uint8_t>(status_remaps[careerdata.rivalStatus[currentID].rivalMember[0x01] % sizeof(status_remaps)]); // Rival 2
+			outbuf.append<uint8_t>(status_remaps[careerdata.rivalStatus[currentID].rivalMember[0x02] % sizeof(status_remaps)]); // Rival 3
+			outbuf.append<uint8_t>(status_remaps[careerdata.rivalStatus[currentID].rivalMember[0x03] % sizeof(status_remaps)]); // Rival 4
+			outbuf.append<uint8_t>(status_remaps[careerdata.rivalStatus[currentID].rivalMember[0x04] % sizeof(status_remaps)]); // Rival 5
+			outbuf.append<uint8_t>(status_remaps[careerdata.rivalStatus[currentID].rivalMember[0x05] % sizeof(status_remaps)]); // Rival 6
+			outbuf.append<uint8_t>(status_remaps[careerdata.rivalStatus[currentID].rivalMember[0x06] % sizeof(status_remaps)]); // Rival 7
+			outbuf.append<uint8_t>(status_remaps[careerdata.rivalStatus[currentID].rivalMember[0x07] % sizeof(status_remaps)]); // Rival 8 // Lowest
+		}
+		//outbuf.append<uint32_t>(careerdata.rivalStatus[currentID].wins); // Boss Defeats I don't think this should be the wins as there is a limit of a few hundred. Maybe unlocked members?
+		outbuf.append<uint32_t>(check);
+	}
+	Send();
 }
 void Client::SendRivalJoin()
 {
@@ -1568,6 +1680,27 @@ void Client::SendSigns()
 	for (uint16_t i = 0; i < count; i++) outbuf.append<uint32_t>(tempSign[i] + 10);
 	Send();
 }
+void Client::GetCarSettings(uint32_t bay)
+{
+	if (bay >= (uint32_t)(garagedata.garageCount * 4) || garagedata.car[bay].carID == 0xFFFFFFFF)
+	{
+		logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u has specified invalid bay number when requesting car data.",
+			logger->toWide(handle).c_str(),
+			driverslicense,
+			logger->toWide((char*)&IP_Address).c_str()
+		);
+		Disconnect();
+		return;
+	}
+
+	if (!garagedata.activeCar)
+	{
+		logger->Log(Logger::LOGTYPE_Client, L"Client has no active car.");
+		Disconnect();
+		return;
+	}
+	SendCarData(bay);
+}
 void Client::SendCarData(uint32_t bay)
 {
 	if (bay >= garagedata.car.size() || bay >= (uint32_t)(garagedata.garageCount * 4) || garagedata.car[bay].carID == 0xFFFFFFFF) return;
@@ -1605,6 +1738,108 @@ void Client::SendBayDetails()
 			Send();
 		}
 	}
+}
+void Client::SwitchCar(uint32_t bay)
+{
+	if (bay > garagedata.car.size() || bay < 1)
+	{
+		Disconnect();
+		return;
+	}
+	if (garagedata.car[bay - 1].carID == 0xFFFFFFFF)
+	{
+		Disconnect();
+		return;
+	}
+	setActiveCar(bay - 1);
+	outbuf.clearBuffer();
+	outbuf.setSize(0x06);
+	outbuf.setOffset(0x06);
+	outbuf.setType(0x200);
+	outbuf.setSubType(0x282);
+	outbuf.append<uint32_t>(bay);
+	Send();
+}
+void Client::PurchaseCar(uint32_t id, COLOUR2 colour, uint32_t cost)
+{
+	if (isInCarShop(id) == -1)
+	{
+		logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase car not in shop. Car ID %u.",
+			logger->toWide(handle).c_str(),
+			driverslicense,
+			logger->toWide((char*)&IP_Address).c_str(),
+			id
+		);
+		Disconnect();
+		return;
+	}
+
+	uint16_t finalPrice = getShopCarPrice(id);
+	if (finalPrice == -1 || cost != finalPrice)
+	{
+		logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has provided different price for car than expected. Car ID %u, Cost %u, Real Cost %u.",
+			logger->toWide(handle).c_str(),
+			driverslicense,
+			logger->toWide((char*)&IP_Address).c_str(),
+			id,
+			cost,
+			finalPrice
+		);
+		Disconnect();
+		return;
+	}
+
+	int32_t emptyBay = getEmptyBay();
+	if (emptyBay == -1 || emptyBay > 3)
+	{
+		logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase car with no room in garage. Car ID %u.",
+			logger->toWide(handle).c_str(),
+			driverslicense,
+			logger->toWide((char*)&IP_Address).c_str(),
+			id
+		);
+		Disconnect();
+		return;
+	}
+
+	if (enoughCP(finalPrice))
+	{
+		if (addCar(id, emptyBay, colour) == true) takeCP(finalPrice);
+		else
+		{
+			logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase car from the car but there was an error adding car to garage. Car ID %u, Car count: %u.",
+				logger->toWide(handle).c_str(),
+				driverslicense,
+				logger->toWide((char*)&IP_Address).c_str(),
+				id,
+				getCarCount()
+			);
+			Disconnect();
+			return;
+		}
+	}
+	else
+	{
+		logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase car from the car shop without enough CP. Car ID %u, Client CP %u, Real Cost %u.",
+			logger->toWide(handle).c_str(),
+			driverslicense,
+			logger->toWide((char*)&IP_Address).c_str(),
+			id,
+			getCP(),
+			finalPrice
+		);
+		Disconnect();
+		return;
+	}
+
+	outbuf.clearBuffer();
+	outbuf.setSize(0x06);
+	outbuf.setOffset(0x06);
+	outbuf.setType(0x200);
+	outbuf.setSubType(0x283);
+	outbuf.append<int32_t>(emptyBay + 1); // Available Slot
+	outbuf.append<int64_t>(getCP());
+	Send();
 }
 void Client::SendCarData()
 {

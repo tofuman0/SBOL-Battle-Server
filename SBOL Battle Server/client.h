@@ -168,6 +168,7 @@ public:
 	int32_t joinCourse();
 	int8_t getCarCount();
 	int32_t getEmptyBay();
+	bool addCar(int32_t carID, uint32_t bay, COLOUR2 colour);
 	bool addCar(int32_t carID, uint32_t bay, float r1, float g1, float b1, float r2, float g2, float b2);
 	bool removeCar(uint32_t bay);
 	int32_t setActiveCar(uint32_t bay);
@@ -229,9 +230,12 @@ public:
 #pragma region Client Packets
 	void SendPing();
 	void SendWelcome(uint8_t type, std::string& name);
+	void SendAcceptConnection();
 	void SendAuthError(std::string& cmd);
 	void SendAuthError(uint8_t cmd);
+	void SendCareerRecord();
 	void SendCourseJoin(uint8_t notify = 1);
+	void SendRivalRecords();
 	void SendRivalJoin();
 	void SendRivalPosition();
 	void SendRemoveRivals();
@@ -244,6 +248,9 @@ public:
 	void SendPlayerStats();
 	void SendItems();
 	void SendSigns();
+	void GetCarSettings(uint32_t bay);
+	void SwitchCar(uint32_t bay);
+	void PurchaseCar(uint32_t id, COLOUR2 colour, uint32_t cost);
 	void SendCarData();
 	void SendCarData(uint32_t bay);
 	void SendBayDetails();

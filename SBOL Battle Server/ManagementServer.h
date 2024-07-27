@@ -77,6 +77,7 @@ public:
 	void SendHeartBeat();
 	void SwapCar(uint32_t license, uint8_t isSwapping, uint32_t fromBay, uint32_t toBay);
 	void RemoveCar(uint32_t license, uint32_t bay);
+	void SendCheckCredentials(Client* client);
 #pragma endregion
 private:
 	std::queue<MESSAGE_QUEUE> messagequeue;
