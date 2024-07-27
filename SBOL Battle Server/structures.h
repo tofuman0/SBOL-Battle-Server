@@ -76,12 +76,7 @@ typedef struct st_colour2 {
 	float B2;
 } COLOUR2;
 typedef struct st_carmods {
-	float colour1_R;
-	float colour1_G;
-	float colour1_B;
-	float colour2_R;
-	float colour2_G;
-	float colour2_B;
+	COLOUR2 carcolour;
 	uint8_t engine;
 	uint8_t muffler;
 	uint8_t transmission;
@@ -103,12 +98,7 @@ typedef struct st_carmods {
 	uint16_t wheels;
 	uint8_t colourwheels;
 	uint8_t unknown3[3];
-	float wheelcolour1_R;
-	float wheelcolour1_G;
-	float wheelcolour1_B;
-	float wheelcolour2_R;
-	float wheelcolour2_G;
-	float wheelcolour2_B;
+	COLOUR2 wheelcolour;
 	uint32_t stickers;
 	uint8_t tuner[16]; // Tuner name
 } CARMODS;

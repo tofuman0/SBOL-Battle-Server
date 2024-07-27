@@ -140,12 +140,12 @@ void ClientPacketCar(Client* client)
 		{
 			client->inbuf.setOffset(0x08);
 			client->takeCP(cost);
-			client->garagedata.car[bay].carMods.colour1_R = client->inbuf.get<float>();
-			client->garagedata.car[bay].carMods.colour1_G = client->inbuf.get<float>();
-			client->garagedata.car[bay].carMods.colour1_B = client->inbuf.get<float>();
-			client->garagedata.car[bay].carMods.colour2_R = client->inbuf.get<float>();
-			client->garagedata.car[bay].carMods.colour2_G = client->inbuf.get<float>();
-			client->garagedata.car[bay].carMods.colour2_B = client->inbuf.get<float>();
+			client->garagedata.car[bay].carMods.carcolour.R1 = client->inbuf.get<float>();
+			client->garagedata.car[bay].carMods.carcolour.G1 = client->inbuf.get<float>();
+			client->garagedata.car[bay].carMods.carcolour.B1 = client->inbuf.get<float>();
+			client->garagedata.car[bay].carMods.carcolour.R2 = client->inbuf.get<float>();
+			client->garagedata.car[bay].carMods.carcolour.G2 = client->inbuf.get<float>();
+			client->garagedata.car[bay].carMods.carcolour.B2 = client->inbuf.get<float>();
 			client->outbuf.append<uint32_t>(PAINT_BASE_COST * (3 - client->getCarClass())); // Cost
 			client->outbuf.append<int64_t>(client->getCP()); // CP 
 		}

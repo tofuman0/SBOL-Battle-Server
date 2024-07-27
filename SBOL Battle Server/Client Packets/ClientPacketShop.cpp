@@ -217,12 +217,12 @@ void ClientPacketShop(Client* client)
 			client->takeCP(finalPrice);
 			client->garagedata.car[bay].carMods.wheels = wheelID;
 			client->garagedata.car[bay].carMods.colourwheels = wheelType;
-			client->garagedata.car[bay].carMods.wheelcolour1_R = client->inbuf.get<float>(0x0B);
-			client->garagedata.car[bay].carMods.wheelcolour1_G = client->inbuf.get<float>(0x0F);
-			client->garagedata.car[bay].carMods.wheelcolour1_B = client->inbuf.get<float>(0x13);
-			client->garagedata.car[bay].carMods.wheelcolour2_R = client->inbuf.get<float>(0x17);
-			client->garagedata.car[bay].carMods.wheelcolour2_G = client->inbuf.get<float>(0x1B);
-			client->garagedata.car[bay].carMods.wheelcolour2_B = client->inbuf.get<float>(0x1F);
+			client->garagedata.car[bay].carMods.wheelcolour.R1 = client->inbuf.get<float>(0x0B);
+			client->garagedata.car[bay].carMods.wheelcolour.G1 = client->inbuf.get<float>(0x0F);
+			client->garagedata.car[bay].carMods.wheelcolour.B1 = client->inbuf.get<float>(0x13);
+			client->garagedata.car[bay].carMods.wheelcolour.R2 = client->inbuf.get<float>(0x17);
+			client->garagedata.car[bay].carMods.wheelcolour.G2 = client->inbuf.get<float>(0x1B);
+			client->garagedata.car[bay].carMods.wheelcolour.B2 = client->inbuf.get<float>(0x1F);
 			client->outbuf.clearBuffer();
 			client->outbuf.setSize(0x06);
 			client->outbuf.setOffset(0x06);
