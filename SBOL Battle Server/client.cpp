@@ -113,7 +113,7 @@ int32_t Client::joinCourse()
 	}
 	if (course == nullptr)
 	{
-		logger->Log(Logger::LOGTYPE_Client, L"Client can't join course.");
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client can't join course.");
 		Disconnect();
 		return 0;
 	}
@@ -409,7 +409,7 @@ uint16_t Client::getShopPartPrice(uint32_t bay, uint8_t itemCategory, uint8_t it
 		{
 			if (itemID == 0 || itemID > 9)
 			{
-				logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase invalid item from Tire/Brake shop ID %u",
+				logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to purchase invalid item from Tire/Brake shop ID %u",
 					logger->toWide(handle).c_str(),
 					driverslicense,
 					logger->toWide((char*)&IP_Address).c_str(),
@@ -498,7 +498,7 @@ uint16_t Client::getShopPartPriceFromID(uint32_t carID, uint8_t itemCategory, ui
 		{
 			if (itemID == 0 || itemID > 9)
 			{
-				logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase invalid item from Tire/Brake shop ID %u",
+				logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to purchase invalid item from Tire/Brake shop ID %u",
 					logger->toWide(handle).c_str(),
 					driverslicense,
 					logger->toWide((char*)&IP_Address).c_str(),
@@ -970,7 +970,7 @@ void Client::processBattleWin()
 		addExp((uint32_t)exp);
 		careerdata.level = getLevel();
 
-		logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u has won battle. Which lasted for %0.2f Kms. %u Exp received with %u SP remaining.",
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has won battle. Which lasted for %0.2f Kms. %u Exp received with %u SP remaining.",
 			logger->toWide(handle).c_str(),
 			driverslicense,
 			logger->toWide((char*)&IP_Address).c_str(),
@@ -1004,7 +1004,7 @@ void Client::processBattleLose()
 		addExp((uint32_t)exp);
 		careerdata.level = getLevel();
 
-		logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u has lost battle. Which lasted for %0.2f Kms. %u Exp received with %u SP remaining.",
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has lost battle. Which lasted for %0.2f Kms. %u Exp received with %u SP remaining.",
 			logger->toWide(handle).c_str(),
 			driverslicense,
 			logger->toWide((char*)&IP_Address).c_str(),
@@ -1370,7 +1370,7 @@ void Client::SendRivalRecords()
 	int32_t count = static_cast<int32_t>(inbuf.get<uint8_t>(0x04));
 	if (inbuf.getSize() < 5 + (count * sizeof(int32_t)) || count > sizeof(careerdata.rivalStatus) / sizeof(RIVAL_STATUS))
 	{
-		logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has sent invalid 0xC01 packet.",
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has sent invalid 0xC01 packet.",
 			logger->toWide(handle).c_str(),
 			driverslicense,
 			logger->toWide((char*)&IP_Address).c_str()
@@ -1393,7 +1393,7 @@ void Client::SendRivalRecords()
 		uint32_t currentID = inbuf.get<uint32_t>();
 		if (currentID >= sizeof(careerdata.rivalStatus) / sizeof(RIVAL_STATUS))
 		{
-			logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has sent invalid 0xC01 packet.",
+			logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has sent invalid 0xC01 packet.",
 				logger->toWide(handle).c_str(),
 				driverslicense,
 				logger->toWide((char*)&IP_Address).c_str()
@@ -1509,7 +1509,7 @@ void Client::SendRivalPosition()
 	// If in battle don't bother sending position but we still need to tick.
 	if(battle.status == BATTLESTATUS::BS_NOT_IN_BATTLE)
 		Send();
-	//logger->Log(Logger::LOGTYPE_Client, L"0x%04X,0x%04X,0x%04X", position.location1, position.location2, position.location3);
+	//logger->Log(Logger::LOGTYPE_CLIENT, L"0x%04X,0x%04X,0x%04X", position.location1, position.location2, position.location3);
 }
 void Client::SendRemoveRivals()
 {
@@ -1680,11 +1680,11 @@ void Client::SendSigns()
 	for (uint16_t i = 0; i < count; i++) outbuf.append<uint32_t>(tempSign[i] + 10);
 	Send();
 }
-void Client::GetCarSettings(uint32_t bay)
+void Client::SendCarSettings(uint32_t bay)
 {
 	if (bay >= (uint32_t)(garagedata.garageCount * 4) || garagedata.car[bay].carID == 0xFFFFFFFF)
 	{
-		logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u has specified invalid bay number when requesting car data.",
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has specified invalid bay number when requesting car data.",
 			logger->toWide(handle).c_str(),
 			driverslicense,
 			logger->toWide((char*)&IP_Address).c_str()
@@ -1695,7 +1695,7 @@ void Client::GetCarSettings(uint32_t bay)
 
 	if (!garagedata.activeCar)
 	{
-		logger->Log(Logger::LOGTYPE_Client, L"Client has no active car.");
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client has no active car.");
 		Disconnect();
 		return;
 	}
@@ -1719,6 +1719,258 @@ void Client::SendCarData(uint32_t bay)
 	outbuf.append<uint16_t>(garagedata.car[bay].status); // Status. 1: for sale
 	Send();
 }
+void Client::SendSellCar(uint32_t bay)
+{
+	if (getCarCount() <= 1 || bay == garagedata.activeCarBay)
+	{
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has tried to sell car but only has 1 car or is trying to sell active car.",
+			logger->toWide(handle).c_str(),
+			driverslicense,
+			logger->toWide((char*)&IP_Address).c_str()
+		);
+		Disconnect();
+		return;
+	}
+
+	if (bay >= (uint32_t)(garagedata.garageCount * 4) || garagedata.car[bay].carID == 0xFFFFFFFF)
+	{
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has specified invalid bay number in car sell shop.",
+			logger->toWide(handle).c_str(),
+			driverslicense,
+			logger->toWide((char*)&IP_Address).c_str()
+		);
+		Disconnect();
+		return;
+	}
+
+	uint32_t resalePrice = getCarSalePrice(bay);
+
+	if (removeCar(bay) == false)
+	{
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has failed to remove car from garage when selling. Bay %u.",
+			logger->toWide(handle).c_str(),
+			driverslicense,
+			logger->toWide((char*)&IP_Address).c_str(),
+			bay
+		);
+		Disconnect();
+		return;
+	}
+
+	giveCP(resalePrice);
+
+	outbuf.clearBuffer();
+	outbuf.setSize(0x06);
+	outbuf.setOffset(0x06);
+	outbuf.setType(0x200);
+	outbuf.setSubType(0x284);
+	outbuf.append<int32_t>(bay + 1);
+	outbuf.append<int64_t>(getCP());
+	Send();
+}
+void Client::SendPaintCar(uint32_t bay, uint32_t cost, COLOUR2 colour)
+{
+	if (bay >= (uint32_t)(garagedata.garageCount * 4) || garagedata.car[bay].carID == 0xFFFFFFFF)
+	{
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has specified invalid bay number in paint shop.",
+			logger->toWide(handle).c_str(),
+			driverslicense,
+			logger->toWide((char*)&IP_Address).c_str()
+		);
+		Disconnect();
+		return;
+	}
+
+	if (cost != (PAINT_BASE_COST * (3 - getCarClass())))
+	{	// Painting costs PAINT_COST
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has to purchase paint job and specified altered cost. Client Cost %u, Real Cost %u.",
+			logger->toWide(handle).c_str(),
+			driverslicense,
+			logger->toWide((char*)&IP_Address).c_str(),
+			cost,
+			(PAINT_BASE_COST * (3 - getCarClass()))
+		);
+		Disconnect();
+		return;
+	}
+	else if (bay < (uint32_t)(garagedata.garageCount * 4) && garagedata.car[bay].carID != 0xFFFFFFFF && enoughCP(cost))
+	{
+		takeCP(cost);
+		garagedata.car[bay].carMods.carcolour = colour;
+		outbuf.clearBuffer();
+		outbuf.setSize(0x06);
+		outbuf.setOffset(0x06);
+		outbuf.setType(0x200);
+		outbuf.setSubType(0x285);
+		outbuf.append<uint32_t>(PAINT_BASE_COST * (3 - getCarClass())); // Cost
+		outbuf.append<int64_t>(getCP()); // CP 
+		Send();
+	}
+	else
+	{	// Client shouldn't be able to get here if they can't afford it.
+		Disconnect();
+		return;
+	}
+}
+void Client::SendCarValue(uint32_t bay)
+{
+
+	if (bay >= (uint32_t)(garagedata.garageCount * 4) || garagedata.car[bay].carID == 0xFFFFFFFF)
+	{
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has specified invalid bay number in car sell shop.",
+			logger->toWide(handle).c_str(),
+			driverslicense,
+			logger->toWide((char*)&IP_Address).c_str()
+		);
+		Disconnect();
+		return;
+	}
+
+	if (bay == getActiveCar())
+	{
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has specified active bay number in car sell shop.",
+			logger->toWide(handle).c_str(),
+			driverslicense,
+			logger->toWide((char*)&IP_Address).c_str()
+		);
+		Disconnect();
+		return;
+	}
+
+	uint32_t salePrice = getCarSalePrice(bay);
+
+	outbuf.clearBuffer();
+	outbuf.setSize(0x06);
+	outbuf.setOffset(0x06);
+	outbuf.setType(0x200);
+	outbuf.setSubType(0x287);
+	outbuf.append<uint32_t>(bay + 1); // Bay
+	outbuf.append<uint32_t>(salePrice); // Sale Value
+	Send();
+}
+void Client::SendCarShop()
+{
+	outbuf.clearBuffer();
+	outbuf.setSize(0x06);
+	outbuf.setOffset(0x06);
+	outbuf.setType(0x200);
+	outbuf.setSubType(0x288);
+	shopCars.clear();
+	for (uint32_t i = 0; i < server->itemData.count; i++)
+	{
+		if (server->itemData.data[i].itemType == 0 && isValidCar(server->itemData.data[i].carID)) shopCars.push_back(server->itemData.data[i].carID);
+	}
+	outbuf.append<uint16_t>((uint16_t)shopCars.size());
+	for (uint32_t i = 0; i < shopCars.size(); i++) outbuf.append<uint32_t>(shopCars[i]);
+	Send();
+}
+void Client::SendPaintShopPrice()
+{
+	outbuf.clearBuffer();
+	outbuf.setSize(0x06);
+	outbuf.setOffset(0x06);
+	outbuf.setType(0x200);
+	outbuf.setSubType(0x289);
+	outbuf.append<uint32_t>(getActiveCar() + 1); // Active Car
+	outbuf.append<uint32_t>(PAINT_BASE_COST * (3 - getCarClass())); // Paint Cost
+	Send();
+}
+void Client::SendOverhaulPrice(uint32_t bay)
+{
+	if (bay >= (uint32_t)(garagedata.garageCount * 4) || garagedata.car[bay].carID == 0xFFFFFFFF)
+	{
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has specified invalid bay number in engine overhaul.",
+			logger->toWide(handle).c_str(),
+			driverslicense,
+			logger->toWide((char*)&IP_Address).c_str()
+		);
+		Disconnect();
+		return;
+	}
+	uint32_t overhaulPrice = calculateOverhaul(bay);
+
+	outbuf.clearBuffer();
+	outbuf.setSize(0x08);
+	outbuf.setOffset(0x06);
+	outbuf.setType(0x200);
+	outbuf.setSubType(0x28A);
+	outbuf.append<uint32_t>(bay); // Active Car
+	outbuf.append<uint32_t>(overhaulPrice); // Overhaul Cost
+	Send();
+}
+void Client::SendOverhaul(uint32_t bay, uint32_t cost)
+{
+	if (bay >= (uint32_t)(garagedata.garageCount * 4) || garagedata.car[bay].carID == 0xFFFFFFFF)
+	{
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has specified invalid bay number in engine overhaul.",
+			logger->toWide(handle).c_str(),
+			driverslicense,
+			logger->toWide((char*)&IP_Address).c_str()
+		);
+		Disconnect();
+		return;
+	}
+	uint32_t overhaulPrice = calculateOverhaul(bay);
+	if (cost != overhaulPrice)
+	{
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has provided incorrect cost for engine overhaul. Client Cost %u, Real Cost %u.",
+			logger->toWide(handle).c_str(),
+			driverslicense,
+			logger->toWide((char*)&IP_Address).c_str(),
+			cost,
+			overhaulPrice
+		);
+		Disconnect();
+		return;
+	}
+	if (enoughCP(overhaulPrice))
+	{
+		takeCP(overhaulPrice);
+		garagedata.car[bay].engineCondition = 10099;
+		outbuf.clearBuffer();
+		outbuf.setSize(0x08);
+		outbuf.setOffset(0x06);
+		outbuf.setType(0x200);
+		outbuf.setSubType(0x28B);
+		outbuf.append<uint32_t>(bay + 1); // Active Car
+		outbuf.append<int64_t>(getCP()); // CP
+		outbuf.append<uint8_t>(1); // Success
+		outbuf.append<uint16_t>((uint16_t)garagedata.car[bay].engineCondition / 100); // Condition
+		outbuf.append<uint8_t>(0); // Status?
+		Send();
+	}
+	else
+	{
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has attempted to pay for engine overhaul without enough CP. Client CP %u, Cost %u.",
+			logger->toWide(handle).c_str(),
+			driverslicense,
+			logger->toWide((char*)&IP_Address).c_str(),
+			overhaulPrice,
+			getCP()
+		);
+		Disconnect();
+		return;
+	}
+}
+void Client::SendTunedCarPurchaseList()
+{
+	outbuf.clearBuffer();
+	outbuf.setSize(0x08);
+	outbuf.setOffset(0x06);
+	outbuf.setType(0x200);
+	outbuf.setSubType(0x28C);
+	outbuf.append<uint32_t>(0); // ????
+	outbuf.append<uint32_t>(0); // ????
+	outbuf.append<uint16_t>(0); // Car count
+	//outbuf.append<uint32_t>(3); // ????
+	//outbuf.append<uint32_t>(4); // ????
+	//outbuf.append<uint32_t>(5); // ????
+	//outbuf.append<uint32_t>(6); // ????
+	//outbuf.addOffset(0x20);
+	//outbuf.addSize(0x20);
+	//outbuf.append<uint8_t>(0);
+	Send();
+}
 void Client::SendBayDetails()
 {
 	uint32_t limit = (uint32_t)(garagedata.garageCount * 4);
@@ -1739,7 +1991,7 @@ void Client::SendBayDetails()
 		}
 	}
 }
-void Client::SwitchCar(uint32_t bay)
+void Client::SendSwitchCar(uint32_t bay)
 {
 	if (bay > garagedata.car.size() || bay < 1)
 	{
@@ -1760,11 +2012,11 @@ void Client::SwitchCar(uint32_t bay)
 	outbuf.append<uint32_t>(bay);
 	Send();
 }
-void Client::PurchaseCar(uint32_t id, COLOUR2 colour, uint32_t cost)
+void Client::SendPurchaseCar(uint32_t id, COLOUR2 colour, uint32_t cost)
 {
 	if (isInCarShop(id) == -1)
 	{
-		logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase car not in shop. Car ID %u.",
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to purchase car not in shop. Car ID %u.",
 			logger->toWide(handle).c_str(),
 			driverslicense,
 			logger->toWide((char*)&IP_Address).c_str(),
@@ -1777,7 +2029,7 @@ void Client::PurchaseCar(uint32_t id, COLOUR2 colour, uint32_t cost)
 	uint16_t finalPrice = getShopCarPrice(id);
 	if (finalPrice == -1 || cost != finalPrice)
 	{
-		logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has provided different price for car than expected. Car ID %u, Cost %u, Real Cost %u.",
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has provided different price for car than expected. Car ID %u, Cost %u, Real Cost %u.",
 			logger->toWide(handle).c_str(),
 			driverslicense,
 			logger->toWide((char*)&IP_Address).c_str(),
@@ -1792,7 +2044,7 @@ void Client::PurchaseCar(uint32_t id, COLOUR2 colour, uint32_t cost)
 	int32_t emptyBay = getEmptyBay();
 	if (emptyBay == -1 || emptyBay > 3)
 	{
-		logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase car with no room in garage. Car ID %u.",
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to purchase car with no room in garage. Car ID %u.",
 			logger->toWide(handle).c_str(),
 			driverslicense,
 			logger->toWide((char*)&IP_Address).c_str(),
@@ -1807,7 +2059,7 @@ void Client::PurchaseCar(uint32_t id, COLOUR2 colour, uint32_t cost)
 		if (addCar(id, emptyBay, colour) == true) takeCP(finalPrice);
 		else
 		{
-			logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase car from the car but there was an error adding car to garage. Car ID %u, Car count: %u.",
+			logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to purchase car from the car but there was an error adding car to garage. Car ID %u, Car count: %u.",
 				logger->toWide(handle).c_str(),
 				driverslicense,
 				logger->toWide((char*)&IP_Address).c_str(),
@@ -1820,7 +2072,7 @@ void Client::PurchaseCar(uint32_t id, COLOUR2 colour, uint32_t cost)
 	}
 	else
 	{
-		logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to purchase car from the car shop without enough CP. Car ID %u, Client CP %u, Real Cost %u.",
+		logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to purchase car from the car shop without enough CP. Car ID %u, Client CP %u, Real Cost %u.",
 			logger->toWide(handle).c_str(),
 			driverslicense,
 			logger->toWide((char*)&IP_Address).c_str(),
@@ -1991,7 +2243,7 @@ void Client::SendBattleCheckStatus()
 	{
 		if (abs(battle.challenger->battle.spCount - battle.spCount) > 10)
 		{
-			battle.challenger->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u may have altered the battle SP. %u SP. SP Count %u",
+			battle.challenger->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u may have altered the battle SP. %u SP. SP Count %u",
 				battle.challenger->logger->toWide(battle.challenger->handle).c_str(),
 				battle.challenger->driverslicense,
 				battle.challenger->logger->toWide((char*)&battle.challenger->IP_Address).c_str(),
@@ -2075,6 +2327,61 @@ void Client::SendBattleNPCFinish()
 	Send();
 	clearBattle();
 }
+void Client::SendBattleDamage(uint32_t bay, uint32_t damage1, uint32_t damage2, uint32_t damage3, uint32_t damage4)
+{
+	logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has finished battle. Damage 1: %u, Damage 2: %u, Damage 3: %u, Damage 4: %u.",
+		logger->toWide(handle).c_str(),
+		driverslicense,
+		logger->toWide((char*)&IP_Address).c_str(),
+		courseID,
+		damage1,
+		damage2,
+		damage3,
+		damage4
+	);
+
+	uint32_t currentCondition = garagedata.activeCar->engineCondition;
+	adjustEngineCondition(damage1, damage2, damage3, damage4);
+	std::stringstream ss;
+	int8_t state = 0;
+
+	if (currentCondition < garagedata.activeCar->engineCondition)
+		state = 1;
+	else if (currentCondition > garagedata.activeCar->engineCondition)
+		state = 2;
+
+	float wear = (float)(currentCondition - garagedata.activeCar->engineCondition) / 100.0f;
+	ss << std::setprecision(2) << wear << "% wear on engine occured.";
+	SendAnnounceMessage(ss.str(), RGB(50, 100, 250), driverslicense);
+
+	ss.str("");
+
+	switch (state)
+	{
+	case 0:
+		ss << "Engine condition unchanged!";
+		break;
+	case 1:
+		ss << "Engine condition changed! Engine condition was increased during  last battle.";
+		break;
+	case 2:
+		ss << "Engine condition changed! Engine condition was decreased during  last battle.";
+		break;
+	default:
+		break;
+	}
+
+	outbuf.clearBuffer();
+	outbuf.setSize(0x06);
+	outbuf.setOffset(0x06);
+	outbuf.setType(0x200);
+	outbuf.setSubType(0x286);
+	outbuf.append<uint8_t>(1); // Show Message
+	outbuf.append<uint16_t>(garagedata.activeCar->engineCondition / 100);  // Engine Condition
+	outbuf.append<uint8_t>(state); // State up right down
+	outbuf.appendString(ss.str(), 96);
+	Send();
+}
 void Client::Send(PACKET* src)
 {
 	if (src == nullptr)
@@ -2083,7 +2390,7 @@ void Client::Send(PACKET* src)
 	{
 		if (CLIENT_BUFFER_SIZE < ((int)src->getSize() + 15))
 		{
-			logger->Log(Logger::LOGTYPE_Client, L"Client Sent too large packet.");
+			logger->Log(Logger::LOGTYPE_CLIENT, L"Client Sent too large packet.");
 			Disconnect();
 		}
 		else

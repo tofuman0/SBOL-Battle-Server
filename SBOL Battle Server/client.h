@@ -248,11 +248,19 @@ public:
 	void SendPlayerStats();
 	void SendItems();
 	void SendSigns();
-	void GetCarSettings(uint32_t bay);
-	void SwitchCar(uint32_t bay);
-	void PurchaseCar(uint32_t id, COLOUR2 colour, uint32_t cost);
+	void SendCarSettings(uint32_t bay);
+	void SendSwitchCar(uint32_t bay);
+	void SendPurchaseCar(uint32_t id, COLOUR2 colour, uint32_t cost);
+	void SendSellCar(uint32_t bay);
+	void SendPaintCar(uint32_t bay, uint32_t cost, COLOUR2 colour);
 	void SendCarData();
 	void SendCarData(uint32_t bay);
+	void SendCarValue(uint32_t bay);
+	void SendCarShop();
+	void SendPaintShopPrice();
+	void SendOverhaulPrice(uint32_t bay);
+	void SendOverhaul(uint32_t bay, uint32_t cost);
+	void SendTunedCarPurchaseList();
 	void SendBayDetails();
 	void SendBattleChallengeNPC(uint16_t RivalID, uint32_t _time = 1000);
 	void SendBattleChallenge(uint16_t challengeID, uint16_t clientID, uint32_t _time = 1000);
@@ -262,6 +270,7 @@ public:
 	void SendBattleStart();
 	void SendBattleCheckStatus();
 	void SendBattleNPCFinish();
+	void SendBattleDamage(uint32_t bay, uint32_t damage1, uint32_t damage2, uint32_t damage3, uint32_t damage4);
 #pragma endregion
 #pragma region Client Packet Transmission
 	void addToSendQueue(PACKET* src);

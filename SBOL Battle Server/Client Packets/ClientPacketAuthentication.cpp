@@ -20,7 +20,7 @@ void ClientPacketAuthentication(Client* client)
 	}
 	return;
 	default:
-		client->logger->Log(Logger::LOGTYPE_Client, L"Client sent invalid packet.");
+		client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client sent invalid packet.");
 		client->Disconnect();
 		return;
 	}

@@ -197,6 +197,18 @@ void ClientPacketChat(Client* client)
 							return;
 						}
 					}
+					else if (command[1].compare("cp") == 0)
+					{
+						uint64_t cp = 1000;
+						if (command.size() > 2) cp = atoll(command[2].c_str());
+						client->takeCP(client->getCP());
+						client->giveCP(cp);
+						std::stringstream ss;
+						ss << "Set " << cp << " CP";
+						client->SendAnnounceMessage(ss.str(), RGB(50, 100, 250), client->driverslicense);
+						client->SendPlayerStats();
+						return;
+					}
 					else if (command[1].compare("level") == 0 && client->privileges)
 					{
 						if (command.size() > 2)
@@ -398,7 +410,7 @@ void ClientPacketChat(Client* client)
 		uint32_t teamID = client->inbuf.get<uint32_t>(0x62);
 		if (teamID != client->teamdata.teamID || client->inTeam() == false)
 		{
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to team chat but is not in a team or in the specified team. Team ID %u",
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to team chat but is not in a team or in the specified team. Team ID %u",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),

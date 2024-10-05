@@ -65,7 +65,7 @@ void ClientPacketPlayerCreation(Client* client)
 				if (client->setActiveCar(0))
 				{
 					client->Disconnect();
-					client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u) failed to set active car on new account.", client->logger->toWide(client->handle).c_str(), client->driverslicense);
+					client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u) failed to set active car on new account.", client->logger->toWide(client->handle).c_str(), client->driverslicense);
 					return;
 				}
 
@@ -96,7 +96,7 @@ void ClientPacketPlayerCreation(Client* client)
 		if (!found)
 		{
 			//Illegal car choice
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u) has made an illegal initial car choice: Car %u.", client->logger->toWide(client->handle).c_str(), client->driverslicense, selectedCar);
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u) has made an illegal initial car choice: Car %u.", client->logger->toWide(client->handle).c_str(), client->driverslicense, selectedCar);
 			client->Disconnect();
 			return;
 		}

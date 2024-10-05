@@ -32,7 +32,7 @@ void ClientPacketPositioning(Client* client)
 			}
 			client->inbuf.getArray((uint8_t*)&client->position, sizeof(POSITION), 0x06);
 			if(client->logPosition)
-				client->logger->Log(Logger::LOGTYPE_Client, L"0x%04X,0x%04X,0x%04X", client->position.location1, client->position.location2, client->position.location3);
+				client->logger->Log(Logger::LOGTYPE_CLIENT, L"0x%04X,0x%04X,0x%04X", client->position.location1, client->position.location2, client->position.location3);
 			//client->position.time += 1000;
 			//Relay current position
 			//if (client->battle.status == BATTLESTATUS::NOT_IN_BATTLE) 
@@ -45,7 +45,7 @@ void ClientPacketPositioning(Client* client)
 		}
 		else
 		{
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u has tried to spoof player ID %u",
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has tried to spoof player ID %u",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),

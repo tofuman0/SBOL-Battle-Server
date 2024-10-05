@@ -1005,7 +1005,7 @@ bool Server::ClientChecks(Client * client)
 	//}
 	if (client->timeoutCount > 0 && client->timeoutCount < time(NULL))
 	{
-		client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has timed out so was disconnected.",
+		client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has timed out so was disconnected.",
 			client->logger->toWide(client->handle).c_str(),
 			client->driverslicense,
 			client->logger->toWide((char*)&client->IP_Address).c_str()

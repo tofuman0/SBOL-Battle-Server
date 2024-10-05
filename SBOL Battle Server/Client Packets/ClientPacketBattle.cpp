@@ -31,7 +31,7 @@ void ClientPacketBattle(Client* client)
 			client->battle.status = Client::BATTLESTATUS::BS_NOT_IN_BATTLE;
 			client->SendBattleAbort(0);
 		}
-		client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u is challenging player ID %u",
+		client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u is challenging player ID %u",
 			client->logger->toWide(client->handle).c_str(),
 			client->driverslicense,
 			client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -88,7 +88,7 @@ void ClientPacketBattle(Client* client)
 			client->battle.spCount++;
 			if (client->battle.lastSP != INITIALBATTLE_SP && (client->battle.SP >= client->battle.lastSP || (client->battle.lastSP - client->battle.SP) > 400000))
 			{
-				client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u may have altered the battle SP. %u SP taken since last SP",
+				client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u may have altered the battle SP. %u SP taken since last SP",
 					client->logger->toWide(client->handle).c_str(),
 					client->driverslicense,
 					client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -108,7 +108,7 @@ void ClientPacketBattle(Client* client)
 		if (clientID < COURSE_NPC_LIMIT)
 		{	// Is Rival ID
 			client->SendBattleChallengeNPC(clientID, 100000);
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u is challenging NPC ID %u",
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u is challenging NPC ID %u",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -119,7 +119,7 @@ void ClientPacketBattle(Client* client)
 		{
 			client->battle.status = Client::BATTLESTATUS::BS_NOT_IN_BATTLE;
 			client->SendBattleAbort(0);
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u is challenging invalid NPC ID %u",
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u is challenging invalid NPC ID %u",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),

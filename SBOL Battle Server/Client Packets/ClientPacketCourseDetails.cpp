@@ -46,7 +46,7 @@ void ClientPacketCourseDetails(Client* client)
 		{
 			if (abs(((char*)&client->garagedata.activeCar->carSettings)[0]) > 15)
 			{
-				client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) with ID %u has provided invalid car settings.",
+				client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has provided invalid car settings.",
 					client->logger->toWide(client->handle).c_str(),
 					client->driverslicense,
 					client->logger->toWide((char*)&client->IP_Address).c_str());
@@ -85,7 +85,7 @@ void ClientPacketCourseDetails(Client* client)
 		uint16_t value5 = client->inbuf.get<uint16_t>();
 		uint8_t courseNumber = client->inbuf.get<uint8_t>();
 #ifdef _DEBUG
-		client->logger->Log(Logger::LOGTYPE_Client, L"Client entering course: Float to Int ???: %u - Section: %02X - Distance: %02X - ???: %u - ???: %u - Course: %u.", value1, courseJunction, courseDistance, value4, value5, courseNumber);
+		client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client entering course: Float to Int ???: %u - Section: %02X - Distance: %02X - ???: %u - ???: %u - Course: %u.", value1, courseJunction, courseDistance, value4, value5, courseNumber);
 #endif
 
 		// Entering Course
@@ -95,7 +95,7 @@ void ClientPacketCourseDetails(Client* client)
 		if (courseNumber == 0x15) courseNumber = 9;
 		else if (courseNumber > COURSE_COUNT || courseNumber == 0)
 		{
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client sent tried to join invalid course.");
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client sent tried to join invalid course.");
 			client->Disconnect();
 		}
 		if (client->course != nullptr) client->course->removeClient(client);

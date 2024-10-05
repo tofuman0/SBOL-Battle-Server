@@ -30,7 +30,7 @@ void ClientPacketStatus(Client* client)
 		}
 		else
 		{
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to activate sign that they haven't unlocked or that is invalid. Sign %u.",
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to activate sign that they haven't unlocked or that is invalid. Sign %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),

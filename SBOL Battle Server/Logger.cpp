@@ -57,8 +57,7 @@ void Logger::Log(LOGTYPE type, const wchar_t* in, ...)
 			OutputDebugString(&buf[0]);
 
 		wprintf(buf);
-
-		if ((type == LOGTYPE_Client || type == LOGTYPE_ERROR || type == LOGTYPE_PACKET || type == LOGTYPE_SERVER || (type == LOGTYPE_DEBUG && isDebug) || (isDebug && type != LOGTYPE_NONE)) && logpath.length() > 0)
+		if ((type == LOGTYPE_CLIENT || type == LOGTYPE_COMM || type == LOGTYPE_MANAGEMENT || type == LOGTYPE_ERROR || type == LOGTYPE_PACKET || type == LOGTYPE_SERVER || (type == LOGTYPE_DEBUG && isDebug) || (isDebug && type != LOGTYPE_NONE)) && logpath.length() > 0)
 		{
 			swprintf(&logbuf[0], MAX_MESG_LEN - 10, L"%s\\%s%02u%02u%04u.log", toWide(logpath).c_str(), LOGFILES[type], rawtime.wMonth, rawtime.wDay, rawtime.wYear);
 			

@@ -12,7 +12,7 @@ void ClientPacketTeam(Client* client)
 		// Name @ 0x04
 		if (client->getLevel() < 10 || client->inTeam())
 		{
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to create a team but doesn\'t meet the required level of 10 or is already in a team. Level %u, Team ID %d.",
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to create a team but doesn\'t meet the required level of 10 or is already in a team. Level %u, Team ID %d.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -33,7 +33,7 @@ void ClientPacketTeam(Client* client)
 		uint32_t teamid = client->inbuf.get<uint32_t>();
 		if (client->teamdata.teamID != teamid || client->isTeamLeader() == false)
 		{
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to delete a team but is isn't in the team or the leader. Team ID %u.",
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to delete a team but is isn't in the team or the leader. Team ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -84,7 +84,7 @@ void ClientPacketTeam(Client* client)
 		uint32_t requestID = client->inbuf.get<uint32_t>();
 		if (client->isTeamLeader() == false)
 		{
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to accept a team join request but is isn't the team leader. Request ID %u.",
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to accept a team join request but is isn't the team leader. Request ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -119,7 +119,7 @@ void ClientPacketTeam(Client* client)
 		uint8_t joinStatus = client->inbuf.get<uint8_t>(0x08);
 		if (client->teamdata.teamID != teamid)
 		{
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to update team join status but is not in team. Team ID %u.",
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to update team join status but is not in team. Team ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -139,7 +139,7 @@ void ClientPacketTeam(Client* client)
 		std::string teamComment = client->inbuf.getString(0x08, 0x28);
 		if (client->teamdata.teamID != teamid || client->isTeamLeader() == false)
 		{
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to update team comment but is not in team or team leader. Team ID %u.",
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to update team comment but is not in team or team leader. Team ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -210,7 +210,7 @@ void ClientPacketTeam(Client* client)
 		
 		if (client->teamdata.teamID != teamid)
 		{
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to list a team members' but is not in the team. Team ID %u.",
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to list a team members' but is not in the team. Team ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -253,7 +253,7 @@ void ClientPacketTeam(Client* client)
 
 		if (client->inTeam() == false || client->isTeamLeader() == false)
 		{
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to list a team join requests but is not in a team or the team leader.",
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to list a team join requests but is not in a team or the team leader.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str()
@@ -287,7 +287,7 @@ void ClientPacketTeam(Client* client)
 
 		if (client->inTeam() == false || client->isTeamLeader() == false)
 		{
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to remove team join request ID but is not in a team or leader. Request ID %u.",
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to remove team join request ID but is not in a team or leader. Request ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -343,7 +343,7 @@ void ClientPacketTeam(Client* client)
 
 		if (client->inTeam() == false || client->isTeamLeader() == false)
 		{
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to remove team memberbut is not in a team or leader. Member ID %u.",
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to remove team memberbut is not in a team or leader. Member ID %u.",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
@@ -385,7 +385,7 @@ void ClientPacketTeam(Client* client)
 
 		if (client->inTeam() == false || client->isTeamLeader() == false)
 		{
-			client->logger->Log(Logger::LOGTYPE_Client, L"Client %s (%u / %s) has tried to adjust team member team area access but is not in a team or the team leader. Member ID %u",
+			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) has tried to adjust team member team area access but is not in a team or the team leader. Member ID %u",
 				client->logger->toWide(client->handle).c_str(),
 				client->driverslicense,
 				client->logger->toWide((char*)&client->IP_Address).c_str(),
