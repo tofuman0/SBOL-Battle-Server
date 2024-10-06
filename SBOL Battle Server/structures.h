@@ -7,7 +7,7 @@
 #ifndef SHARED_STRUCTS
 #define SHARED_STRUCTS
 class Client;
-
+#pragma pack(1)
 typedef struct st_sendqueue {
 	uint8_t sndbuf[CLIENT_BUFFER_SIZE];
 } SEND_QUEUE;
@@ -469,4 +469,5 @@ typedef struct st_partticket {
 	int16_t bodyColour[1];
 } PARTTICKETTABLE;
 #pragma endregion
+#pragma pack()
 #endif

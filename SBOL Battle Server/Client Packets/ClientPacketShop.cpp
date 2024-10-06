@@ -40,8 +40,7 @@ void ClientPacketShop(Client* client)
 		uint8_t itemType = client->inbuf.get<uint8_t>(0x09);
 		uint8_t itemID = client->inbuf.get<uint8_t>(0x0A);
 		uint32_t cost = client->inbuf.get<uint32_t>(0x0B);
-		uint32_t finalPrice = client->getShopPartPrice(bay, itemCategory, itemType, itemID);
-
+		
 		if (bay >= (uint32_t)(client->garagedata.garageCount * 4) || client->garagedata.car[bay].carID == 0xFFFFFFFF)
 		{
 			client->logger->Log(Logger::LOGTYPE_CLIENT, L"Client %s (%u / %s) with ID %u has specified invalid bay number in part shop.",
@@ -52,6 +51,8 @@ void ClientPacketShop(Client* client)
 			client->Disconnect();
 			return;
 		}
+
+		uint32_t finalPrice = client->getShopPartPrice(bay, itemCategory, itemType, itemID);
 
 		if (finalPrice == 0 || cost != finalPrice)
 		{
