@@ -1,28 +1,28 @@
 {
-	"id" : 0,
+	"id" : 1,
 	"customteam" : false,
-	"teamname" : "ROLLING GUY",
-	"stickers" : 5,
+	"teamname" : "ROWING GUY",
+	"stickers" : 3,
 	"members" : [
 		{
-			"id" : 0,
-			"name" : "Rolling Guy #1",
+			"id" : 8,
+			"name" : "Rowing Guy #1",
 			"carid" : 0,
 			"leader" : true,
-			"cp" : 180,
+			"cp" : 144,
 			"routetable" : 1,
 			"rewardtable" : 0,
 			"commontable" : 0,
 			"rewardchance" : 100.0,
 			"carmods" :	{
-				"carcolour1" : "0x0A01AF",
-				"carcolour2" : "0x232323",
-				"engine" : 3,
-				"muffler" : 3,
-				"transmission" : 2,
+				"carcolour1" : "0x0A7D3C",
+				"carcolour2" : "0x0F3396",
+				"engine" : 2,
+				"muffler" : 2,
+				"transmission" : 1,
 				"differential" : 3,
-				"tyreandbrakes" : 4,
-				"suspension" : 3,
+				"tyreandbrakes" : 3,
+				"suspension" : 2,
 				"body" : 3,
 				"overfenders" : 0,
 				"frontbumper" : 3,
@@ -33,78 +33,7 @@
 				"rearspoiler" : 3,
 				"grill" : 0,
 				"lights" : 0,
-				"wheels" : 200,
-				"colourwheels" : 1,
-				"wheelcolour1" : "0xFFFFFF",
-				"wheelcolour2" : "0xFFFFFF",
-				"stickers" : 0
-			},
-			"carsettings" : {
-				"handle" : -12,
-				"acceleration" : 15,
-				"brake" : 15,
-				"brakebalance" : 0,
-				"springratefront" : 0,
-				"springraterear" : 0,
-				"damperratefront" : 0,
-				"damperraterear" : 0,
-				"gear1" : 0,
-				"gear2" : 0,
-				"gear3" : 0,
-				"gear4" : 0,
-				"gear5" : 0,
-				"gear6" : 0,
-				"rideheightfront" : -8,
-				"rideheightrear" : -10,
-				"finaldrive" : -10,
-				"boostpressure" : 0
-			},
-			"difficulty" : {
-				"floats" : [ 0.1, 0.8, 0.0, 0.0, 0.0, 0.0, 13.8, 0.0, 13.8, 0.0, 12.0 ],
-				"bytes" : [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ]
-			},
-			"requirements" : {
-				"level" : 0,
-				"wins" : 0,
-				"kms" : 0,
-				"day" : 0,
-				"time" : 0,
-				"previousrivals" : [ ],
-				"drivetrain" : 0,
-				"enginecylinders" : 0,
-				"aspiration" : 0
-			}
-		},
-		{
-			"id" : 1,
-			"name" : "Rolling Guy #2",
-			"carid" : 1,
-			"leader" : false,
-			"cp" : 8,
-			"routetable" : 1,
-			"rewardtable" : 0,
-			"commontable" : 0,
-			"rewardchance" : 9.0,
-			"carmods" : {
-				"carcolour1" : "0xA0B9B9",
-				"carcolour2" : "0x282828",
-				"engine" : 0,
-				"muffler" : 1,
-				"transmission" : 2,
-				"differential" : 1,
-				"tyreandbrakes" : 2,
-				"suspension" : 2,
-				"body" : 2,
-				"overfenders" : 0,
-				"frontbumper" : 5,
-				"bonnet" : 2,
-				"mirrors" : 2,
-				"sideskirts" : 5,
-				"rearbumper" : 5,
-				"rearspoiler" : 5,
-				"grill" : 2,
-				"lights" : 0,
-				"wheels" : 201,
+				"wheels" : 286,
 				"colourwheels" : 1,
 				"wheelcolour1" : "0xFFFFFF",
 				"wheelcolour2" : "0xFFFFFF",
@@ -125,14 +54,14 @@
 				"gear4" : 0,
 				"gear5" : 0,
 				"gear6" : 0,
-				"rideheightfront" : -5,
-				"rideheightrear" : -5,
-				"finaldrive" : -5,
+				"rideheightfront" : -8,
+				"rideheightrear" : -10,
+				"finaldrive" : -10,
 				"boostpressure" : 0
 			},
 			"difficulty" : {
-				"floats" : [ 0.1, 0.4, 0.0, 0.0, 0.0, 0.0, 13.2, 0.0, 12.5, 0.0, 11.5 ],
-				"bytes" : [ 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0 ]
+				"floats" : [ 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 13.0, 0.0, 13.2, 0.0, 11.8 ],
+				"bytes" : [ 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1 ]
 			},
 			"requirements" : {
 				"level" : 0,
@@ -147,8 +76,79 @@
 			}
 		},
 		{
-			"id" : 2,
-			"name" : "Rolling Guy #3",
+			"id" : 9,
+			"name" : "Rowing Guy #2",
+			"carid" : 1,
+			"leader" : false,
+			"cp" : 6,
+			"routetable" : 1,
+			"rewardtable" : 0,
+			"commontable" : 0,
+			"rewardchance" : 9.0,
+			"carmods" : {
+				"carcolour1" : "0xA082B4",
+				"carcolour2" : "0x0F2796",
+				"engine" : 0,
+				"muffler" : 1,
+				"transmission" : 2,
+				"differential" : 1,
+				"tyreandbrakes" : 2,
+				"suspension" : 2,
+				"body" : 2,
+				"overfenders" : 0,
+				"frontbumper" : 5,
+				"bonnet" : 2,
+				"mirrors" : 2,
+				"sideskirts" : 5,
+				"rearbumper" : 5,
+				"rearspoiler" : 5,
+				"grill" : 2,
+				"lights" : 0,
+				"wheels" : 239,
+				"colourwheels" : 1,
+				"wheelcolour1" : "0xFFFFFF",
+				"wheelcolour2" : "0xFFFFFF",
+				"stickers" : 0
+			},
+			"carsettings" : {
+				"handle" : -3,
+				"acceleration" : 15,
+				"brake" : 15,
+				"brakebalance" : 0,
+				"springratefront" : 0,
+				"springraterear" : 0,
+				"damperratefront" : 0,
+				"damperraterear" : 0,
+				"gear1" : 0,
+				"gear2" : 0,
+				"gear3" : 0,
+				"gear4" : 0,
+				"gear5" : 0,
+				"gear6" : 0,
+				"rideheightfront" : -5,
+				"rideheightrear" : -5,
+				"finaldrive" : -5,
+				"boostpressure" : 0
+			},
+			"difficulty" : {
+				"floats" : [ 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 12.5, 0.0, 12.0, 0.0, 11.5 ],
+				"bytes" : [ 2, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0 ]
+			},
+			"requirements" : {
+				"level" : 0,
+				"wins" : 0,
+				"kms" : 0,
+				"day" : 0,
+				"time" : 0,
+				"previousrivals" : [ ],
+				"drivetrain" : 0,
+				"enginecylinders" : 0,
+				"aspiration" : 0
+			}
+		},
+		{
+			"id" : 10,
+			"name" : "Rowing Guy #3",
 			"carid" : 3,
 			"leader" : false,
 			"cp" : 4,
@@ -157,8 +157,8 @@
 			"commontable" : 0,
 			"rewardchance" : 9.0,
 			"carmods" : {
-				"carcolour1" : "0x19469F",
-				"carcolour2" : "0x1E1E1E",
+				"carcolour1" : "0x780F4A",
+				"carcolour2" : "0x0F2796",
 				"engine" : 0,
 				"muffler" : 1,
 				"transmission" : 2,
@@ -175,14 +175,14 @@
 				"rearspoiler" : 4,
 				"grill" : 1,
 				"lights" : 1,
-				"wheels" : 203,
+				"wheels" : 271,
 				"colourwheels" : 1,
 				"wheelcolour1" : "0xFFFFFF",
 				"wheelcolour2" : "0xFFFFFF",
 				"stickers" : 0
 			},
 			"carsettings" : {
-				"handle" : -14,
+				"handle" : 15,
 				"acceleration" : 15,
 				"brake" : 15,
 				"brakebalance" : 0,
@@ -202,8 +202,8 @@
 				"boostpressure" : 0
 			},
 			"difficulty" : {
-				"floats" : [ 0.1, 0.1, 0.0, 0.0, 0.0, 0.0, 12.0, 0.0, 11.0, 0.0, 10.9 ],
-				"bytes" : [ 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0 ]
+				"floats" : [ 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 11.9, 0.0, 11.0, 0.0, 10.9 ],
+				"bytes" : [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0 ]
 			},
 			"requirements" : {
 				"level" : 0,
@@ -218,8 +218,8 @@
 			}
 		},
 		{
-			"id" : 3,
-			"name" : "Rolling Guy #4",
+			"id" : 11,
+			"name" : "Rowing Guy #4",
 			"carid" : 0,
 			"leader" : false,
 			"cp" : 4,
@@ -228,8 +228,8 @@
 			"commontable" : 0,
 			"rewardchance" : 9.0,
 			"carmods" : {
-				"carcolour1" : "0xC5996C",
-				"carcolour2" : "0x282823",
+				"carcolour1" : "0xA08CC8",
+				"carcolour2" : "0x0F2A96",
 				"engine" : 0,
 				"muffler" : 1,
 				"transmission" : 2,
@@ -246,14 +246,14 @@
 				"rearspoiler" : 1,
 				"grill" : 2,
 				"lights" : 1,
-				"wheels" : 204,
-				"colourwheels" : 1,
+				"wheels" : 296,
+				"colourwheels" : 0,
 				"wheelcolour1" : "0xFFFFFF",
 				"wheelcolour2" : "0xFFFFFF",
 				"stickers" : 0
 			},
 			"carsettings" : {
-				"handle" : -14,
+				"handle" : 15,
 				"acceleration" : 15,
 				"brake" : 15,
 				"brakebalance" : 0,
@@ -273,8 +273,8 @@
 				"boostpressure" : 0
 			},
 			"difficulty" : {
-				"floats" : [ 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 11.5, 0.0, 11.0, 0.0, 10.9 ],
-				"bytes" : [ 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0 ]
+				"floats" : [ 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 11.6, 0.0, 11.0, 0.0, 10.9 ],
+				"bytes" : [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0 ]
 			},
 			"requirements" : {
 				"level" : 0,
@@ -289,8 +289,8 @@
 			}
 		},
 		{
-			"id" : 4,
-			"name" : "Rolling Guy #5",
+			"id" : 12,
+			"name" : "Rowing Guy #5",
 			"carid" : 1,
 			"leader" : false,
 			"cp" : 4,
@@ -299,8 +299,8 @@
 			"commontable" : 0,
 			"rewardchance" : 9.0,
 			"carmods" : {
-				"carcolour1" : "0x32BE82",
-				"carcolour2" : "0x737373",
+				"carcolour1" : "0x961E82",
+				"carcolour2" : "0x0F2896",
 				"engine" : 0,
 				"muffler" : 1,
 				"transmission" : 2,
@@ -317,14 +317,14 @@
 				"rearspoiler" : 3,
 				"grill" : 0,
 				"lights" : 0,
-				"wheels" : 205,
+				"wheels" : 210,
 				"colourwheels" : 1,
 				"wheelcolour1" : "0xFFFFFF",
-				"wheelcolour2" : "0xFF0000",
+				"wheelcolour2" : "0xFFFFFF",
 				"stickers" : 0
 			},
 			"carsettings" : {
-				"handle" : -13,
+				"handle" : 15,
 				"acceleration" : 15,
 				"brake" : 15,
 				"brakebalance" : 0,
@@ -344,8 +344,8 @@
 				"boostpressure" : 0
 			},
 			"difficulty" : {
-				"floats" : [ 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 11.0, 0.0, 10.0, 0.0, 10.9 ],
-				"bytes" : [ 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0 ]
+				"floats" : [ 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 10.9, 0.0, 10.0, 0.0, 10.8 ],
+				"bytes" : [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0 ]
 			},
 			"requirements" : {
 				"level" : 0,
@@ -360,8 +360,8 @@
 			}
 		},
 		{
-			"id" : 5,
-			"name" : "Rolling Guy #6",
+			"id" : 13,
+			"name" : "Rowing Guy #6",
 			"carid" : 0,
 			"leader" : false,
 			"cp" : 4,
@@ -370,8 +370,8 @@
 			"commontable" : 0,
 			"rewardchance" : 9.0,
 			"carmods" : {
-				"carcolour1" : "0x5A6450",
-				"carcolour2" : "0x5A6450",
+				"carcolour1" : "0x286491",
+				"carcolour2" : "0x0F2896",
 				"engine" : 0,
 				"muffler" : 1,
 				"transmission" : 3,
@@ -388,14 +388,14 @@
 				"rearspoiler" : 2,
 				"grill" : 1,
 				"lights" : 1,
-				"wheels" : 206,
+				"wheels" : 218,
 				"colourwheels" : 1,
 				"wheelcolour1" : "0xFFFFFF",
 				"wheelcolour2" : "0xFFFFFF",
 				"stickers" : 0
 			},
 			"carsettings" : {
-				"handle" : -10,
+				"handle" : 15,
 				"acceleration" : 15,
 				"brake" : 15,
 				"brakebalance" : 0,
@@ -415,8 +415,8 @@
 				"boostpressure" : 0
 			},
 			"difficulty" : {
-				"floats" : [ 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 13.0, 0.0, 10.0, 0.0, 11.5 ],
-				"bytes" : [ 2, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0 ]
+				"floats" : [ 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 12.8, 0.0, 12.8, 0.0, 11.5 ],
+				"bytes" : [ 2, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1 ]
 			},
 			"requirements" : {
 				"level" : 0,
@@ -431,8 +431,8 @@
 			}
 		},
 		{
-			"id" : 6,
-			"name" : "Rolling Guy #7",
+			"id" : 14,
+			"name" : "Rowing Guy #7",
 			"carid" : 1,
 			"leader" : false,
 			"cp" : 4,
@@ -441,32 +441,32 @@
 			"commontable" : 0,
 			"rewardchance" : 9.0,
 			"carmods" : {
-				"carcolour1" : "0x234D2F",
-				"carcolour2" : "0x191919",
+				"carcolour1" : "0x00B4BE",
+				"carcolour2" : "0x0F2696",
 				"engine" : 0,
 				"muffler" : 1,
-				"transmission" : 1,
+				"transmission" : 0,
 				"differential" : 1,
 				"tyreandbrakes" : 1,
 				"suspension" : 0,
 				"body" : 1,
 				"overfenders" : 0,
-				"frontbumper" : 2,
-				"bonnet" : 0,
-				"mirrors" : 0,
-				"sideskirts" : 2,
-				"rearbumper" : 2,
-				"rearspoiler" : 1,
+				"frontbumper" : 3,
+				"bonnet" : 1,
+				"mirrors" : 2,
+				"sideskirts" : 3,
+				"rearbumper" : 3,
+				"rearspoiler" : 3,
 				"grill" : 0,
 				"lights" : 0,
-				"wheels" : 200,
+				"wheels" : 248,
 				"colourwheels" : 1,
-				"wheelcolour1" : "0x0F0FFF",
+				"wheelcolour1" : "0xFFFFFF",
 				"wheelcolour2" : "0xFFFFFF",
 				"stickers" : 0
 			},
 			"carsettings" : {
-				"handle" : -14,
+				"handle" : 15,
 				"acceleration" : 15,
 				"brake" : 15,
 				"brakebalance" : 0,
@@ -486,8 +486,8 @@
 				"boostpressure" : 0
 			},
 			"difficulty" : {
-				"floats" : [ 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 9.5, 0.0, 10.0, 0.0, 10.9 ],
-				"bytes" : [ 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0 ]
+				"floats" : [ 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 9.4, 0.0, 10.0, 0.0, 10.9 ],
+				"bytes" : [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0 ]
 			},
 			"requirements" : {
 				"level" : 0,
@@ -502,18 +502,18 @@
 			}
 		},
 		{
-			"id" : 7,
-			"name" : "Rolling Guy #8",
+			"id" : 15,
+			"name" : "Rowing Guy #8",
 			"carid" : 0,
 			"leader" : false,
-			"cp" : 4,
+			"cp" : 2,
 			"routetable" : 1,
 			"rewardtable" : 0,
 			"commontable" : 0,
 			"rewardchance" : 9.0,
 			"carmods" : {
-				"carcolour1" : "0x530C13",
-				"carcolour2" : "0x0F0F0F",
+				"carcolour1" : "0x00B9C8",
+				"carcolour2" : "0x0F2696",
 				"engine" : 0,
 				"muffler" : 0,
 				"transmission" : 1,
@@ -530,14 +530,14 @@
 				"rearspoiler" : 0,
 				"grill" : 1,
 				"lights" : 1,
-				"wheels" : 214,
+				"wheels" : 244,
 				"colourwheels" : 1,
 				"wheelcolour1" : "0x191919",
-				"wheelcolour2" : "0xC42233",
+				"wheelcolour2" : "0x191919",
 				"stickers" : 0
 			},
 			"carsettings" : {
-				"handle" : -14,
+				"handle" : 15,
 				"acceleration" : 15,
 				"brake" : 15,
 				"brakebalance" : 0,
@@ -557,8 +557,8 @@
 				"boostpressure" : 0
 			},
 			"difficulty" : {
-				"floats" : [ 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 9.0, 0.0, 10.0, 0.0, 10.8 ],
-				"bytes" : [ 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0 ]
+				"floats" : [ 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 8.6, 0.0, 10.0, 0.0, 10.8 ],
+				"bytes" : [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0 ]
 			},
 			"requirements" : {
 				"level" : 0,
